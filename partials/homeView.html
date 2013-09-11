@@ -1,4 +1,4 @@
-<div class="topcoat-navigation-bar">
+<div id="header" class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item center three-quarters">
         <h1 class="topcoat-navigation-bar__title">PhoneGap+AngularJS</h1>
     </div>
@@ -8,7 +8,7 @@
         </a>
     </div>
 </div>
-<div class="topcoat-list__container list">
+<div id="content" class="topcoat-list__container list">
     <h3 class="topcoat-list__header">PhoneGap API Samples</h3>
     <ul class="topcoat-list">
         <li class="topcoat-list__item--first" ng-click="slidePage('/view8')">
@@ -36,7 +36,7 @@
             Compass
         </li>
     </ul>
-    <div class="topcoat-navigation-bar">
+    <div class="topcoat-navigation-bar footer">
         <h1 class="centerize"  ng-show="!showURL" ng-swipe-left="showURL=true">Version  {{' %VERSION%' | interpolate}} </h1>
         <h1 class="centerize" ng-show="showURL" ng-swipe-right="showURL=false"><a href="http://devgirl.org">devgirl.org </a></h1>
     </div>
