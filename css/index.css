@@ -27,7 +27,7 @@
 }
 .pad {
     left: 5%;
-    height: 100%;
+    /*height: 100%;*/
     width: 95%;
     position: absolute;
 }

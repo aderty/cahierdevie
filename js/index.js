@@ -27,7 +27,7 @@ var app = {
     bindEvents: function() {
         document.addEventListener('load', this.onLoad, false);
         document.addEventListener('deviceready', this.onDeviceReady, false);
-        window.addEventListener("orientationchange", orientationChange, true);
+        window.addEventListener("orientationchange", this.orientationChange, true);
     },
     onLoad: function() {
         
@@ -38,5 +38,8 @@ var app = {
         /*angular.element(document).ready(function() {
             angular.bootstrap(document);
         });*/
+    },
+
+    orientationChange: function () {
     }
 };
