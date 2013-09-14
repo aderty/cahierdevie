@@ -1,19 +1,43 @@
 <div id="header" class="topcoat-navigation-bar header">
-    <div class="topcoat-navigation-bar__item center three-quarters">
-        <h1 class="topcoat-navigation-bar__title">PhoneGap+AngularJS</h1>
-    </div>
-    <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="changeSettings()">
-            <span class="topcoat-icon settings-icon"></span>
+    <div class="topcoat-navigation-bar__item left quarter">
+        <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu"  data-effeckt="effeckt-off-screen-nav-left-push" >
+            <span class="topcoat-icon box-shadow-menu"></span>
         </a>
+        <!--<a class="topcoat-icon-button--quiet" ng-click="changeSettings()">
+            <span class="topcoat-icon settings-icon"></span>
+        </a>-->
+    </div>
+    <div class="topcoat-navigation-bar__item center half">
+        <h1 class="topcoat-navigation-bar__title">Cahier de vie</h1>
     </div>
 </div>
+<nav class="topcoat-list__container effeckt-off-screen-nav" id="effeckt-off-screen-nav">
+
+  <h4 class="topcoat-list__header">
+    Navigation
+    <a href="#0" id="effeckt-off-screen-nav-close" class="effeckt-off-screen-nav-close">×</a>
+  </h4>
+
+  <ul class="topcoat-list">
+    <li class="topcoat-list__item"><a href="#0">This</a></li>
+    <li class="topcoat-list__item"><a href="#0">Little</a></li>
+    <li class="topcoat-list__item"><a href="#0">Piggy</a></li>
+    <li class="topcoat-list__item"><a href="#0">Went</a></li>
+    <li class="topcoat-list__item"><a href="#0">To</a></li>
+    <li class="topcoat-list__item"><a href="#0">Market</a></li>
+  </ul>
+
+</nav>
 <div id="content" class="topcoat-list__container list">
     <h3 class="topcoat-list__header">PhoneGap API Samples</h3>
     <ul class="topcoat-list">
+        <li class="topcoat-list__item" ng-click="slidePage('/viewCahier')">
+            Cahier
+        </li>
         <li class="topcoat-list__item--first" ng-click="slidePage('/view8')">
             HackerNews
         </li>
+        
         <li class="topcoat-list__item" ng-click="slidePage('/view1')">
             Notification
         </li>
@@ -36,9 +60,9 @@
             Compass
         </li>
     </ul>
-    <div class="topcoat-navigation-bar footer">
+</div>
+<div class="topcoat-navigation-bar footer">
         <h1 class="centerize"  ng-show="!showURL" ng-swipe-left="showURL=true">Version  {{' %VERSION%' | interpolate}} </h1>
         <h1 class="centerize" ng-show="showURL" ng-swipe-right="showURL=false"><a href="http://devgirl.org">devgirl.org </a></h1>
-    </div>
 </div>
 <ng-include src="'partials/settingsOverlay.html'"></ng-include>

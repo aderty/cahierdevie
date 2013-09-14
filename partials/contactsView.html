@@ -24,6 +24,7 @@
     <div ng-show="contacts.length>0">
         <p class="centerize">Number of contacts found: {{contacts.length}}</p>
         <div class="topcoat-list__container list">
+            <h3 class="topcoat-list__header">Contacts</h3>
             <ul class=topcoat-list>
                 <li ng-repeat="contact in contacts" class="topcoat-list__item">
                     <p>{{ contact.name.formatted }}

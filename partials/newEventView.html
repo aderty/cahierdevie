@@ -1,0 +1,33 @@
+<div class="topcoat-navigation-bar header" ng-controller="HomeCtrl">
+    <div class="topcoat-navigation-bar__item left quarter">
+        <a class="topcoat-icon-button--quiet" href="#menu" title="menu" >
+            <span class="topcoat-icon box-shadow-menu"></span>
+        </a>
+         <a class="topcoat-icon-button--quiet" ng-click="back()">
+            <span class="topcoat-icon back_light-icon"></span>
+        </a>
+    </div>
+    <div class="topcoat-navigation-bar__item center half">
+        <h1 class="topcoat-navigation-bar__title">Nouveau évènement</h1>
+    </div>
+    <div class="topcoat-navigation-bar__item right quarter">
+        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+            <span class="topcoat-icon home-icon"></span>
+        </a>
+    </div>
+</div>
+
+<div class="pad">
+    <div class="centerize" >
+        <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
+        <div ng-repeat="picData in imgs" ng-animate="'slide'">
+            <img ng-src="data:image/jpeg;base64,{{picData}}" />
+            <span ng-click="deleteImg($index)">Supp</span>
+        </div>
+    </div>
+    <form id="eventForm" name="eventForm" ng-submit="add(event)">
+        <textarea ng-model="event.description" class="topcoat-textarea" rows="6" cols="36" placeholder="Description"></textarea>
+    </form>
+</div>
+
+<ng-include src="'partials/settingsOverlay.html'"></ng-include>

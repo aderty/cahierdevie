@@ -19,8 +19,32 @@
 * {
     -webkit-tap-highlight-color: rgba(0,0,0,0); /* make transparent link selection, adjust last value opacity 0 to 1.0
     */
+    /*-webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;*/
+    perspective: 1000;
+    transform: translateZ(0);
 }
-.header {
+
+.box-shadow-menu {
+  position: relative;
+  padding-left: 1.25em;
+}
+.box-shadow-menu:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.25em;
+  width: 3em;
+  height: 0.15em;
+  background: black;
+  box-shadow: 
+    0 0.25em 0 0 black,
+    0 0.5em 0 0 black;
+}
+
+/*.header {
     position: fixed;
     height: 4rem;
     top: 0;
@@ -40,7 +64,7 @@
 }
 #content ul {
     padding-bottom: 4rem;
-}
+}*/
 .list {
     width: 100%;
     /*height: 100%;*/
@@ -110,6 +134,20 @@
     background-size: cover;
 }
 
+.plus-icon {
+    background: url("../img/plus.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.back_light-icon {
+    background: url("../img/back_light.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
 img {
     margin-top: 10px;
     padding: 25px;
@@ -127,7 +165,7 @@ p {
   color: #c6c8c8;
 }
 
-h4 {
+/*h4 {
   padding: 0;
   margin: 0;
   font: inherit;
@@ -141,7 +179,7 @@ h4 {
   font-size: 1.0rem;
   font-weight: 400;
   color: #c6c8c8;
-} 
+} */
 
 
 .fade-hide-setup, .fade-show-setup {

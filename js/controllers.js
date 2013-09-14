@@ -3,9 +3,10 @@
 /* Controllers */
 function HomeCtrl($scope,navSvc,$rootScope) {
     $rootScope.showSettings = false;
-    $scope.slidePage = function (path,type) {
+    $scope.slidePage = function (path, type) {
         navSvc.slidePage(path,type);
     };
+    $rootScope.date = new Date();
     $scope.back = function () {
         navSvc.back();
     };
@@ -15,6 +16,47 @@ function HomeCtrl($scope,navSvc,$rootScope) {
     $scope.closeOverlay = function () {
         $rootScope.showSettings = false;
     };
+
+    EffecktOffScreenNav.bindUIActions();
+}
+
+function CahierJourCtrl($scope, navSvc) {
+    $scope.newEvent = function () {
+        navSvc.slidePage("/viewEvent");
+    }
+}
+
+function EventCtrl($scope, navSvc) {
+    $scope.takePic = function () {
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+            encodingType: 0     // 0=JPG 1=PNG
+        }
+        // Take picture using device camera and retrieve image as base64-encoded string
+        navigator.camera.getPicture(onSuccess, onFail, options);
+    }
+    $scope.imgs = [];
+
+    var onSuccess = function (imageData) {
+        console.log("On Success! ");
+        //$scope.picData = "data:image/jpeg;base64," + imageData;
+        $scope.imgs.push(imageData);
+        $scope.$apply();
+
+    };
+    var onFail = function (e) {
+        console.log("On fail " + e);
+    };
+
+    $scope.add = function (event) {
+
+    }
+
+    $scope.deleteImg = function (index) {
+        $scope.imgs.splice(index, 1);
+    }
 }
 
 function NotificationCtrl($scope) {
