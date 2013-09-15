@@ -44,8 +44,8 @@ function EventCtrl($scope, navSvc, EnfantService) {
     var onSuccess = function (imageData) {
         console.log("On Success! ");
         //$scope.picData = "data:image/jpeg;base64," + imageData;
-        $scope.imgs.push(imageData);
-        $scope.$apply();
+        /*$scope.imgs.push(imageData);
+        $scope.$apply();*/
         movePic(imageData);
 
     };
@@ -73,16 +73,20 @@ function EventCtrl($scope, navSvc, EnfantService) {
         var n = d.getTime();
         //new file name
         var newFileName = n + entry.name.substring(entry.name.indexOf("."));
-        var myFolderApp = "EventPicture";// + EnfantService.getCurrent().id;
-        alert(newFileName);
+        var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
 
         window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
         window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
             //The folder is created if doesn't exist
             fileSys.root.getDirectory(myFolderApp,
                             { create: true, exclusive: false },
-                            function (directory) {
-                                entry.moveTo(directory, newFileName, successMove, resOnError3);
+                            function (directoryRoot) {
+                                directoryRoot.getDirectory(EnfantService.getCurrent().id + "_" + EnfantService.getCurrent().prenom,
+                                        { create: true, exclusive: false },
+                                        function (directory) {
+                                            entry.moveTo(directory, newFileName, successMove, resOnError3);
+                                        },
+                                resOnError4);
                             },
                             resOnError2);
         },
@@ -92,12 +96,17 @@ function EventCtrl($scope, navSvc, EnfantService) {
     //Callback function when the file has been moved successfully - inserting the complete path
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
+        $scope.imgs.push(entry.toURI());
+        $scope.$apply();
     }
     function resOnError3(error) {
         alert("moveTo : " + error.code);
     }
     function resOnError2(error) {
         alert("getDirectory : " + error.code);
+    }
+    function resOnError4(error) {
+        alert("getDirectory2 : " + error.code);
     }
     function resOnError(error) {
         alert("requestFileSystem : " + error.code);

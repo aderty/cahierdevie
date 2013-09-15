@@ -212,7 +212,8 @@ myApp.factory('CahierService', function ($q, db) {
 myApp.factory('EnfantService', function ($q, db) {
     var motifs = null;
     var current = {
-        id : 10
+        id: 10,
+        prenom: "paul"
     };
     return {
         list: function () {
