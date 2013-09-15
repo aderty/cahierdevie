@@ -5,7 +5,7 @@
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Cahier du {{date}}</h1>
+        <h1 class="topcoat-navigation-bar__title">Cahier du {{currentCahier.date}}</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -13,15 +13,14 @@
         </a>
     </div>
 </div>
-<div id="content" class="topcoat-list__container list" ng-controller="CahierJourCtrl">
+<div id="content" class="topcoat-list__container list" >
     <h3 class="topcoat-list__header">Evènements du jour</h3>
     <ul class="topcoat-list">
         <li class="topcoat-list__item--first" ng-click="slidePage('/view8')">
             <a class="topcoat-icon-button--quiet" ng-click="newEvent()" ><span class="topcoat-icon plus-icon"></span></a>
         </li>
-        <li ng-repeat="contact in contacts" class="topcoat-list__item">
-             <p>{{ contact.name.formatted }}
-              <a href="tel://{{contact.phoneNumbers[0].value}}" style="float:right">{{ contact.phoneNumbers[0].value }}</a></p>
+        <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
+             <h3>{{ event.title }}</h3>
         </li>
     </ul>
 </div>

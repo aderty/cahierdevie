@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-function HomeCtrl($scope,navSvc,$rootScope) {
+function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     $rootScope.showSettings = false;
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path,type);
@@ -20,13 +20,54 @@ function HomeCtrl($scope,navSvc,$rootScope) {
     EffecktOffScreenNav.bindUIActions();
 }
 
-function CahierJourCtrl($scope, navSvc) {
-    $scope.newEvent = function () {
-        navSvc.slidePage("/viewEvent");
-    }
+function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
+    $scope.slidePage = function (path, type) {
+        navSvc.slidePage(path, type);
+    };
+    $scope.showCahier = function (enfant) {
+        EnfantService.setCurrent(enfant);
+        CahierService.list(enfant.id).then(function (cahiers) {
+            if (cahiers && cahiers.length) {
+                CahierService.setCurrent(cahiers[0]);
+            }
+            navSvc.slidePage('/viewCahier');
+        });
+       
+    };
+    EnfantService.list().then(function (enfants) {
+        if (enfants && enfants.length) {
+            $scope.enfants = enfants;
+        }
+    });
+    
+
 }
 
-function EventCtrl($scope, navSvc, EnfantService) {
+function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
+
+    $scope.currentCahier = CahierService.getCurrent();
+
+    $scope.newEvent = function () {
+        EventService.setCurrent(null);
+        navSvc.slidePage("/viewEvent");
+    }
+    $scope.editEvent = function (event) {
+        EventService.setCurrent(event);
+        navSvc.slidePage("/viewEvent");
+    }
+    CahierService.onCurrentChange(function (cahier) {
+    });
+}
+
+function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
+    var creation = true;
+    $scope.event = EventService.getCurrent();
+    if ($scope.event) {
+        creation = false;
+    }
+    else {
+        $scope.event.pictures = [];
+    }
     $scope.takePic = function () {
         var options = {
             quality: 75,
@@ -39,7 +80,6 @@ function EventCtrl($scope, navSvc, EnfantService) {
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
     }
-    $scope.imgs = [];
 
     var onSuccess = function (imageData) {
         console.log("On Success! ");
@@ -54,14 +94,24 @@ function EventCtrl($scope, navSvc, EnfantService) {
     };
 
     $scope.add = function (event) {
-        myApp.db.objectStore("wishlist").add(item).done(function () {
-            loadFromDB("wishlist");
-        })
+        var cahier = CahierService.getCurrent();
+        if (creation) {
+            cahier.events.push({
+                date: new Date(),
+                title: event.title,
+                desc: event.desc,
+                pictures: event.pictures
+            });
+        }
+        CahierService.save(cahier).then(function () {
+            navSvc.back();
+            $scope.$apply();
+        });
     }
 
     $scope.deleteImg = function (index) {
-        deletePic($scope.imgs[index]);
-        $scope.imgs.splice(index, 1);
+        deletePic(event.pictures[index]);
+        $scope.event.pictures.splice(index, 1);
     }
 
     function movePic(file) {
@@ -107,7 +157,7 @@ function EventCtrl($scope, navSvc, EnfantService) {
     //Callback function when the file has been moved successfully - inserting the complete path
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
-        $scope.imgs.push(entry.toURI());
+        $scope.event.pictures.push(entry.toURI());
         $scope.$apply();
     }
     function resOnError(error) {

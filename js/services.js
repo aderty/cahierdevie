@@ -180,56 +180,20 @@ myApp.factory('db', function () {
     return $.indexedDB("cahierdevie");
 });
 
-myApp.factory('CahierService', function ($q, db) {
-    var motifs = null;
-    return {
-        list: function () {
-            var defered = $q.defer();
-            if (motifs) {
-                defered.resolve(motifs);
-            }
-            else {
-                $http({
-                    method: 'GET',
-                    url: '/data-conges-motifs'
-                }).then(function (response) {
-                    motifs = response.data;
-                    defered.resolve(motifs);
-                });
-            }
-            return defered.promise;
-        },
-        add: function (cahier) {
-            var defered = $q.defer();
-            db.objectStore("cachier").add(cahier).done(function () {
-                defered.resolve(true);
-            })
-            return defered.promise;
-        }
-    };
-});
-
-myApp.factory('EnfantService', function ($q, db) {
-    var motifs = null;
+myApp.factory('EnfantService', function ($q, db, $timeout) {
     var current = {
-        id: 10,
-        prenom: "paul"
+        id: 1,
+        prenom: "paul",
+        email:"test@test.com"
     };
     return {
-        list: function () {
+        list: function (idEnfant) {
             var defered = $q.defer();
-            if (motifs) {
-                defered.resolve(motifs);
-            }
-            else {
-                $http({
-                    method: 'GET',
-                    url: '/data-conges-motifs'
-                }).then(function (response) {
-                    motifs = response.data;
-                    defered.resolve(motifs);
-                });
-            }
+            var enfants = [];
+            enfants.push(current);
+            $timeout(function () {
+                defered.resolve(enfants);
+            });
             return defered.promise;
         },
         add: function (cahier) {
@@ -241,6 +205,68 @@ myApp.factory('EnfantService', function ($q, db) {
         },
         getCurrent: function () {
             return current;
+        },
+        setCurrent: function (_enfant) {
+            current = _enfant;
+        }
+    };
+});
+
+myApp.factory('CahierService', function ($q, db, $timeout) {
+    var d = new Date();
+    var current = {
+        id: 3,
+        idEnfant: 1,
+        prenom: "paul",
+        date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
+        events: []
+    };
+    return {
+        list: function (idEnfant) {
+            var defered = $q.defer();
+            var cahiers = [];
+            db.objectStore("cahier").index("idEnfant").each(function (elem) {
+                if (idEnfant == elem.value.idEnfant) {
+                    cahiers.push(elem.value);
+                }
+            }, idEnfant).done(function () {
+                $timeout(function () {
+                    defered.resolve(cahiers);
+                });
+            }).fail(function () {
+                defered.resolve(null);
+            });
+            return defered.promise;
+        },
+        save: function (cahier) {
+            var defered = $q.defer();
+            return db.objectStore("cahier").put(cahier).done(function () {
+                defered.resolve(true);
+            }).fail(function (error) {
+
+            });
+            return defered.promise;
+        },
+        getCurrent: function () {
+            return current;
+        },
+        setCurrent: function (_event) {
+            current = _event;
+        },
+        onCurrentChange: function (callback) {
+        }
+    };
+});
+
+myApp.factory('EventService', function ($q, db) {
+    var d = new Date();
+    var current = null;
+    return {
+        getCurrent: function () {
+            return current;
+        },
+        setCurrent: function (_event) {
+            current = _event;
         }
     };
 });

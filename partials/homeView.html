@@ -1,4 +1,4 @@
-<div id="header" class="topcoat-navigation-bar header">
+<div id="header" class="topcoat-navigation-bar header" ng-controller="HomeCtrl">
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu"  data-effeckt="effeckt-off-screen-nav-left-push" >
             <span class="topcoat-icon box-shadow-menu"></span>
@@ -11,7 +11,7 @@
         <h1 class="topcoat-navigation-bar__title">Cahier de vie</h1>
     </div>
 </div>
-<nav class="topcoat-list__container effeckt-off-screen-nav" id="effeckt-off-screen-nav">
+<nav class="topcoat-list__container effeckt-off-screen-nav" id="effeckt-off-screen-nav" style="display: none;">
 
   <h4 class="topcoat-list__header">
     Navigation
@@ -28,36 +28,14 @@
   </ul>
 
 </nav>
-<div id="content" class="topcoat-list__container list">
+<div id="content" class="topcoat-list__container list" ng-controller="MainCtrl" >
     <h3 class="topcoat-list__header">PhoneGap API Samples</h3>
     <ul class="topcoat-list">
         <li class="topcoat-list__item" ng-click="slidePage('/viewCahier')">
             Cahier
         </li>
-        <li class="topcoat-list__item--first" ng-click="slidePage('/view8')">
-            HackerNews
-        </li>
-        
-        <li class="topcoat-list__item" ng-click="slidePage('/view1')">
-            Notification
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view2')">
-            Geolocation
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view3')">
-            Acceleration
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view4')">
-            Device
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view5')">
-            Camera
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view6')">
-            Contacts
-        </li>
-        <li class="topcoat-list__item" ng-click="slidePage('/view7')">
-            Compass
+        <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" class="topcoat-list__item">
+             <h3>{{ enfant.prenom }}</h3>
         </li>
     </ul>
 </div>

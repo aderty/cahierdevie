@@ -12,7 +12,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
     })
     .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'HomeCtrl' });
+        $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'MainCtrl' });
         $routeProvider.when('/viewCahier', { templateUrl: 'partials/cahierJourView.html', controller: 'CahierJourCtrl' });
         $routeProvider.when('/viewEvent', { templateUrl: 'partials/newEventView.html', controller: 'EventCtrl' });
         $routeProvider.when('/view1', {templateUrl: 'partials/notificationView.html'});
@@ -34,20 +34,34 @@ myApp.initDB = function () {
                     "autoIncrement": true,
                     "keyPath": "id"
                 });
-                catalog.createIndex("prenom");
+                catalog.createIndex("prenom", {
+                    "unique": false, // Uniqueness of Index, defaults to false
+                    "multiEntry": false // see explanation below
+                }, "prenom");
+                var cart = versionTransaction.createObjectStore("cahier", {
+                    "autoIncrement": true,
+                    "keyPath": "id"
+                });
+                cart.createIndex("idEnfant", {
+                    "unique": false, // Uniqueness of Index, defaults to false
+                    "multiEntry": true // see explanation below
+                }, "idEnfant");
             },
             // This was added in the next version of the site
             "2": function (versionTransaction) {
-                var cart = versionTransaction.createObjectStore("cahier", {
-                    "autoIncrement": true,
-                    "keyPath": "prenom"
-                });
-                cart.createIndex("itemId");
-                var wishlist = versionTransaction.createObjectStore("wishlist", {
+                var catalog = versionTransaction.createObjectStore("enfants", {
                     "autoIncrement": false,
-                    "keyPath": "itemId"
+                    "keyPath": "id"
                 });
-                wishlist.createIndex("name");
+                catalog.createIndex("prenom");
+                var cart = versionTransaction.createObjectStore("cahier", {
+                    "autoIncrement": false,
+                    "keyPath": "id"
+                });
+                cart.createIndex("idEnfant", {
+                    "unique": false, // Uniqueness of Index, defaults to false
+                    "multiEntry": true // see explanation below
+                }, "idEnfant");
             }
         }
     }).then(function () {

@@ -18,15 +18,21 @@
 </div>
 
 <div id="content" class="pad">
-    <div class="centerize" >
-        <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
-        <div ng-repeat="picData in imgs" ng-animate="'slide'">
-            <img ng-src="{{picData}}" />
-            <span ng-click="deleteImg($index)">Supp</span>
+    <form id="eventForm" name="eventForm">
+        <div class="left" style="float:left">
+            <input ng-model="event.title" type="text" value="" placeholder="Titre" class="topcoat-text-input--large">
         </div>
-    </div>
-    <form id="eventForm" name="eventForm" ng-submit="add(event)">
-        <textarea ng-model="event.description" class="topcoat-textarea" rows="6" cols="36" placeholder="Description"></textarea>
+        <div class="centerize" >
+            <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
+            <div ng-repeat="picData in event.pictures" ng-animate="'slide'">
+                <img ng-src="{{picData}}" />
+                <span ng-click="deleteImg($index)">Supp</span>
+            </div>
+        </div>
+        <div class="left" style="float:left">
+            <textarea ng-model="event.desc" class="topcoat-textarea--large" rows="6" cols="36" placeholder="Description"></textarea>
+        </div>
+        <button class="topcoat-button--large--cta" ng-click="add(event)">Ajouter</button>
     </form>
 </div>
 
