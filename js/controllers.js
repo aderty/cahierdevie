@@ -82,9 +82,9 @@ function EventCtrl($scope, navSvc, EnfantService) {
             fileSys.root.getDirectory(myFolderApp,
                             { create: true, exclusive: false },
                             function (directory) {
-                                entry.moveTo(directory, newFileName, successMove, resOnError);
+                                entry.moveTo(directory, newFileName, successMove, resOnError3);
                             },
-                            resOnError);
+                            resOnError2);
         },
         resOnError);
     }
@@ -93,9 +93,14 @@ function EventCtrl($scope, navSvc, EnfantService) {
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
     }
-
+    function resOnError3(error) {
+        alert("moveTo : " + error.code);
+    }
+    function resOnError2(error) {
+        alert("getDirectory : " + error.code);
+    }
     function resOnError(error) {
-        alert(error.code);
+        alert("requestFileSystem : " + error.code);
     }
 }
 
