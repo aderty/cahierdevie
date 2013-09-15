@@ -44,15 +44,15 @@
     0 0.5em 0 0 black;
 }
 
-/*.header {
+.header {
     position: fixed;
-    height: 4rem;
+    /*height: 4rem;*/
     top: 0;
     width: 100%;
     left: 0;
     z-index: 10000;
 }
-.footer {
+/*.footer {
     position: fixed;
     height: 4rem;
     bottom: 0;

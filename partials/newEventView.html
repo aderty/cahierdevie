@@ -21,7 +21,7 @@
     <div class="centerize" >
         <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
         <div ng-repeat="picData in imgs" ng-animate="'slide'">
-            <img ng-src="data:image/jpeg;base64,{{picData}}" />
+            <img ng-src="{{picData}}" />
             <span ng-click="deleteImg($index)">Supp</span>
         </div>
     </div>

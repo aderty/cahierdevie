@@ -46,6 +46,7 @@ function EventCtrl($scope, navSvc, EnfantService) {
         //$scope.picData = "data:image/jpeg;base64," + imageData;
         $scope.imgs.push(imageData);
         $scope.$apply();
+        movePic(imageData);
 
     };
     var onFail = function (e) {
