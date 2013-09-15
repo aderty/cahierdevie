@@ -32,14 +32,15 @@ myApp.initDB = function () {
             "1": function (versionTransaction) {
                 var catalog = versionTransaction.createObjectStore("enfants", {
                     "autoIncrement": true,
-                    "keyPath": "prenom"
+                    "keyPath": "id"
                 });
                 catalog.createIndex("prenom");
             },
             // This was added in the next version of the site
             "2": function (versionTransaction) {
-                var cart = versionTransaction.createObjectStore("cachier", {
-                    "autoIncrement": true
+                var cart = versionTransaction.createObjectStore("cahier", {
+                    "autoIncrement": true,
+                    "keyPath": "prenom"
                 });
                 cart.createIndex("itemId");
                 var wishlist = versionTransaction.createObjectStore("wishlist", {

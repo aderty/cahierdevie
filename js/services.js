@@ -176,5 +176,73 @@ myApp.factory('contacts', function ($rootScope, phonegapReady) {
     }
 });
 
+myApp.factory('db', function () {
+    return $.indexedDB("cahierdevie");
+});
+
+myApp.factory('CahierService', function ($q, db) {
+    var motifs = null;
+    return {
+        list: function () {
+            var defered = $q.defer();
+            if (motifs) {
+                defered.resolve(motifs);
+            }
+            else {
+                $http({
+                    method: 'GET',
+                    url: '/data-conges-motifs'
+                }).then(function (response) {
+                    motifs = response.data;
+                    defered.resolve(motifs);
+                });
+            }
+            return defered.promise;
+        },
+        add: function (cahier) {
+            var defered = $q.defer();
+            db.objectStore("cachier").add(cahier).done(function () {
+                defered.resolve(true);
+            })
+            return defered.promise;
+        }
+    };
+});
+
+myApp.factory('EnfantService', function ($q, db) {
+    var motifs = null;
+    var current = {
+        id : 10
+    };
+    return {
+        list: function () {
+            var defered = $q.defer();
+            if (motifs) {
+                defered.resolve(motifs);
+            }
+            else {
+                $http({
+                    method: 'GET',
+                    url: '/data-conges-motifs'
+                }).then(function (response) {
+                    motifs = response.data;
+                    defered.resolve(motifs);
+                });
+            }
+            return defered.promise;
+        },
+        add: function (cahier) {
+            var defered = $q.defer();
+            db.objectStore("cachier").add(cahier).done(function () {
+                defered.resolve(true);
+            })
+            return defered.promise;
+        },
+        getCurrent: function () {
+            return current;
+        }
+    };
+});
+
 
 

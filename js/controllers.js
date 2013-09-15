@@ -26,13 +26,15 @@ function CahierJourCtrl($scope, navSvc) {
     }
 }
 
-function EventCtrl($scope, navSvc) {
+function EventCtrl($scope, navSvc, EnfantService) {
     $scope.takePic = function () {
         var options = {
             quality: 50,
-            destinationType: Camera.DestinationType.DATA_URL,
+            destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
-            encodingType: 0     // 0=JPG 1=PNG
+            encodingType: 0,     // 0=JPG 1=PNG
+            targetWidth: 250,
+            targetHeight: 250
         }
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
@@ -51,11 +53,48 @@ function EventCtrl($scope, navSvc) {
     };
 
     $scope.add = function (event) {
-
+        myApp.db.objectStore("wishlist").add(item).done(function () {
+            loadFromDB("wishlist");
+        })
     }
 
     $scope.deleteImg = function (index) {
         $scope.imgs.splice(index, 1);
+    }
+
+    function movePic(file) {
+        window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError);
+    }
+
+    //Callback function when the file system uri has been resolved
+    function resolveOnSuccess(entry) {
+        var d = new Date();
+        var n = d.getTime();
+        //new file name
+        var newFileName = n + entry.name.substring(entry.name.indexOf("."));
+        var myFolderApp = "EventPicture/" + EnfantService.getCurrent().id;
+        alert(newFileName);
+
+        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
+            //The folder is created if doesn't exist
+            fileSys.root.getDirectory(myFolderApp,
+                            { create: true, exclusive: false },
+                            function (directory) {
+                                entry.moveTo(directory, newFileName, successMove, resOnError);
+                            },
+                            resOnError);
+        },
+        resOnError);
+    }
+
+    //Callback function when the file has been moved successfully - inserting the complete path
+    function successMove(entry) {
+        //I do my insert with "entry.fullPath" as for the path
+    }
+
+    function resOnError(error) {
+        alert(error.code);
     }
 }
 
