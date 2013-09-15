@@ -29,12 +29,12 @@ function CahierJourCtrl($scope, navSvc) {
 function EventCtrl($scope, navSvc, EnfantService) {
     $scope.takePic = function () {
         var options = {
-            quality: 50,
+            quality: 75,
             destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
-            encodingType: 0,     // 0=JPG 1=PNG
-            targetWidth: 250,
-            targetHeight: 250
+            encodingType: 0//,     // 0=JPG 1=PNG
+            /*targetWidth: 250,
+            targetHeight: 250*/
         }
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
@@ -60,11 +60,22 @@ function EventCtrl($scope, navSvc, EnfantService) {
     }
 
     $scope.deleteImg = function (index) {
+        deletePic($scope.imgs[index]);
         $scope.imgs.splice(index, 1);
     }
 
     function movePic(file) {
         window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError);
+    }
+    function deletePic(file) {
+        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
+    }
+
+    function deleteOnSuccess(entry) {
+        //new file name
+        entry.remove(function (entry) {
+            console.log("Removal succeeded");
+        }, resOnError);
     }
 
     //Callback function when the file system uri has been resolved
@@ -84,11 +95,11 @@ function EventCtrl($scope, navSvc, EnfantService) {
                                 directoryRoot.getDirectory(EnfantService.getCurrent().id + "_" + EnfantService.getCurrent().prenom,
                                         { create: true, exclusive: false },
                                         function (directory) {
-                                            entry.moveTo(directory, newFileName, successMove, resOnError3);
+                                            entry.moveTo(directory, newFileName, successMove, resOnError);
                                         },
-                                resOnError4);
+                                resOnError);
                             },
-                            resOnError2);
+                            resOnError);
         },
         resOnError);
     }
@@ -99,17 +110,8 @@ function EventCtrl($scope, navSvc, EnfantService) {
         $scope.imgs.push(entry.toURI());
         $scope.$apply();
     }
-    function resOnError3(error) {
-        alert("moveTo : " + error.code);
-    }
-    function resOnError2(error) {
-        alert("getDirectory : " + error.code);
-    }
-    function resOnError4(error) {
-        alert("getDirectory2 : " + error.code);
-    }
     function resOnError(error) {
-        alert("requestFileSystem : " + error.code);
+        alert(error.code);
     }
 }
 
