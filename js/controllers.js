@@ -73,7 +73,7 @@ function EventCtrl($scope, navSvc, EnfantService) {
         var n = d.getTime();
         //new file name
         var newFileName = n + entry.name.substring(entry.name.indexOf("."));
-        var myFolderApp = "EventPicture/" + EnfantService.getCurrent().id;
+        var myFolderApp = "EventPicture";// + EnfantService.getCurrent().id;
         alert(newFileName);
 
         window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
