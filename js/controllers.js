@@ -66,7 +66,9 @@ function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
         creation = false;
     }
     else {
-        $scope.event.pictures = [];
+        $scope.event = {
+            pictures: []
+        };
     }
     $scope.takePic = function () {
         var options = {
