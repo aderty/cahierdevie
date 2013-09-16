@@ -71,6 +71,9 @@ myApp.initDB = function () {
             //loadFromDB("wishlist");
             //downloadCatalog();
         }, 200);
+        window.onerror = function (e) {
+            alert(e);
+        }
     }, function () {
         alert("Looks like an error occured " + JSON.stringify(arguments))
     });
