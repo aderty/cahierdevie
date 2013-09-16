@@ -243,7 +243,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
             return db.objectStore("cahier").put(cahier).done(function () {
                 defered.resolve(true);
             }).fail(function (error) {
-
+                alert(error);
             });
             return defered.promise;
         },

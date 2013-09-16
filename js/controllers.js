@@ -105,7 +105,9 @@ function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
                 pictures: event.pictures
             });
         }
+        alert("pic " + event.pictures.length);
         CahierService.save(cahier).then(function () {
+            alert("save ok");
             navSvc.back();
             $scope.$apply();
         });
