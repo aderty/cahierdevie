@@ -1,6 +1,12 @@
-<div class="topcoat-navigation-bar header" ng-controller="HomeCtrl">
+<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
+
+  <ng-include src="'partials/navigationMain.html'"></ng-include>
+
+</nav>
+<section ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" href="#menu" title="menu" >
+        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
             <span class="topcoat-icon box-shadow-menu"></span>
         </a>
          <a class="topcoat-icon-button--quiet" ng-click="back()">
@@ -35,5 +41,5 @@
         <button class="topcoat-button--large--cta" ng-click="add(event)">Ajouter</button>
     </form>
 </div>
-
+</section>
 <ng-include src="'partials/settingsOverlay.html'"></ng-include>

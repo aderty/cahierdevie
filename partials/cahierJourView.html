@@ -1,26 +1,31 @@
-<div class="topcoat-navigation-bar header" ng-controller="HomeCtrl">
-    <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" href="#menu" title="menu" >
-            <span class="topcoat-icon box-shadow-menu"></span>
-        </a>
+<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
+  <ng-include src="'partials/navigationMain.html'"></ng-include>
+</nav>
+<section ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+    <div class="topcoat-navigation-bar header">
+        <div class="topcoat-navigation-bar__item left quarter">
+            <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left">
+                <span class="topcoat-icon box-shadow-menu"></span>
+            </a>
+        </div>
+        <div class="topcoat-navigation-bar__item center half">
+            <h1 class="topcoat-navigation-bar__title">Cahier du {{currentCahier.date}}</h1>
+        </div>
+        <div class="topcoat-navigation-bar__item right quarter">
+            <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+                <span class="topcoat-icon home-icon"></span>
+            </a>
+        </div>
     </div>
-    <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Cahier du {{currentCahier.date}}</h1>
+    <div id="content" class="topcoat-list__container list" >
+        <h3 class="topcoat-list__header">Evènements du jour</h3>
+        <ul class="topcoat-list">
+            <li class="topcoat-list__item--first" ng-click="newEvent()">
+                <a class="topcoat-icon-button--quiet" ><span class="topcoat-icon plus-icon"></span></a>
+            </li>
+            <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
+                 <h3>{{ event.title }}</h3>
+            </li>
+        </ul>
     </div>
-    <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-            <span class="topcoat-icon home-icon"></span>
-        </a>
-    </div>
-</div>
-<div id="content" class="topcoat-list__container list" >
-    <h3 class="topcoat-list__header">Evènements du jour</h3>
-    <ul class="topcoat-list">
-        <li class="topcoat-list__item--first" ng-click="slidePage('/view8')">
-            <a class="topcoat-icon-button--quiet" ng-click="newEvent()" ><span class="topcoat-icon plus-icon"></span></a>
-        </li>
-        <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
-             <h3>{{ event.title }}</h3>
-        </li>
-    </ul>
-</div>
+</section>

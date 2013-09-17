@@ -17,7 +17,11 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
         $rootScope.showSettings = false;
     };
 
-    EffecktOffScreenNav.bindUIActions();
+    $scope.optsNavigation = {
+        disable: 'right'
+    };
+
+    //EffecktOffScreenNav.bindUIActions();
 }
 
 function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
