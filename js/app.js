@@ -70,9 +70,10 @@ myApp.initDB = function () {
             //loadFromDB("cart");
             //loadFromDB("wishlist");
             //downloadCatalog();
+            $.zeez('ee');
         }, 200);
-        window.onerror = function (e) {
-            alert(e);
+        window.onerror = function (e, f, l) {
+            alert(e + " \n file : " + f +" \n ligne :" + l);
         }
     }, function () {
         alert("Looks like an error occured " + JSON.stringify(arguments))
