@@ -245,7 +245,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
                     defered.resolve(true);
                 });
             }).fail(function (e, l, f) {
-                alert(e + " \n file : " + f + " \n ligne :" + l);
+                alert(e.stack + " \n file : " + f + " \n ligne :" + l);
             });
             return defered.promise;
         },

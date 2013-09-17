@@ -30,7 +30,7 @@ myApp.initDB = function () {
     $.indexedDB("cahierdevie", {
         "schema": {
             "1": function (versionTransaction) {
-                var catalog = versionTransaction.createObjectStore("enfants", {
+                /*var catalog = versionTransaction.createObjectStore("enfants", {
                     "autoIncrement": true,
                     "keyPath": "id"
                 });
@@ -45,7 +45,7 @@ myApp.initDB = function () {
                 cart.createIndex("idEnfant", {
                     "unique": false, // Uniqueness of Index, defaults to false
                     "multiEntry": true // see explanation below
-                }, "idEnfant");
+                }, "idEnfant");*/
             },
             // This was added in the next version of the site
             "2": function (versionTransaction) {
@@ -70,10 +70,9 @@ myApp.initDB = function () {
             //loadFromDB("cart");
             //loadFromDB("wishlist");
             //downloadCatalog();
-            alert(window.indexedDB);
         }, 200);
         window.onerror = function (e, f, l) {
-            alert(e + " \n file : " + f +" \n ligne :" + l);
+            alert(e.stack + " \n file : " + f + " \n ligne :" + l);
         }
     }, function () {
         alert("Looks like an error occured " + JSON.stringify(arguments))
