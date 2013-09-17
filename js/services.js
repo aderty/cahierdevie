@@ -241,9 +241,11 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         save: function (cahier) {
             var defered = $q.defer();
             return db.objectStore("cahier").put(cahier).done(function () {
-                defered.resolve(true);
-            }).fail(function (error) {
-                alert(error);
+                $timeout(function () {
+                    defered.resolve(true);
+                });
+            }).fail(function (e, l, f) {
+                alert(e + " \n file : " + f + " \n ligne :" + l);
             });
             return defered.promise;
         },
