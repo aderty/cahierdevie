@@ -70,7 +70,7 @@ myApp.initDB = function () {
             //loadFromDB("cart");
             //loadFromDB("wishlist");
             //downloadCatalog();
-            $.zeez('ee');
+            alert(window.indexedDB);
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e + " \n file : " + f +" \n ligne :" + l);
