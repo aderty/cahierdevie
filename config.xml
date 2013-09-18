@@ -82,10 +82,11 @@
   <!-- retina iPad support: PhoneGap 2.5.0+ only -->
   <icon src="res/icons/ios/icon-72_at_2x.png" gap:platform="ios" width="144" height="144" />
   <!-- android -->
-  <icon src="res/icons/android/ldpi.png" gap:platform="android" gap:density="ldpi" />
-  <icon src="res/icons/android/mdpi.png" gap:platform="android" gap:density="mdpi" />
-  <icon src="res/icons/android/hdpi.png" gap:platform="android" gap:density="hdpi" />
-  <icon src="res/icons/android/xhdpi.png" gap:platform="android" gap:density="xhdpi" />
+  <icon src="res/drawable-hdpi/ic_launcher.png" gap:platform="android" gap:density="ldpi" />
+  <icon src="res/drawable-mdpi/ic_launcher.png" gap:platform="android" gap:density="mdpi" />
+  <icon src="res/drawable-hdpi/ic_launcher.png" gap:platform="android" gap:density="hdpi" />
+  <icon src="res/drawable-xhdpi/ic_launcher.png" gap:platform="android" gap:density="xhdpi" />
+  <icon src="res/drawable-xxhdpi/ic_launcher.png" gap:platform="android" gap:density="xxhdpi" />
   <!-- windowsPhone -->
   <icon src="res/icons/winphone/icon.png" gap:platform="winphone" />
   <icon src="res/icons/winphone/tileicon.png" gap:platform="winphone" gap:role="background" />
