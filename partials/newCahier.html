@@ -14,7 +14,7 @@
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Nouveau &eacute;v&egrave;nement</h1>
+        <h1 class="topcoat-navigation-bar__title">Nouveau cahier</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -23,23 +23,18 @@
     </div>
 </div>
 
-<div id="content" class="pad">
-    <form id="eventForm" name="eventForm">
+<div id="content" >
+    <form id="cahierForm" name="cahierForm">
         <div class="left" style="float:left">
-            <input ng-model="event.title" type="text" value="" placeholder="Titre" class="topcoat-text-input--large">
-        </div>
-        <div class="centerize" >
-            <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
-            <div ng-repeat="picData in event.pictures" ng-animate="'slide'">
-                <img ng-src="{{picData}}" />
-                <span ng-click="deleteImg($index)">Supp</span>
-            </div>
+            <input ng-model="cahier.prenom" type="text" value="" placeholder="Pr&eacute;nom de l'enfant" class="topcoat-text-input--large">
         </div>
         <div class="left" style="float:left">
-            <textarea ng-model="event.desc" class="topcoat-textarea--large" rows="6" cols="36" placeholder="Description"></textarea>
+            <input ng-model="cahier.email" type="text" value="" placeholder="Email de correspondance" class="topcoat-text-input--large">
         </div>
-        <button class="topcoat-button--large--cta" ng-click="add(event)">Ajouter</button>
+        <div class="left" style="float:left">
+            <input ng-model="cahier.tel" type="text" value="" placeholder="Tel" class="topcoat-text-input--large">
+        </div>
+        <button class="topcoat-button--large--cta" ng-click="add(cahier)">Ajouter</button>
     </form>
 </div>
 </section>
-<ng-include src="'partials/settingsOverlay.html'"></ng-include>

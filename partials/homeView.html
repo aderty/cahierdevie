@@ -18,19 +18,14 @@
     </div>
 </div>
 <div id="content" class="topcoat-list__container list" ng-controller="MainCtrl" >
-    <h3 class="topcoat-list__header">PhoneGap API Samples</h3>
+    <h3 class="topcoat-list__header">Cahiers des enfants</h3>
     <ul class="topcoat-list">
-        <li class="topcoat-list__item" ng-click="slidePage('/viewCahier')">
-            Cahier
-        </li>
         <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" class="topcoat-list__item">
              <h3>{{ enfant.prenom }}</h3>
+        </li>
+        <li class="topcoat-list__item" ng-click="newCahier()">
+            Nouveau cahier
         </li>
     </ul>
 </div>
 </section>
-<div class="topcoat-navigation-bar footer">
-        <h1 class="centerize"  ng-show="!showURL" ng-swipe-left="showURL=true">Version  {{' %VERSION%' | interpolate}} </h1>
-        <h1 class="centerize" ng-show="showURL" ng-swipe-right="showURL=false"><a href="http://devgirl.org">devgirl.org </a></h1>
-</div>
-<ng-include src="'partials/settingsOverlay.html'"></ng-include>

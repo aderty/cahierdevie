@@ -194,18 +194,44 @@ myApp.factory('EnfantService', function ($q, db, $timeout) {
         list: function (idEnfant) {
             var defered = $q.defer();
             var enfants = [];
-            enfants.push(current);
+            /*enfants.push(current);
             $timeout(function () {
                 defered.resolve(enfants);
+            });*/
+            db.getInstance().objectStore("enfants").each(function (data) {
+                enfants.push(data.value);
+            }).done(function (data) {
+                $timeout(function () {
+                    defered.resolve(enfants);
+                });
+            }).fail(function () {
+                defered.reject(null);
             });
             return defered.promise;
         },
-        add: function (cahier) {
+        get: function (id) {
             var defered = $q.defer();
-            db.getInstance().objectStore("cachier").add(cahier).done(function () {
-                defered.resolve(true);
-            })
+            db.getInstance().objectStore("enfants").get(id).done(function (data) {
+                $timeout(function () {
+                    defered.resolve(data);
+                });
+            }).fail(function () {
+                defered.reject(null);
+            });
             return defered.promise;
+        },
+        save: function (enfant) {
+            var defered = $q.defer();
+            return db.getInstance().objectStore("enfants").put(enfant).done(function () {
+                $timeout(function () {
+                    defered.resolve(true);
+                });
+            }).fail(function (e, l, f) {
+                alert(e.stack + " \n file : " + f + " \n ligne :" + l);
+            });
+            return defered.promise;
+        },
+        remove: function(enfant){
         },
         getCurrent: function () {
             return current;

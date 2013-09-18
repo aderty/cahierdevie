@@ -37,6 +37,10 @@ function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
         });
        
     };
+    $scope.newCahier = function () {
+        EnfantService.setCurrent(null);
+        navSvc.slidePage('/viewNewCahier');
+    }
     EnfantService.list().then(function (enfants) {
         if (enfants && enfants.length) {
             $scope.enfants = enfants;
@@ -55,6 +59,37 @@ function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
     $scope.editEvent = function (event) {
         EventService.setCurrent(event);
         navSvc.slidePage("/viewEvent");
+    }
+}
+
+function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
+    var creation = true;
+
+    $scope.enfant = EnfantService.getCurrent();
+    if ($scope.enfant) {
+        creation = false;
+    }
+    else {
+        $scope.enfant = {
+            id: new Date().getTime()
+        }
+    }
+
+    $scope.add = function (enfant) {
+        if (!enfant.id) {
+            enfant.id = new Date().getTime();
+        }
+        EnfantService.save(enfant).then(function () {
+            navSvc.back();
+            $scope.$apply();
+        });
+    }
+
+    $scope.delete = function (enfant) {
+        EnfantService.remove(enfant).then(function () {
+            navSvc.back();
+            $scope.$apply();
+        });
     }
 }
 
