@@ -226,6 +226,14 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         events: []
     };
     return {
+        "new": function (idEnfant, date) {
+            return {
+                id: idEnfant + "_" + date.getFullYear() + (date.getMonth() + 1) + date.getDate(),
+                idEnfant: idEnfant,
+                date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
+                events: []
+            }
+        },
         list: function (idEnfant) {
             var defered = $q.defer();
             var cahiers = [];
@@ -239,6 +247,19 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
                 });
             }).fail(function () {
                 defered.resolve(null);
+            });
+            return defered.promise;
+        },
+        get: function (idEnfant, date) {
+            var defered = $q.defer();
+            var cahiers = [];
+            var key = idEnfant + "_" + date.getFullYear() + (date.getMonth() + 1) + date.getDate();
+            db.getInstance().objectStore("cahier").get(key).done(function (data) {
+                $timeout(function () {
+                    defered.resolve(data);
+                });
+            }).fail(function () {
+                defered.reject(null);
             });
             return defered.promise;
         },

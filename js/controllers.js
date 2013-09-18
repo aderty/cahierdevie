@@ -20,8 +20,6 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     $scope.optsNavigation = {
         disable: 'right'
     };
-
-    //EffecktOffScreenNav.bindUIActions();
 }
 
 function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
@@ -30,11 +28,11 @@ function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
     $scope.showCahier = function (enfant) {
         EnfantService.setCurrent(enfant);
-        CahierService.list(enfant.id).then(function (cahiers) {
-            alert(cahiers);
-            if (cahiers && cahiers.length) {
-                CahierService.setCurrent(cahiers[0]);
+        CahierService.get(enfant.id, new Date()).then(function (cahier) {
+            if (!cahier) {
+                cahier = CahierService.new(enfant.id, new Date());
             }
+            CahierService.setCurrent(cahier);
             navSvc.slidePage('/viewCahier');
         });
        
@@ -44,8 +42,6 @@ function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
             $scope.enfants = enfants;
         }
     });
-    
-
 }
 
 function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
@@ -60,8 +56,6 @@ function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
         EventService.setCurrent(event);
         navSvc.slidePage("/viewEvent");
     }
-    CahierService.onCurrentChange(function (cahier) {
-    });
 }
 
 function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
