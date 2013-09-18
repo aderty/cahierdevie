@@ -177,7 +177,11 @@ myApp.factory('contacts', function ($rootScope, phonegapReady) {
 });
 
 myApp.factory('db', function () {
-    return $.indexedDB("cahierdevie");
+    return {
+      getInstance: function(){
+          return $.indexedDB("cahierdevie");
+      }
+    };
 });
 
 myApp.factory('EnfantService', function ($q, db, $timeout) {
@@ -198,7 +202,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout) {
         },
         add: function (cahier) {
             var defered = $q.defer();
-            db.objectStore("cachier").add(cahier).done(function () {
+            db.getInstance().objectStore("cachier").add(cahier).done(function () {
                 defered.resolve(true);
             })
             return defered.promise;
@@ -225,7 +229,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         list: function (idEnfant) {
             var defered = $q.defer();
             var cahiers = [];
-            db.objectStore("cahier").index("idEnfant").each(function (elem) {
+            db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
                 if (idEnfant == elem.value.idEnfant) {
                     cahiers.push(elem.value);
                 }
@@ -240,7 +244,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         },
         save: function (cahier) {
             var defered = $q.defer();
-            return db.objectStore("cahier").put(cahier).done(function () {
+            return db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
                 });
