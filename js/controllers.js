@@ -31,6 +31,7 @@ function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     $scope.showCahier = function (enfant) {
         EnfantService.setCurrent(enfant);
         CahierService.list(enfant.id).then(function (cahiers) {
+            alert(cahiers);
             if (cahiers && cahiers.length) {
                 CahierService.setCurrent(cahiers[0]);
             }
@@ -110,7 +111,6 @@ function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
             });
         }
         CahierService.save(cahier).then(function () {
-            alert("save ok");
             navSvc.back();
             $scope.$apply();
         });
