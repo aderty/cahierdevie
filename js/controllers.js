@@ -41,13 +41,13 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         EnfantService.setCurrent(null);
         navSvc.slidePage('/viewNewCahier');
     }
-    //$timeout(function () {
+    $timeout(function () {
         EnfantService.list().then(function (enfants) {
             if (enfants && enfants.length) {
                 $scope.enfants = enfants;
             }
         });
-    //}, 250);
+    }, 250);
 }
 
 function CahierJourCtrl($scope, navSvc, CahierService, EventService) {

@@ -19,7 +19,9 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.otherwise({redirectTo: '/'});
   }]);
 myApp.initialize = function () {
-    myApp.initDB();
+    window.setTimeout(function () {
+        myApp.initDB();
+    }, 150);
 }
 myApp.initDB = function () {
     $.indexedDB("cahierdevie", {
