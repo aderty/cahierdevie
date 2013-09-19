@@ -3,7 +3,7 @@
     <button>X</button>
 </h4>
 
-  <ul class="topcoat-list">
-    <li class="topcoat-list__item"><a href="#0">Jour pr&eacute;c&eacute;dent</a></li>
-    <li class="topcoat-list__item"><a href="#0">Jour futur</a></li>
+  <ul class="topcoat-list" ng-controller="NavigationCtrl">
+    <li class="topcoat-list__item"><span class="topcoat-button" ng-click="backDate()">Jour pr&eacute;c&eacute;dent</span></li>
+    <li class="topcoat-list__item"><span class="topcoat-button" ng-click="nextDate()">Jour futur</span></li>
   </ul>

@@ -1,5 +1,10 @@
 'use strict';
 
+myApp.run(["$rootScope", function ($rootScope) {
+    var date = new Date(); 
+    $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}]);
+
 /* Controllers */
 function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     $rootScope.showSettings = false;
@@ -18,42 +23,142 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
 
     $scope.optsNavigation = {
-        disable: 'right'
+        disable: 'right',
+        touchToDrag: false
     };
+}
+
+function NavigationCtrl($scope, navSvc, $rootScope) {
+    $scope.backDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+    $scope.nextDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+}
+
+function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notification){
+    $scope.closeOverlay = function () {
+        $rootScope.showEnfantOverlay = false;
+    };
+    $scope.update = function(){
+        $scope.closeOverlay();
+        navSvc.slidePage('/viewNewCahier');
+    }
+    $scope.remove = function(){
+        if(confirm("Etes-vous sur ?")){
+            $scope.closeOverlay();
+            EnfantService.remove(EnfantService.getCurrent()).then(function(){
+                $scope.$emit("reload");
+            });
+        }
+        /*if(notification.confirm("Etes-vous sur ?", function(){
+            $scope.closeOverlay();
+            EnfantService.remove(EnfantService.getCurrent());
+        });*/
+    }
 }
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
+    
+    $scope.backDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+    $scope.nextDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+    
+    $rootScope.showEnfantOverlay = false;
+    
+    $scope.showMenuEnfant = function (enfant) {
+        EnfantService.setCurrent(enfant);
+        $rootScope.showEnfantOverlay = true;
+    };
+    
+    
+    
     $scope.showCahier = function (enfant) {
         EnfantService.setCurrent(enfant);
-        CahierService.get(enfant.id, new Date()).then(function (cahier) {
+        CahierService.get(enfant.id, $rootScope.currentDate).then(function (cahier) {
             if (!cahier) {
-                cahier = CahierService.new(enfant.id, new Date());
+                cahier = CahierService.new(enfant.id, $rootScope.currentDate);
             }
             CahierService.setCurrent(cahier);
             navSvc.slidePage('/viewCahier');
         });
        
     };
+    
     $scope.newCahier = function () {
         EnfantService.setCurrent(null);
         navSvc.slidePage('/viewNewCahier');
     }
     $timeout(function () {
-        EnfantService.list().then(function (enfants) {
-            if (enfants && enfants.length) {
-                $scope.enfants = enfants;
-            }
-        });
+        loadEnfants();
     }, 250);
+    
+    /*EnfantService.onChange(loadCahier);
+    
+    $scope.$on('$destroy', function() {
+          EnfantService.removeOnChange(loadCahier);
+    });*/
+    
+    $rootScope.$watch('currentDate', loadCahier);
+    
+    $scope.$on("reload", function(){
+        $timeout(function () {
+            loadEnfants();
+        });
+        //$scope.$apply();
+    });
+    
+    function loadEnfants(){
+        EnfantService.list().then(function (enfants) {
+            $scope.enfants = enfants;
+        });
+    }
+    
+    function loadCahier(){
+        if(!EnfantService.getCurrent()) return;
+        CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
+            if (!cahier) {
+                 cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
+            }
+            CahierService.setCurrent(cahier);
+        });
+    }
 }
 
-function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
-
+function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
+    function loadCahier(){
+        if(!EnfantService.getCurrent()) return;
+        CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
+            if (!cahier) {
+                 cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
+            }
+            CahierService.setCurrent(cahier);
+        });
+    }
     $scope.currentCahier = CahierService.getCurrent();
-
+    $scope.currentEnfant = EnfantService.getCurrent();
+    
+    EnfantService.onChange(loadCahier);
+    
+    $scope.$on('$destroy', function() {
+          EnfantService.removeOnChange(loadCahier);
+    });
+    
+    CahierService.onChange(function(cahier){
+        $scope.currentCahier = cahier;
+        $scope.currentEnfant = EnfantService.getCurrent();
+    });
     $scope.newEvent = function () {
         EventService.setCurrent(null);
         navSvc.slidePage("/viewEvent");
@@ -63,8 +168,34 @@ function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
         navSvc.slidePage("/viewEvent");
     }
     $scope.removeEvent = function (event, index) {
+        if(event.pictures && event.pictures.length){
+            var i=0, l = event.pictures.length;
+            for(;i<l;i++){
+                deletePic(event.pictures[i]);
+            }
+        }
         $scope.currentCahier.events.splice(index, 1);
         CahierService.save($scope.currentCahier);
+    }
+    $scope.prevEnfant = function(){
+        EnfantService.prev();
+    }
+    $scope.nextEnfant = function(){
+        EnfantService.next();
+    }
+    $scope.modifierEnfant = function(){
+        navSvc.slidePage('/viewNewCahier');
+    }
+    
+    function deletePic(file) {
+        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
+    }
+
+    function deleteOnSuccess(entry) {
+        //new file name
+        entry.remove(function (entry) {
+            console.log("Removal succeeded");
+        }, resOnError);
     }
 }
 
@@ -82,6 +213,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     }
 
     $scope.add = function (enfant) {
+        if(!enfant || !enfant.prenom || enfant.prenom == "") return;
         if (!enfant.id) {
             enfant.id = new Date().getTime();
         }
@@ -90,16 +222,10 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
             $scope.$apply();
         });
     }
-
-    $scope.delete = function (enfant) {
-        EnfantService.remove(enfant).then(function () {
-            navSvc.back();
-            $scope.$apply();
-        });
-    }
 }
 
-function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
+function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
+    $rootScope.showEnfantOverlay = false;
     var creation = true;
     $scope.event = EventService.getCurrent();
     if ($scope.event) {
@@ -136,6 +262,7 @@ function EventCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
     };
 
     $scope.add = function (event) {
+        if(!event || !event.title || event.title == "") return;
         var cahier = CahierService.getCurrent();
         if (creation) {
             cahier.events.push({

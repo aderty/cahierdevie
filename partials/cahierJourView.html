@@ -1,7 +1,12 @@
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
   <ng-include src="'partials/navigationMain.html'"></ng-include>
+  
+  <ul class="topcoat-list" ng-controller="NavigationCtrl">
+    <li class="topcoat-list__item"><span class="topcoat-button" ng-click="modifierEnfant()">Modifier infos</span></li>
+  </ul>
+  
 </nav>
-<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" hm-swipeleft="prevEnfant()" hm-swiperight="nextEnfant()" >
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
             <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left">
@@ -9,7 +14,7 @@
             </a>
         </div>
         <div class="topcoat-navigation-bar__item center half">
-            <h1 class="topcoat-navigation-bar__title">Cahier du {{currentCahier.date}}</h1>
+            <h1 class="topcoat-navigation-bar__title">Cahier de {{currentEnfant.prenom}}</h1>
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
             <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -18,8 +23,8 @@
         </div>
     </div>
     <div id="content" class="topcoat-list__container list" >
-        <h3 class="topcoat-list__header">Ev&egrave;nements du jour</h3>
-        <ul class="topcoat-list">
+        <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
+        <ul class="topcoat-list" >
             <li class="topcoat-list__item--first" ng-click="newEvent()">
                 <a class="topcoat-icon-button--quiet" ><span class="topcoat-icon plus-icon"></span></a>
             </li>

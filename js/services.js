@@ -184,20 +184,14 @@ myApp.factory('db', function () {
     };
 });
 
-myApp.factory('EnfantService', function ($q, db, $timeout) {
-    var current = {
-        id: 1,
-        prenom: "paul",
-        email:"test@test.com"
-    };
+myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
+    var current, enfants = [];
+    var enfantChangeCb = [];
+    
     return {
         list: function (idEnfant) {
             var defered = $q.defer();
-            var enfants = [];
-            /*enfants.push(current);
-            $timeout(function () {
-                defered.resolve(enfants);
-            });*/
+            enfants = [];
             db.getInstance().objectStore("enfants").each(function (data) {
                 enfants.push(data.value);
             }).done(function (data) {
@@ -208,6 +202,25 @@ myApp.factory('EnfantService', function ($q, db, $timeout) {
                 defered.reject(null);
             });
             return defered.promise;
+        },
+        next: function () {
+            var i= 0, l= enfants.length;
+            for(;i<l;i++){
+                if(enfants[i].id == current.id){
+                    this.setCurrent(enfants[ i < l-1 ? i + 1 : 0]);
+                    break;
+                }
+            }
+            
+        },
+        prev: function () {
+            var i= 0, l= enfants.length;
+            for(;i<l;i++){
+                if(enfants[i].id == current.id){
+                    this.setCurrent(enfants[ i > 0 ? i - 1 : l - 1]);
+                    break;
+                }
+            }
         },
         get: function (id) {
             var defered = $q.defer();
@@ -231,18 +244,47 @@ myApp.factory('EnfantService', function ($q, db, $timeout) {
             });
             return defered.promise;
         },
-        remove: function(enfant){
+        remove: function(enfant) {
+            var defered = $q.defer();
+            CahierService.removeAll(enfant.id).then(function(){
+                db.getInstance().objectStore("enfants").delete(enfant.id).done(function() {
+                    $timeout(function() {
+                        defered.resolve(true);
+                    });
+                }).fail(function(e, l, f) {
+                    alert(e.stack + " \n file : " + f + " \n ligne :" + l);
+                });
+            });
+            return defered.promise;
         },
         getCurrent: function () {
             return current;
         },
         setCurrent: function (_enfant) {
             current = _enfant;
+            var i=0, l = enfantChangeCb.length;
+            for(;i<l; i++){
+                enfantChangeCb[i].call(this, current);
+            }
+        },
+        onChange: function (callback) {
+            enfantChangeCb.push(callback);
+        },
+        removeOnChange: function(callback){
+            var i=0, l = enfantChangeCb.length;
+            for(;i<l; i++){
+                if(callback == enfantChangeCb[i]){
+                    enfantChangeCb.splice(i, 1);
+                }
+            }
         }
     };
 });
 
 myApp.factory('CahierService', function ($q, db, $timeout) {
+    
+    var cahierChangeCb = [];
+    
     var d = new Date();
     var current = {
         id: 3,
@@ -251,12 +293,17 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
         events: []
     };
+    
+    function genKey(id, date){
+        return id + "_" + date.getFullYear() + (date.getMonth() < 9 || date.getMonth() > 11  ? '0' : '') +  (date.getMonth() + 1) + date.getDate();
+    }
+    
     return {
         "new": function (idEnfant, date) {
             return {
-                id: idEnfant + "_" + date.getFullYear() + (date.getMonth() + 1) + date.getDate(),
+                id: genKey(idEnfant, date),
                 idEnfant: idEnfant,
-                date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
+                date: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
                 events: []
             }
         },
@@ -272,14 +319,34 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
                     defered.resolve(cahiers);
                 });
             }).fail(function () {
-                defered.resolve(null);
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        removeAll: function(idEnfant){
+            var defered = $q.defer();
+            db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
+                // Suppression des images des évènements
+                if(elem.value.events && elem.value.events.length){
+                    var i=0, l = elem.value.events.length;
+                    for(;i<l;i++){
+                        deleteEvent(elem.value.events[i]);
+                    }
+                }
+                elem.delete();
+            }, idEnfant).done(function () {
+                $timeout(function () {
+                    defered.resolve(true);
+                });
+            }).fail(function () {
+                defered.reject(arguments);
             });
             return defered.promise;
         },
         get: function (idEnfant, date) {
             var defered = $q.defer();
             var cahiers = [];
-            var key = idEnfant + "_" + date.getFullYear() + (date.getMonth() + 1) + date.getDate();
+            var key = genKey(idEnfant, date);
             db.getInstance().objectStore("cahier").get(key).done(function (data) {
                 $timeout(function () {
                     defered.resolve(data);
@@ -305,10 +372,36 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         },
         setCurrent: function (_event) {
             current = _event;
+            var i=0, l = cahierChangeCb.length;
+            for(;i<l; i++){
+                cahierChangeCb[i].call(this, current);
+            }
         },
-        onCurrentChange: function (callback) {
+        onChange: function (callback) {
+            cahierChangeCb.push(callback);
         }
     };
+    
+    function deleteEvent(event){
+        // Suppression des images des évènements
+        if(event.pictures && event.pictures.length){
+             var i=0, l = event.pictures.length;
+             for(;i<l;i++){
+                  deletePic(event.pictures[i]);
+             }
+        }
+    }
+    
+    function deletePic(file) {
+        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
+    }
+
+    function deleteOnSuccess(entry) {
+        //new file name
+        entry.remove(function (entry) {
+            console.log("Removal succeeded");
+        }, resOnError);
+    }
 });
 
 myApp.factory('EventService', function ($q, db) {

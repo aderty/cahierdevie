@@ -55,6 +55,10 @@ html, body {
     0 0.5em 0 0 black;
 }
 
+.saisie
+{
+	width: 90%;
+}
 .header {
     position: fixed;
     /*height: 4rem;*/
