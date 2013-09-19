@@ -62,6 +62,10 @@ function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
         EventService.setCurrent(event);
         navSvc.slidePage("/viewEvent");
     }
+    $scope.removeEvent = function (event, index) {
+        $scope.currentCahier.events.splice(index, 1);
+        CahierService.save($scope.currentCahier);
+    }
 }
 
 function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {

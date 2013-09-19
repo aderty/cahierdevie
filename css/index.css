@@ -155,6 +155,13 @@ nav.navigation {
     background-size: cover;
 }
 
+.delete-icon {
+    background: url("../img/delete.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
 .back_light-icon {
     background: url("../img/back_light.svg") no-repeat;
     -webkit-background-size: cover;

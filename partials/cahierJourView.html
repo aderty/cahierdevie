@@ -25,6 +25,10 @@
             </li>
             <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
                  <h3>{{ event.title }}</h3>
+                <p>{{event.desc}}</p>
+                <a class="topcoat-icon-button--quiet" title="Supprimer" ng-click="removeEvent(event, $index)" style="float: right;">
+                    <span class="topcoat-icon delete-icon"></span>
+                </a>
             </li>
         </ul>
     </div>
