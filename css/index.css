@@ -25,6 +25,9 @@
     backface-visibility: hidden;*/
     perspective: 1000;
     transform: translateZ(0);
+}
+
+.noSelect {
     -webkit-touch-callout:none;
     -webkit-user-select:none;
     -khtml-user-select:none;

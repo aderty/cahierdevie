@@ -20,7 +20,7 @@
 <div id="content" class="topcoat-list__container list" >
     <h3 class="topcoat-list__header">Cahiers des enfants du {{currentDate}}</h3>
     <ul class="topcoat-list">
-        <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" hm-hold="showMenuEnfant(enfant)" class="topcoat-list__item">
+        <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" hm-hold="showMenuEnfant(enfant)" class="topcoat-list__item noSelect">
              <h3>{{ enfant.prenom }}</h3>
         </li>
         <li class="topcoat-list__item" ng-click="newCahier()">
