@@ -18,7 +18,9 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewNewCahier', { templateUrl: 'partials/newCahier.html', controller: 'CahierCtrl' });
         $routeProvider.otherwise({redirectTo: '/'});
   }]);
-
+myApp.initialize = function () {
+    myApp.initDB();
+}
 myApp.initDB = function () {
     $.indexedDB("cahierdevie", {
         "schema": {

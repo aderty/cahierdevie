@@ -36,15 +36,15 @@
         <script src="lib/jquery-2.0.3.min.js"></script>
 
         <script src="lib/jx.min.js"></script>
-        <script src="lib/angular.js"></script>
-        <script src="lib/angular-mobile.js"></script>
-        <script src="lib/mobile-nav.js"></script>
+        <script src="lib/angular.min.js"></script>
+        <script src="lib/angular-mobile.min.js"></script>
+        <script src="lib/mobile-nav.min.js"></script>
         
-        <script src="lib/snap.js"></script>
-        <script src="lib/angular-snap.js"></script>
+        <script src="lib/snap.min.js"></script>
+        <script src="lib/angular-snap.min.js"></script>
 
-        <script src="lib/IndexedDBShim.js"></script>
-        <script src="lib/jquery.indexeddb.js"></script>
+        <script src="lib/IndexedDBShim.min.js"></script>
+        <script src="lib/jquery.indexeddb.min.js"></script>
 
         <script src="js/app.js"></script>
         <script src="js/services.js"></script>
@@ -53,27 +53,7 @@
         <script src="js/directives.js"></script>
 
         <script type="text/javascript">
-            app.initialize();
+            myApp.initialize();
         </script>
-
-        <script type="text/javascript">
-            //document.addEventListener('deviceready', function () {
-                /*var x = document.createElement("script");
-                x.src = "lib/IndexedDBShim.js";
-                x.onload = function () {
-                    window.setTimeout(function () {
-                        x = document.createElement("script");
-                        x.src = "lib/jquery.indexeddb.js";
-                        x.onload = function () {
-                            window.setTimeout(myApp.initDB, 250);
-                        };
-                        document.body.appendChild(x);
-                    }, 250);
-                };
-                document.body.appendChild(x);*/
-            //}, false);
-
-                window.setTimeout(myApp.initDB, 500);
-            </script>
     </body>
 </html>

@@ -22,7 +22,7 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
 }
 
-function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
+function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
@@ -41,11 +41,13 @@ function MainCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
         EnfantService.setCurrent(null);
         navSvc.slidePage('/viewNewCahier');
     }
-    EnfantService.list().then(function (enfants) {
-        if (enfants && enfants.length) {
-            $scope.enfants = enfants;
-        }
-    });
+    //$timeout(function () {
+        EnfantService.list().then(function (enfants) {
+            if (enfants && enfants.length) {
+                $scope.enfants = enfants;
+            }
+        });
+    //}, 250);
 }
 
 function CahierJourCtrl($scope, navSvc, CahierService, EventService) {
