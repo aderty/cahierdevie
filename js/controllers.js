@@ -86,14 +86,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     
     $scope.showCahier = function (enfant) {
         EnfantService.setCurrent(enfant);
-        CahierService.get(enfant.id, $rootScope.currentDate).then(function (cahier) {
-            if (!cahier) {
-                cahier = CahierService.new(enfant.id, $rootScope.currentDate);
-            }
-            CahierService.setCurrent(cahier);
-            navSvc.slidePage('/viewCahier');
-        });
-       
+        navSvc.slidePage('/viewCahier');  
     };
     
     $scope.newCahier = function () {
@@ -274,9 +267,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             });
         }
         CahierService.save(cahier).then(function () {
-            navSvc.back();
             $scope.$apply();
         });
+        navSvc.back();
     }
 
     $scope.deleteImg = function (index) {
