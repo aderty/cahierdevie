@@ -3,7 +3,7 @@
   <ng-include src="'partials/navigationMain.html'"></ng-include>
 
 </nav>
-<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" hm-swipeleft="backDate()" hm-swiperight="nextDate()" >
+<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
 <div id="header" class="topcoat-navigation-bar header" >
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu" snap-toggle="left">
@@ -20,7 +20,7 @@
 <div id="content" class="topcoat-list__container list" >
     <h3 class="topcoat-list__header">Cahiers des enfants du {{currentDate}}</h3>
     <ul class="topcoat-list">
-        <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" hm-hold="showMenuEnfant(enfant)" class="topcoat-list__item noSelect">
+        <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" ng-hold="showMenuEnfant(enfant)" class="topcoat-list__item noSelect">
              <h3>{{ enfant.prenom }}</h3>
         </li>
         <li class="topcoat-list__item" ng-click="newCahier()">

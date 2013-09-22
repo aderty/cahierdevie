@@ -7,7 +7,7 @@ function jsonp_callback(data) {
 
 
 // Declare app level module which depends on filters, and services
-var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ajoslin.mobile-navigate', 'ngRoute', 'ngTouch', 'snap', 'hmTouchevents'])
+var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ajoslin.mobile-navigate', 'ngRoute', 'ngTouch', 'ngTouch.hold', 'snap'])
     .config(function ($compileProvider){
         //$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);

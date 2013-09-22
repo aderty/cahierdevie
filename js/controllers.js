@@ -233,6 +233,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     }
     else {
         $scope.event = {
+            time: new Date().getHours() + ":" + new Date().getMinutes(),
             pictures: []
         };
     }
@@ -266,7 +267,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         var cahier = CahierService.getCurrent();
         if (creation) {
             cahier.events.push({
-                date: new Date(),
+                time: event.time,
                 title: event.title,
                 desc: event.desc,
                 pictures: event.pictures
