@@ -215,6 +215,9 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
             $scope.$apply();
         });
     }
+    $scope.cancel = function () {
+        navSvc.back();
+    }
 }
 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
