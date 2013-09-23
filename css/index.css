@@ -73,6 +73,50 @@ html, body {
     0 0.5em 0 0 black;
 }
 
+.neo160
+{
+	margin-top: 1rem;
+	/* centrage */
+				width: 32px;
+				height: 22px;
+				float: left;
+				background: #555;
+				border-radius: 2px;
+				-moz-border-radius: 2px;
+				-webkit-border-radius: 2px;
+				-ms-border-radius: 2px
+				}
+
+			.neo160::before{
+				position: relative;
+				width: 8px;
+				height: 2px;
+				content: '';
+				left: 18px;
+				top: -2px;
+				float: left;
+				background: #555;
+				border-radius: 2px 2px 0 0;
+				-moz-border-radius: 2px 2px 0 0;
+				-webkit-border-radius: 2px 2px 0 0;
+				-ms-border-radius: 2px 2px 0 0
+				}
+
+			.neo160::after{
+				position: relative;
+				width: 10px;
+				height: 10px;
+				content: '';
+				left: -3px;
+				top: 4px;
+				float: left;
+				border: 2px solid #fff;
+				border-radius: 12px;
+				-moz-border-radius: 12px;
+				-webkit-border-radius: 12px;
+				-ms-border-radius: 12px
+				}
+
 .saisie
 {
 	width: 90%;
@@ -88,6 +132,11 @@ html, body {
 nav.navigation {
     /*z-index: 51;*/
 }
+
+.topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
+{
+	 border-right: 1px solid #a5a8a8;
+}
 /*.footer {
     position: fixed;
     height: 4rem;
@@ -95,8 +144,8 @@ nav.navigation {
     width: 100%;
     left: 0;
 }*/
-#content {
-    margin-top: 4rem;
+section {
+    padding-top: 4rem;
 }
 /*#content ul {
     padding-bottom: 4rem;

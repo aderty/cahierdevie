@@ -230,6 +230,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             pictures: []
         };
     }
+    if($scope.event.pictures.length){
+        $scope.currentPhoto = $scope.event.pictures[0];
+    }
+    
     $scope.takePic = function () {
         var options = {
             quality: 75,
@@ -249,7 +253,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         /*$scope.imgs.push(imageData);
         $scope.$apply();*/
         movePic(imageData);
-
     };
     var onFail = function (e) {
         console.log("On fail " + e);
@@ -271,9 +274,24 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         });
         navSvc.back();
     }
+    $scope.cancel = function(){
+        navSvc.back();
+    }
+    $scope.indexPhoto = 0;
+    $scope.currentPhoto = "";
+    $scope.prevPhoto = function(){
+        if(!$scope.event.pictures.length) return;
+        $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
+    $scope.nextPhoto = function(){
+        if(!$scope.event.pictures.length) return;
+        $scope.indexPhoto = ($scope.indexPhoto - 1) % $scope.event.pictures.length;
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
 
     $scope.deleteImg = function (index) {
-        deletePic(event.pictures[index]);
+        deletePic($scope.event.pictures[index]);
         $scope.event.pictures.splice(index, 1);
     }
 
@@ -321,6 +339,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
         $scope.event.pictures.push(entry.toURI());
+        $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length -1];
         $scope.$apply();
     }
     function resOnError(error) {

@@ -9,12 +9,9 @@
         <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
             <span class="topcoat-icon box-shadow-menu"></span>
         </a>
-         <a class="topcoat-icon-button--quiet" ng-click="back()">
-            <span class="topcoat-icon back_light-icon"></span>
-        </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Nouveau &eacute;v&egrave;nement</h1>
+        <h1 class="topcoat-navigation-bar__title">Instant de vie</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -22,11 +19,27 @@
         </a>
     </div>
 </div>
-
+<div class="topcoat-button-bar full">
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full first" ng-click="takePic()">
+                <i class="neo160"></i>Take Pic
+            </button>
+        </div>
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full" ng-click="add(event)">
+                Valider
+            </button>
+        </div>
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full" ng-click="cancel()">
+                Annuler
+            </button>
+        </div>
+    </div>
 <div id="content" class="pad">
     <form id="eventForm" name="eventForm">
         <div class="center">
-            <input type="text" timepicker ng-model="event.time" value="" style="display:none;"/>
+            <input type="text" timepicker ng-model="event.time" class="topcoat-text-input--large" />
         </div>
         <div class="center">
             <input ng-model="event.title" type="text" value="" placeholder="Titre" class="topcoat-text-input--large saisie">
@@ -34,15 +47,13 @@
         <div class="center">
             <textarea ng-model="event.desc" class="topcoat-textarea--large saisie" rows="6" cols="36" placeholder="Description"></textarea>
         </div>
-        <div class="center centerize" >
-            <a class="topcoat-icon-button"  ng-click="takePic()">Take Pic</a>
-            <div ng-repeat="picData in event.pictures" ng-animate="'slide'">
+        <div class="center centerize" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
+            <!--<div ng-repeat="picData in event.pictures" ng-animate="'slide'">
                 <img ng-src="{{picData}}" />
-                <span ng-click="deleteImg($index)">Supp</span>
-            </div>
-        </div>
-        <div class="center">
-            <button class="topcoat-button--large--cta" ng-click="add(event)">Ajouter</button>
+                <button class="topcoat-button--large--cta" ng-click="deleteImg($index)">X</button>
+            </div>-->
+            <img ng-src="{{currentPhoto}}" />
+            <button class="topcoat-button--large--cta" ng-click="deleteImg(indexPhoto)">X</button>
         </div>
     </form>
 </div>

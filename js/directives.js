@@ -21,11 +21,13 @@ angular.module('myApp.directives', [])
                     theme: 'default',
                     mode: 'scroller',
                     lang: 'fr',
-                    display: 'inline',
+                    display: 'bottom',
                     animate: 'none'
                 });
 
                 elm.scroller('setValue', scope.model);
+
+                elm.val(scope.model);
 
                 elm.change(function(e) {
                     ngModel.$setViewValue(e.target.value);

@@ -22,12 +22,21 @@
             </a>
         </div>
     </div>
+    <div class="topcoat-button-bar full">
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
+                <span class="topcoat-icon plus-icon"></span>
+            </button>
+        </div>
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full">
+                Transmettre
+            </button>
+        </div>
+    </div>
     <div id="content" class="topcoat-list__container list" >
         <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
         <ul class="topcoat-list" >
-            <li class="topcoat-list__item--first" ng-click="newEvent()">
-                <a class="topcoat-icon-button--quiet" ><span class="topcoat-icon plus-icon"></span></a>
-            </li>
             <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
                  <h3>{{ event.title }}</h3>
                 <p>{{event.desc}}</p>
