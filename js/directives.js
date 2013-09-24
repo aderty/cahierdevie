@@ -25,16 +25,14 @@ angular.module('myApp.directives', [])
                     animate: 'none'
                 });
 
-                elm.scroller('setValue', scope.model);
-
-                elm.val(scope.model);
-
                 elm.change(function(e) {
                     ngModel.$setViewValue(e.target.value);
                     scope.$apply(function() {
                         scope.model = e.target.value;
                     });
                 });
+
+                elm.scroller('setValue', scope.model, true);
 
                 scope.$on('destroy', function() {
                     elm.scroller('destroy');

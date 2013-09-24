@@ -37,23 +37,28 @@
         </div>
     </div>
 <div id="content" class="pad">
-    <form id="eventForm" name="eventForm">
-        <div class="center">
-            <input type="text" timepicker ng-model="event.time" class="topcoat-text-input--large" />
+    <form id="eventForm" name="eventForm" class="panel">
+        <div class="panel-inner">
+        <div class="center field">
+            <span class="field-label">Heure</span>
+            <input type="text" timepicker ng-model="event.time" class="field-input" />
         </div>
-        <div class="center">
-            <input ng-model="event.title" type="text" value="" placeholder="Titre" class="topcoat-text-input--large saisie">
+        <div class="center field">
+            <span class="field-label">Titre</span>
+            <input ng-model="event.title" type="text" value="" placeholder="Titre" class="field-input">
         </div>
-        <div class="center">
-            <textarea ng-model="event.desc" class="topcoat-textarea--large saisie" rows="6" cols="36" placeholder="Description"></textarea>
+        <div class="center field">
+            <span class="field-label">Description</span>
+            <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" placeholder="Description"></textarea>
         </div>
-        <div class="center centerize" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
+        <div class="center photo-field" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
             <!--<div ng-repeat="picData in event.pictures" ng-animate="'slide'">
                 <img ng-src="{{picData}}" />
                 <button class="topcoat-button--large--cta" ng-click="deleteImg($index)">X</button>
             </div>-->
             <img ng-src="{{currentPhoto}}" />
-            <button class="topcoat-button--large--cta" ng-click="deleteImg(indexPhoto)">X</button>
+            <button class="delete" ng-click="deleteImg(indexPhoto)">X</button>
+        </div>
         </div>
     </form>
 </div>

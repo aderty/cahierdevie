@@ -38,9 +38,11 @@
         <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
         <ul class="topcoat-list" >
             <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
-                 <h3>{{ event.title }}</h3>
-                <p>{{event.desc}}</p>
-                <a class="topcoat-icon-button--quiet" title="Supprimer" ng-click="removeEvent(event, $index)" style="float: right;">
+                <div class="list-inner">
+                     <h3>{{ event.title }}</h3>
+                    <p>{{event.desc}}</p>
+                </div>
+                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index)" style="float: right;">
                     <span class="topcoat-icon delete-icon"></span>
                 </a>
             </li>
