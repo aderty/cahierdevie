@@ -52,7 +52,7 @@
             <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" placeholder="Description"></textarea>
         </div>
         <div class="center photo-field" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
-            <img ng-src="{{currentPhoto}}" />
+            <img class="evt-photo" ng-src="{{currentPhoto}}" />
             <button class="delete" ng-click="deleteImg(indexPhoto)">&nbsp;</button>
         </div>
         </div>

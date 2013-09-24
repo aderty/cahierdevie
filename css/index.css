@@ -307,6 +307,17 @@ section {
     position: absolute;*/
 }
 
+.evt-photo {
+    margin-top: 10px;
+    width: 250px;
+    height: 300px;
+    -webkit-box-shadow: inset 0 1px rgba(255,255,255,0.12);
+    box-shadow: inset 0 1px rgba(255,255,255,0.12);
+    border: 1px solid rgba(0,0,0,0.36);
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+}
+
 .note {
     position: absolute;
     bottom: 45px;
