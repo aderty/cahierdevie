@@ -223,6 +223,8 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
     $rootScope.showEnfantOverlay = false;
     var creation = true;
+    $scope.indexPhoto = 0;
+    $scope.currentPhoto = "";
     $scope.event = EventService.getCurrent();
     if ($scope.event) {
         creation = false;
@@ -280,8 +282,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.cancel = function(){
         navSvc.back();
     }
-    $scope.indexPhoto = 0;
-    $scope.currentPhoto = "";
+    
     $scope.prevPhoto = function(){
         if(!$scope.event.pictures.length) return;
         $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;

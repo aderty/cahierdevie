@@ -193,6 +193,9 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
             var defered = $q.defer();
             enfants = [];
             db.getInstance().objectStore("enfants").each(function (data) {
+                if (!data.value.photo) {
+                    data.value.photo = 'res/user.png';
+                }
                 enfants.push(data.value);
             }).done(function (data) {
                 $timeout(function () {
