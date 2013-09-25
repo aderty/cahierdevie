@@ -9,9 +9,6 @@
         <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
             <span class="topcoat-icon box-shadow-menu"></span>
         </a>
-         <a class="topcoat-icon-button--quiet" ng-click="back()">
-            <span class="topcoat-icon back_light-icon"></span>
-        </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
         <h1 class="topcoat-navigation-bar__title">Nouveau cahier</h1>
@@ -29,7 +26,7 @@
             </button>
         </div>
         <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full" ng-click="cancel()">
+            <button class="topcoat-button-bar__button full btn-cancel" ng-click="cancel()">
                 Annuler
             </button>
         </div>
@@ -37,7 +34,7 @@
 <div id="content" >
     <form id="cahierForm" name="cahierForm" class="panel">
         <div class="panel-inner">
-        <div class="center field">
+        <div class="center field first">
             <span class="field-label">Pr&eacute;nom</span>
             <input ng-model="enfant.prenom" type="text" value="" placeholder="Pr&eacute;nom de l'enfant" class="field-input">
         </div>
@@ -49,7 +46,19 @@
             <span class="field-label">Tel</span>
             <input ng-model="enfant.tel" type="tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" value="" placeholder="Tel" class="field-input saisie">
         </div>
-            </div>
+        <div class="center field">
+            <span class="field-label">Fille ou gar&ccedil;on</span>
+            <label class="topcoat-switch genre">
+              <input type="checkbox" ng-model="enfant.sexe" class="topcoat-switch__input">
+              <div class="topcoat-switch__toggle"></div>
+            </label>
+        </div>
+        <div class="center field last">
+            <span class="field-label">Infos compl&eacute;mentaires</span>
+            <textarea ng-model="enfant.infos" class="field-input" rows="6" cols="36" placeholder="Infos"></textarea>
+        </div>
+            </div> 
     </form>
 </div>
+
 </section>

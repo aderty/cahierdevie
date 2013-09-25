@@ -329,7 +329,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         removeAll: function(idEnfant){
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
-                // Suppression des images des évènements
+                // Suppression des images des Ã©vÃ¨nements
                 if(elem.value.events && elem.value.events.length){
                     var i=0, l = elem.value.events.length;
                     for(;i<l;i++){
@@ -386,7 +386,7 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
     };
     
     function deleteEvent(event){
-        // Suppression des images des évènements
+        // Suppression des images des Ã©vÃ¨nements
         if(event.pictures && event.pictures.length){
              var i=0, l = event.pictures.length;
              for(;i<l;i++){
@@ -404,6 +404,10 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         entry.remove(function (entry) {
             console.log("Removal succeeded");
         }, resOnError);
+    }
+    
+    function resOnError(error) {
+        alert(error.code);
     }
 });
 

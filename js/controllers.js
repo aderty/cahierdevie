@@ -193,13 +193,10 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
 }
 
 function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
-    var creation = true;
 
     $scope.enfant = EnfantService.getCurrent();
-    if ($scope.enfant) {
-        creation = false;
-    }
-    else {
+    
+    if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime()
         }
@@ -222,18 +219,14 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
     $rootScope.showEnfantOverlay = false;
-    var creation = true;
-    $scope.indexPhoto = 0;
-    $scope.currentPhoto = "";
     $scope.event = EventService.getCurrent();
-    if ($scope.event) {
-        creation = false;
-    }
-    else {
+    if (!$scope.event) {
         $scope.event = {
+            creation: true,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
             pictures: []
         };
+        EventService.setCurrent($scope.event);
     }
     if($scope.event.pictures.length){
         $scope.currentPhoto = $scope.event.pictures[0];
@@ -266,7 +259,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.add = function (event) {
         if(!event || !event.title || event.title == "") return;
         var cahier = CahierService.getCurrent();
-        if (creation) {
+        if (event.creation) {
+            delete event.creation;
             cahier.events.push({
                 time: event.time,
                 title: event.title,
@@ -282,35 +276,12 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.cancel = function(){
         navSvc.back();
     }
-    
-    $scope.prevPhoto = function(){
-        if(!$scope.event.pictures.length) return;
-        $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;
-        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
-    }
-    $scope.nextPhoto = function(){
-        if(!$scope.event.pictures.length) return;
-        $scope.indexPhoto = ($scope.indexPhoto - 1) % $scope.event.pictures.length;
-        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
-    }
-
-    $scope.deleteImg = function (index) {
-        deletePic($scope.event.pictures[index]);
-        $scope.event.pictures.splice(index, 1);
+    $scope.showPhotos = function(){
+        navSvc.slidePage("/viewPhotos");
     }
 
     function movePic(file) {
         window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError);
-    }
-    function deletePic(file) {
-        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
-    }
-
-    function deleteOnSuccess(entry) {
-        //new file name
-        entry.remove(function (entry) {
-            console.log("Removal succeeded");
-        }, resOnError);
     }
 
     //Callback function when the file system uri has been resolved
@@ -346,6 +317,61 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length -1];
         $scope.$apply();
     }
+    function resOnError(error) {
+        alert(error.code);
+    }
+}
+
+function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
+    $scope.indexPhoto = 0;
+    $scope.currentPhoto = "";
+    $scope.event = EventService.getCurrent();
+    
+    if($scope.event && $scope.event.pictures.length){
+        $scope.currentPhoto = $scope.event.pictures[0];
+    }
+    
+    $scope.cancel = function(){
+        navSvc.back();
+    }
+    
+    $scope.prevPhoto = function(){
+        if(!$scope.event.pictures.length) return;
+        $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
+    $scope.nextPhoto = function(){
+        if(!$scope.event.pictures.length) return;
+        if($scope.indexPhoto == 0){
+            $scope.indexPhoto = $scope.event.pictures.length - 1;
+        }
+        else{
+            $scope.indexPhoto = $scope.indexPhoto - 1;
+        }
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
+
+    $scope.deleteImg = function (index) {
+        deletePic($scope.event.pictures[index]);
+        $scope.event.pictures.splice(index, 1);
+        if($scope.event.pictures.length){
+            $scope.currentPhoto = $scope.event.pictures[0];
+        }
+        else{
+            $scope.cancel();
+        }
+    }
+
+    function deletePic(file) {
+        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
+    }
+    function deleteOnSuccess(entry) {
+        //new file name
+        entry.remove(function (entry) {
+            console.log("Removal succeeded");
+        }, resOnError);
+    }
+
     function resOnError(error) {
         alert(error.code);
     }

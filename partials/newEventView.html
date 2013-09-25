@@ -11,7 +11,7 @@
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Instant de vie</h1>
+        <h1 class="topcoat-navigation-bar__title">Un instant...</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -21,8 +21,10 @@
 </div>
 <div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full first" ng-click="takePic()">
-                <i class="neo160"></i>Take Pic
+            <button class="topcoat-button-bar__button full first btn-photo" ng-click="takePic()">
+                <div>
+                    <i class="neo160"></i>&nbsp;
+                </div>
             </button>
         </div>
         <div class="topcoat-button-bar__item">
@@ -31,7 +33,7 @@
             </button>
         </div>
         <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full" ng-click="cancel()">
+            <button class="topcoat-button-bar__button full btn-cancel" ng-click="cancel()">
                 Annuler
             </button>
         </div>
@@ -39,7 +41,7 @@
 <div id="content" class="pad">
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-        <div class="center field">
+        <div class="center field first">
             <span class="field-label">Heure</span>
             <input type="text" timepicker ng-model="event.time" class="field-input" />
         </div>
@@ -47,16 +49,17 @@
             <span class="field-label">Titre</span>
             <input ng-model="event.title" type="text" value="" placeholder="Titre" class="field-input">
         </div>
-        <div class="center field">
+        <div class="center field" ng-class="{'last': currentPhoto == ''}">
             <span class="field-label">Description</span>
             <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" placeholder="Description"></textarea>
         </div>
-        <div class="center photo-field" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
-            <img class="evt-photo" ng-src="{{currentPhoto}}" />
-            <button class="delete" ng-click="deleteImg(indexPhoto)">&nbsp;</button>
+        <div class="center field last" ng-show="currentPhoto != ''" ng-click="showPhotos()">
+            <span class="field-label">Photos</span>
+            <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
+                <img class="evt-photo-item" ng-src="{{picData}}" />
+            </div> 
         </div>
         </div>
     </form>
 </div>
 </section>
-<ng-include src="'partials/settingsOverlay.html'"></ng-include>

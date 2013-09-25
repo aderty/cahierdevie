@@ -1,0 +1,45 @@
+<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
+
+  <ng-include src="'partials/navigationMain.html'"></ng-include>
+
+</nav>
+<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<div class="topcoat-navigation-bar header">
+    <div class="topcoat-navigation-bar__item left quarter">
+        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
+            <span class="topcoat-icon box-shadow-menu"></span>
+        </a>
+    </div>
+    <div class="topcoat-navigation-bar__item center half">
+        <h1 class="topcoat-navigation-bar__title">Les photos</h1>
+    </div>
+    <div class="topcoat-navigation-bar__item right quarter">
+        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+            <span class="topcoat-icon home-icon"></span>
+        </a>
+    </div>
+</div>
+<div class="topcoat-button-bar full sub-header">
+        <div class="topcoat-button-bar__item" ng-show="currentPhoto != ''">
+            <button class="topcoat-button-bar__button full first btn-cancel" ng-click="deleteImg(indexPhoto)">
+                Supprimer
+            </button>
+        </div>
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full first" ng-click="cancel()">
+                Retour
+            </button>
+        </div>
+    </div>
+<div id="content" class="pad">
+    <div class="panel">
+        <div class="panel-inner">
+        <div class="center field photo-field first last" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
+            <div class="center">
+                <img class="evt-photo" ng-src="{{currentPhoto}}" />
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+</section>

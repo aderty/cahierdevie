@@ -16,6 +16,7 @@ angular.module('myApp.directives', [])
             replace: false,
             require: 'ngModel',
             link: function(scope, elm, attr, ngModel) {
+                var first = true;
                 elm.scroller({
                     preset: 'time',
                     theme: 'default',
@@ -25,8 +26,13 @@ angular.module('myApp.directives', [])
                     animate: 'none'
                 });
 
+
                 elm.change(function(e) {
                     ngModel.$setViewValue(e.target.value);
+                    if (first) {
+                        first = false;
+                        return;
+                    }
                     scope.$apply(function() {
                         scope.model = e.target.value;
                     });
