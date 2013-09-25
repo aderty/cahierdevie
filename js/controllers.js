@@ -161,6 +161,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         navSvc.slidePage("/viewEvent");
     }
     $scope.removeEvent = function (event, index) {
+        if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
         if(event.pictures && event.pictures.length){
             var i=0, l = event.pictures.length;
             for(;i<l;i++){

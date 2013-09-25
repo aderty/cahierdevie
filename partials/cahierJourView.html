@@ -2,7 +2,7 @@
   <ng-include src="'partials/navigationMain.html'"></ng-include>
   
   <ul class="topcoat-list" ng-controller="NavigationCtrl">
-    <li class="topcoat-list__item"><span class="topcoat-button" ng-click="modifierEnfant()">Modifier infos</span></li>
+    <li class="topcoat-list__item" ng-click="modifierEnfant()"><span>Modifier infos</span><i class="topcoat-icon brush-icon"></i></li>
   </ul>
   
 </nav>
@@ -10,7 +10,7 @@
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
             <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left">
-                <span class="topcoat-icon box-shadow-menu"></span>
+                <i class="topcoat-icon listview-icon"></i>
             </a>
         </div>
         <div class="topcoat-navigation-bar__item center half">
@@ -18,18 +18,19 @@
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
             <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-                <span class="topcoat-icon home-icon"></span>
+                <i class="topcoat-icon home-icon"></i>
             </a>
         </div>
     </div>
     <div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
-                <span class="topcoat-icon plus-icon"></span>
+                <i class="topcoat-icon plus-icon"></i>
             </button>
         </div>
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full btn-send">
+                <i class="topcoat-icon cloud-icon"></i>
                 Transmettre
             </button>
         </div>
@@ -42,8 +43,8 @@
                      <h3>{{ event.title }}</h3>
                     <p>{{event.desc}}</p>
                 </div>
-                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index)" style="float: right;">
-                    <span class="topcoat-icon delete-icon"></span>
+                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">
+                    <i class="topcoat-icon delete-icon"></i>
                 </a>
             </li>
         </ul>

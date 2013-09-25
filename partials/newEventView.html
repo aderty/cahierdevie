@@ -7,7 +7,7 @@
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
-            <span class="topcoat-icon box-shadow-menu"></span>
+            <i class="topcoat-icon listview-icon"></i>
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
@@ -15,7 +15,7 @@
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-            <span class="topcoat-icon home-icon"></span>
+            <i class="topcoat-icon home-icon"></i>
         </a>
     </div>
 </div>
@@ -29,11 +29,13 @@
         </div>
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full" ng-click="add(event)">
+                <i class="topcoat-icon checkmark-icon"></i>
                 Valider
             </button>
         </div>
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full btn-cancel" ng-click="cancel()">
+                <i class="topcoat-icon error-icon"></i>
                 Annuler
             </button>
         </div>

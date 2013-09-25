@@ -282,8 +282,14 @@ button.delete {
        margin-top: 2.4rem;
 } 
 
-nav.navigation {
-    /*z-index: 51;*/
+nav.navigation .topcoat-icon{
+    float: right;
+}
+nav.navigation h4 {
+    line-height: 2.25rem;
+}
+nav.navigation h4 > i{
+    margin-top: 0.4rem;
 }
 
 .topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
@@ -293,9 +299,9 @@ nav.navigation {
 .topcoat-navigation-bar {
 	height: 3rem;
 	/*background: rgb(204, 223, 211);*/
-	background-color: rgb(216, 255, 215);
-	background: -moz-linear-gradient(top, rgb(95, 179, 87) 0%, rgb(225, 243, 222));
-	background: -webkit-gradient( linear, left top, left bottom, from(rgb(95, 179, 87)), to(rgb(225, 243, 222)));
+	background-color: rgb(74, 146, 68);
+	background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
+	background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));
 }
 .topcoat-navigation-bar__item {
 	line-height: 3rem;
@@ -351,6 +357,11 @@ section {
 	/*box-shadow: inset -2px 0px 15px 5px rgb(180, 217, 252);*/
 	box-shadow: 0px 0px 10px 5px rgb(180, 217, 252);
 }
+.enfants .next-icon {
+    margin-top: -2.6rem;
+    float: right;
+}
+
 .fille .li-thumb 
 {
 	border: 2px solid rgb(247, 203, 255);
@@ -440,7 +451,7 @@ section {
 }
 
 .home-icon {
-    background: url("../img/home2.svg") no-repeat;
+    background: url("../img/home.svg") no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -469,6 +480,55 @@ section {
 
 .back_light-icon {
     background: url("../img/back_light.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.listview-icon {
+    background: url("../img/listview.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.next-icon {
+    background: url("../img/next.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.checkmark-icon {
+    background: url("../img/checkmark.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.error-icon {
+    background: url("../img/error.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.cancel-icon {
+    background: url("../img/cancel.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.brush-icon {
+    background: url("../img/brush.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.cloud-icon {
+    background: url("../img/cloud.svg") no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
