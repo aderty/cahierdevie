@@ -300,9 +300,15 @@ nav.navigation h4 > i{
 	height: 3rem;
 	/*background: rgb(204, 223, 211);*/
 	background-color: rgb(74, 146, 68);
-	background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
-	background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));
+	/*background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
+	background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));*/
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(179, 207, 177)), color-stop(0.5, rgb(82, 168, 76)),color-stop(0.5, rgb(74, 146, 68)),color-stop(1, rgb(44, 138, 36)));
 }
+
+.topcoat-navigation-bar .topcoat-icon-button:hover, .topcoat-navigation-bar .topcoat-icon-button--quiet:hover, .topcoat-navigation-bar .topcoat-icon-button--large:hover, .topcoat-navigation-bar .topcoat-icon-button--large--quiet:hover {
+    background-color: #ADDBA7;
+}
+
 .topcoat-navigation-bar__item {
 	line-height: 3rem;
 }
