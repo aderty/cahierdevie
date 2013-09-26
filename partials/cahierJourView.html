@@ -1,11 +1,3 @@
-<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
-  <ng-include src="'partials/navigationMain.html'"></ng-include>
-  
-  <ul class="topcoat-list" ng-controller="NavigationCtrl">
-    <li class="topcoat-list__item" ng-click="modifierEnfant()"><span>Modifier infos</span><i class="topcoat-icon brush-icon"></i></li>
-  </ul>
-  
-</nav>
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="prevEnfant()" ng-swipe-right="nextEnfant()" >
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
@@ -50,3 +42,11 @@
         </ul>
     </div>
 </section>
+<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
+  <ng-include src="'partials/navigationMain.html'"></ng-include>
+  
+  <ul class="topcoat-list" ng-controller="NavigationCtrl">
+    <li class="topcoat-list__item" ng-click="modifierEnfant()"><span>Modifier infos</span><i class="topcoat-icon brush-icon"></i></li>
+  </ul>
+  
+</nav>
