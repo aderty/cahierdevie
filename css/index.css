@@ -355,6 +355,10 @@ section {
     position: absolute;
 }
 
+.enfants li:hover, .events li:hover {
+    background-color: rgb(187, 231, 179);
+}
+
 .enfants .li-thumb {
     left: -1rem;
     top: -1.8rem;

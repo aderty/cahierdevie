@@ -29,7 +29,7 @@
     </div>
     <div id="content" class="topcoat-list__container list" >
         <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
-        <ul class="topcoat-list" >
+        <ul class="topcoat-list events" >
             <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
                 <div class="list-inner">
                      <h3>{{ event.title }}</h3>
