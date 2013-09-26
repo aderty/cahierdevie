@@ -355,7 +355,7 @@ section {
     position: absolute;
 }
 
-.enfants li:hover, .events li:hover {
+.enfants li:active, .events li:active {
     background-color: rgb(187, 231, 179);
 }
 
@@ -371,6 +371,10 @@ section {
     margin-top: -2.6rem;
     float: right;
 }
+.enfants li:active .next-icon {
+    background: url("../img/refresh.svg") no-repeat;
+}
+
 
 .fille .li-thumb 
 {
@@ -539,6 +543,13 @@ section {
 
 .cloud-icon {
     background: url("../img/cloud.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.refresh-icon {
+    background: url("../img/refresh.svg") no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
