@@ -343,7 +343,7 @@ nav.navigation h4 > i{
     width: 100%;
     left: 0;
 }*/
-section {
+section > .spacer {
     padding-top: 4rem;
 }
 /*#content ul {
