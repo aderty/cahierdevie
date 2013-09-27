@@ -85,6 +85,7 @@ html, body {
 	min-width: 100%;
 	min-height: 100%;
 	position: relative;
+	-webkit-transform: translate3d(0, 0, 0);
 }
 
 .field {
@@ -343,7 +344,7 @@ nav.navigation h4 > i{
     width: 100%;
     left: 0;
 }*/
-section > .spacer {
+section {
     padding-top: 4rem;
 }
 /*#content ul {
