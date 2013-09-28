@@ -423,6 +423,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                 params.cahier = current;
                                                 options.params = params;
 
+                                                alert(email);
+
                                                 var ft = new FileTransfer();
                                                 ft.upload(fileEntry.fullPath, encodeURI(url + current.id), function (r) {
                                                     /*console.log("Code = " + r.responseCode);
