@@ -291,13 +291,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     var url = ip + 'send-cachier/';
     var myFolderApp = "CahierDeVie";
     var d = new Date();
-    var current = {
-        id: 3,
-        idEnfant: 1,
-        prenom: "paul",
-        date: new Date(d.getFullYear(), d.getMonth(), d.getDate()),
-        events: []
-    };
+    var current = null;
     
     function genKey(id, date){
         return id + "_" + date.getFullYear() + (date.getMonth() < 9 || date.getMonth() > 11  ? '0' : '') +  (date.getMonth() + 1) + date.getDate();
@@ -386,6 +380,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             cahierChangeCb.push(callback);
         },
         send: function (email) {
+            if (!current) {
+                alert("Pas de cahier");
+                return;
+            }
             var defered = $q.defer();
             /*$http({
                 method: 'POST',
@@ -416,15 +414,19 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                         writer.abort();
 
                                         var options = new FileUploadOptions();
+                                        options.chunkedMode = false;
                                         options.fileKey = "file";
                                         options.fileName = fileEntry.toURI().substr(fileEntry.toURI().lastIndexOf('/') + 1);
                                         options.mimeType = "image/jpeg";
-
+                                        
                                         var params = new Object();
                                         params.email = email;
                                         params.cahier = current;
 
                                         options.params = params;
+
+                                        alert(options.fileName);
+                                        alert(url + current.id);
 
                                         var ft = new FileTransfer();
                                         ft.upload(fileEntry.toURI(), url + current.id, function (r) {
