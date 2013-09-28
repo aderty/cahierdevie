@@ -2,7 +2,7 @@
 
 myApp.run(["$rootScope", function ($rootScope) {
     var date = new Date(); 
-    $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
 }]);
 
 /* Controllers */
@@ -63,6 +63,7 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
     $scope.showEdition = false;
+    CahierService.setCurrent(null);
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
@@ -160,6 +161,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.currentCahier = CahierService.getCurrent();
     $scope.currentEnfant = EnfantService.getCurrent();
+    //if (!$scope.currentCahier) {
+        loadCahier();
+    //}
     $scope.send = function () {
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             alert("ok");
