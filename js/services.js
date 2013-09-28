@@ -288,7 +288,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     
     var cahierChangeCb = [];
     var ip = "192.168.1.18:1480";
-    var url = ip + '/send-cachier/';
+    var url = "http://" + ip + '/send-cachier/';
     var myFolderApp = "CahierDeVie";
     var d = new Date();
     var current = null;
@@ -417,11 +417,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                         options.chunkedMode = false;
                                         options.fileKey = "file";
                                         options.fileName = fileEntry.toURI().substr(fileEntry.toURI().lastIndexOf('/') + 1);
-                                        options.mimeType = "image/jpeg";
+                                        options.mimeType = "text/json";
                                         
                                         var params = new Object();
                                         params.email = email;
-                                        params.cahier = current;
+                                        //params.cahier = current;
                                         options.params = params;
 
                                         var ft = new FileTransfer();
@@ -431,6 +431,18 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                             console.log("Sent = " + r.bytesSent);
                                             defered.resolve(r);
                                         }, function (error) {
+                                            try{
+                                                if (error == FileTransferError.FILE_NOT_FOUND_ERR) {
+                                                    alert("FILE_NOT_FOUND_ERR");
+                                                }
+                                                if (error == FileTransferError.INVALID_URL_ERR) {
+                                                    alert("INVALID_URL_ERR");
+                                                    alert(url + current.id);
+                                                }
+                                                if (error == FileTransferError.CONNECTION_ERR) {
+                                                    alert("CONNECTION_ERR");
+                                                }
+                                           }catch(e){}
                                             alert("upload " + error.code);
                                         }, options);
 
