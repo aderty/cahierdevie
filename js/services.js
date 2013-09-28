@@ -444,7 +444,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                             alert("CONNECTION_ERR");
                                                         }
                                                     } catch (e) { }
-                                                    alert("upload " + error.code);
                                                 }, options);
                                             //}, 150);
                                         };
