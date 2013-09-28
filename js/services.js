@@ -432,12 +432,22 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                             console.log("Response = " + r.response);
                                             console.log("Sent = " + r.bytesSent);
                                             defered.resolve(r);
-                                        }, resOnError, options);
+                                        }, function (error) {
+                                            alert("upload " + error.code);
+                                        }, options);
 
-                                    }, resOnError);
-                                }, resOnError);
-                            }, resOnError);
-            }, resOnError);
+                                    }, function (error) {
+                                        alert("create writer " + error.code);
+                                    });
+                                }, function (error) {
+                                    alert("createfile " + error.code);
+                                });
+                            }, function (error) {
+                                alert("get folder " + error.code);
+                            });
+            }, function (error) {
+                alert("sys " + error.code);
+            });
 
             return defered.promise;
         }
