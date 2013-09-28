@@ -420,16 +420,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
 
                                                 var params = new Object();
                                                 params.email = email;
-                                                //params.cahier = current;
+                                                params.cahier = current;
                                                 options.params = params;
-
-                                                alert(fileEntry.fullPath);
 
                                                 var ft = new FileTransfer();
                                                 ft.upload(fileEntry.fullPath, encodeURI(url + current.id), function (r) {
-                                                    console.log("Code = " + r.responseCode);
+                                                    /*console.log("Code = " + r.responseCode);
                                                     console.log("Response = " + r.response);
-                                                    console.log("Sent = " + r.bytesSent);
+                                                    console.log("Sent = " + r.bytesSent);*/
                                                     defered.resolve(r);
                                                 }, function (error) {
                                                     try {
@@ -444,6 +442,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                             alert("CONNECTION_ERR");
                                                         }
                                                     } catch (e) { }
+                                                    defered.reject(error);
                                                 }, options);
                                             //}, 150);
                                         };

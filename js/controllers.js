@@ -166,9 +166,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     //}
     $scope.send = function () {
         CahierService.send(EnfantService.getCurrent().email).then(function () {
-            alert("ok");
+            alert("Cahier envoyé !");
         }, function () {
-            alert("ko");
+            alert("Problème lors de l'envoie du cahier...");
         })
     }
     
