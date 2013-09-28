@@ -410,42 +410,41 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                             function (directoryRoot) {
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (writer) {
+                                        writer.onwriteend = function (evt) {
+                                            var options = new FileUploadOptions();
+                                            options.chunkedMode = false;
+                                            options.fileKey = "file";
+                                            options.fileName = fileEntry.toURI().substr(fileEntry.toURI().lastIndexOf('/') + 1);
+                                            options.mimeType = "text/json";
+
+                                            var params = new Object();
+                                            params.email = email;
+                                            //params.cahier = current;
+                                            options.params = params;
+                                            alert(fileEntry.toURI());
+                                            var ft = new FileTransfer();
+                                            ft.upload(fileEntry.toURI(), url + current.id, function (r) {
+                                                console.log("Code = " + r.responseCode);
+                                                console.log("Response = " + r.response);
+                                                console.log("Sent = " + r.bytesSent);
+                                                defered.resolve(r);
+                                            }, function (error) {
+                                                try {
+                                                    if (error == FileTransferError.FILE_NOT_FOUND_ERR) {
+                                                        alert("FILE_NOT_FOUND_ERR");
+                                                    }
+                                                    if (error == FileTransferError.INVALID_URL_ERR) {
+                                                        alert("INVALID_URL_ERR");
+                                                        alert(url + current.id);
+                                                    }
+                                                    if (error == FileTransferError.CONNECTION_ERR) {
+                                                        alert("CONNECTION_ERR");
+                                                    }
+                                                } catch (e) { }
+                                                alert("upload " + error.code);
+                                            }, options);
+                                        };
                                         writer.write(JSON.stringify(current));
-                                        writer.abort();
-
-                                        var options = new FileUploadOptions();
-                                        options.chunkedMode = false;
-                                        options.fileKey = "file";
-                                        options.fileName = fileEntry.toURI().substr(fileEntry.toURI().lastIndexOf('/') + 1);
-                                        options.mimeType = "text/json";
-                                        
-                                        var params = new Object();
-                                        params.email = email;
-                                        //params.cahier = current;
-                                        options.params = params;
-
-                                        var ft = new FileTransfer();
-                                        ft.upload(fileEntry.toURI(), url + current.id, function (r) {
-                                            console.log("Code = " + r.responseCode);
-                                            console.log("Response = " + r.response);
-                                            console.log("Sent = " + r.bytesSent);
-                                            defered.resolve(r);
-                                        }, function (error) {
-                                            try{
-                                                if (error == FileTransferError.FILE_NOT_FOUND_ERR) {
-                                                    alert("FILE_NOT_FOUND_ERR");
-                                                }
-                                                if (error == FileTransferError.INVALID_URL_ERR) {
-                                                    alert("INVALID_URL_ERR");
-                                                    alert(url + current.id);
-                                                }
-                                                if (error == FileTransferError.CONNECTION_ERR) {
-                                                    alert("CONNECTION_ERR");
-                                                }
-                                           }catch(e){}
-                                            alert("upload " + error.code);
-                                        }, options);
-
                                     }, function (error) {
                                         alert("create writer " + error.code);
                                     });
