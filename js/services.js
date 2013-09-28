@@ -284,10 +284,12 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     };
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout) {
+myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     
     var cahierChangeCb = [];
-    
+    var ip = "192.168.1.18:1480";
+    var url = ip + 'send-cachier/';
+    var myFolderApp = "CahierDeVie";
     var d = new Date();
     var current = {
         id: 3,
@@ -382,6 +384,62 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
         },
         onChange: function (callback) {
             cahierChangeCb.push(callback);
+        },
+        send: function (email) {
+            var defered = $q.defer();
+            /*$http({
+                method: 'POST',
+                url: url + current.id,
+                data: {
+                    email: email,
+                    cachier: current
+                }
+            }).
+              success(function (data, status, headers, config) {
+                  // this callback will be called asynchronously
+                  // when the response is available
+                  defered.resolve(true);
+              }).
+              error(function (data, status, headers, config) {
+                  // called asynchronously if an error occurs
+                  // or server returns response with an error status.
+                  defered.reject(data);
+              });*/
+            window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+            window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
+                fileSys.root.getDirectory(myFolderApp,
+                            { create: true, exclusive: false },
+                            function (directoryRoot) {
+                                directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
+                                    fileEntry.createWriter(function (writer) {
+                                        writer.write(JSON.stringify(current));
+                                        writer.abort();
+
+                                        var options = new FileUploadOptions();
+                                        options.fileKey = "file";
+                                        options.fileName = fileEntry.toURI().substr(fileEntry.toURI().lastIndexOf('/') + 1);
+                                        options.mimeType = "image/jpeg";
+
+                                        var params = new Object();
+                                        params.email = email;
+                                        params.cahier = current;
+
+                                        options.params = params;
+
+                                        var ft = new FileTransfer();
+                                        ft.upload(fileEntry.toURI(), url + current.id, function (r) {
+                                            console.log("Code = " + r.responseCode);
+                                            console.log("Response = " + r.response);
+                                            console.log("Sent = " + r.bytesSent);
+                                            defered.resolve(r);
+                                        }, resOnError, options);
+
+                                    }, resOnError);
+                                }, resOnError);
+                            }, resOnError);
+            }, resOnError);
+
+            return defered.promise;
         }
     };
     
@@ -408,6 +466,12 @@ myApp.factory('CahierService', function ($q, db, $timeout) {
     
     function resOnError(error) {
         alert(error.code);
+    }
+
+    function win(r) {
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        console.log("Sent = " + r.bytesSent);
     }
 });
 

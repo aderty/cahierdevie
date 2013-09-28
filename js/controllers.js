@@ -160,6 +160,13 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.currentCahier = CahierService.getCurrent();
     $scope.currentEnfant = EnfantService.getCurrent();
+    $scope.send = function () {
+        CahierService.send(EnfantService.getCurrent().email).then(function () {
+            alert("ok");
+        }, function () {
+            alert("ko");
+        })
+    }
     
     EnfantService.onChange(loadCahier);
     
