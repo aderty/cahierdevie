@@ -45,10 +45,10 @@ input, textarea {
     -moz-user-select: auto !important;
     -ms-user-select: auto !important;
     user-select: auto !important;
-}
 
-.noSelect {
-   
+    -webkit-transform: translate3d(0, 0, 0);
+	-webkit-user-modify: read-write-plaintext-only;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 html, body {
@@ -94,7 +94,6 @@ html, body {
 	display: box;
 	min-height: 2.5em;
 	background: #fff;
-    -webkit-transform: translate3d(0, 0, 0);
 }
 .field.first {
     border-top-left-radius: 1.0rem;
