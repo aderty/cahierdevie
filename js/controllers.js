@@ -62,10 +62,13 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 }
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
+    $scope.showEdition = false;
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
-    
+    $scope.edit = function () {
+        $scope.showEdition = !$scope.showEdition;
+    }
     $scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -73,6 +76,22 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     $scope.nextDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+
+    $scope.update = function (enfant) {
+        EnfantService.setCurrent(enfant);
+        navSvc.slidePage('/viewNewCahier');
+    }
+    $scope.remove = function (enfant) {
+        if (confirm("Etes-vous sur ?")) {
+            EnfantService.remove(enfant).then(function () {
+                $scope.$emit("reload");
+            });
+        }
+        /*if(notification.confirm("Etes-vous sur ?", function(){
+            $scope.closeOverlay();
+            EnfantService.remove(EnfantService.getCurrent());
+        });*/
     }
     
     $rootScope.showEnfantOverlay = false;
@@ -196,11 +215,14 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
 function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
 
     $scope.enfant = EnfantService.getCurrent();
-    
+    $scope.title = "Nouveau cahier";
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime()
         }
+    }
+    else {
+        $scope.title = "Modification de cahier";
     }
 
     $scope.add = function (enfant) {

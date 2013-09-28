@@ -50,7 +50,7 @@
             <span class="field-label">Description</span>
             <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" placeholder="Description"></textarea>
         </div>
-        <div class="center field last" ng-show="currentPhoto != ''" ng-click="showPhotos()">
+        <div class="center field last" ng-if="currentPhoto != ''" ng-click="showPhotos()">
             <span class="field-label">Photos</span>
             <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
                 <img class="evt-photo-item" ng-src="{{picData}}" />

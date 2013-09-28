@@ -6,7 +6,7 @@
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">Nouveau cahier</h1>
+        <h1 class="topcoat-navigation-bar__title">{{title}}</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -49,6 +49,18 @@
               <input type="checkbox" ng-model="enfant.sexe" class="topcoat-switch__input">
               <div class="topcoat-switch__toggle"></div>
             </label>
+        </div>
+        <div class="center field">
+            <span class="field-label">Allergies</span>
+            <textarea ng-model="enfant.allergies" class="field-input" rows="6" cols="36" placeholder="Allergies"></textarea>
+        </div>
+        <div class="center field">
+            <span class="field-label">Il / elle aime</span>
+            <textarea ng-model="enfant.love" class="field-input" rows="6" cols="36" placeholder="Il / elle aime..."></textarea>
+        </div>
+        <div class="center field">
+            <span class="field-label">Il / elle n'aime pas</span>
+            <textarea ng-model="enfant.hate" class="field-input" rows="6" cols="36" placeholder="Il / elle n'aime pas..."></textarea>
         </div>
         <div class="center field last">
             <span class="field-label">Infos compl&eacute;mentaires</span>

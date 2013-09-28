@@ -343,7 +343,7 @@ nav.navigation h4 > i{
     left: 0;
 }*/
 section {
-    padding-top: 4rem;
+    padding-top: 3rem;
 }
 /*#content ul {
     padding-bottom: 4rem;
@@ -368,6 +368,15 @@ section {
 }
 .enfants .next-icon {
     margin-top: -2.6rem;
+    float: right;
+}
+.enfants a.edit{
+    margin-top: -3.3rem;
+    float: right;
+}
+.enfants a.remove {
+    margin-top: -3.3rem;
+    margin-right: 4rem;
     float: right;
 }
 .enfants li:active .next-icon {
