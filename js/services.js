@@ -410,8 +410,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                             function (directoryRoot) {
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (writer) {
+                                        alert("writer");
                                         writer.onwrite = function (evt) {
-                                            setTimeout(function () {
+                                            //setTimeout(function () {
                                                 var options = new FileUploadOptions();
                                                 options.chunkedMode = false;
                                                 options.fileKey = "file";
@@ -446,10 +447,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                     } catch (e) { }
                                                     alert("upload " + error.code);
                                                 }, options);
-                                            }, 150);
+                                            //}, 150);
                                         };
                                         writer.write(JSON.stringify(current));
-                                        writer.abort();
+                                        //writer.abort();
                                     }, function (error) {
                                         alert("create writer " + error.code);
                                     });
