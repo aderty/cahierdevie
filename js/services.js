@@ -421,9 +421,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                             params.email = email;
                                             //params.cahier = current;
                                             options.params = params;
-                                            alert(fileEntry.toURI());
                                             var ft = new FileTransfer();
-                                            ft.upload(fileEntry.toURI(), url + current.id, function (r) {
+                                            ft.upload(fileEntry.fullPath, url + current.id, function (r) {
                                                 console.log("Code = " + r.responseCode);
                                                 console.log("Response = " + r.response);
                                                 console.log("Sent = " + r.bytesSent);
