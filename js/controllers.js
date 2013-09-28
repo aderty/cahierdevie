@@ -347,7 +347,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     //Callback function when the file has been moved successfully - inserting the complete path
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
-        $scope.event.pictures.push(entry.toURI());
+        $scope.event.pictures.push(entry.toURL());
         $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length -1];
         $scope.$apply();
     }
