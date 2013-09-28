@@ -410,7 +410,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                             function (directoryRoot) {
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (writer) {
-                                        alert("writer");
                                         writer.onwrite = function (evt) {
                                             //setTimeout(function () {
                                                 var options = new FileUploadOptions();
@@ -427,21 +426,21 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                 alert(fileEntry.fullPath);
 
                                                 var ft = new FileTransfer();
-                                                ft.upload(fileEntry.fullPath, url + current.id, function (r) {
+                                                ft.upload(fileEntry.fullPath, encodeURI(url + current.id), function (r) {
                                                     console.log("Code = " + r.responseCode);
                                                     console.log("Response = " + r.response);
                                                     console.log("Sent = " + r.bytesSent);
                                                     defered.resolve(r);
                                                 }, function (error) {
                                                     try {
-                                                        if (error == FileTransferError.FILE_NOT_FOUND_ERR) {
+                                                        if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
                                                             alert("FILE_NOT_FOUND_ERR");
                                                         }
-                                                        if (error == FileTransferError.INVALID_URL_ERR) {
+                                                        if (error.code == FileTransferError.INVALID_URL_ERR) {
                                                             alert("INVALID_URL_ERR");
                                                             alert(url + current.id);
                                                         }
-                                                        if (error == FileTransferError.CONNECTION_ERR) {
+                                                        if (error.code == FileTransferError.CONNECTION_ERR) {
                                                             alert("CONNECTION_ERR");
                                                         }
                                                     } catch (e) { }
