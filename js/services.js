@@ -288,7 +288,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     
     var cahierChangeCb = [];
     var ip = "192.168.1.18:1480";
-    var url = "http://" + ip + '/send-cachier/';
+    var url = "http://" + ip + '/send-cahier/';
     var myFolderApp = "CahierDeVie";
     var d = new Date();
     var current = null;
