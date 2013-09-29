@@ -263,7 +263,7 @@ button.delete {
     top: 0;
     width: 100%;
     left: 0;
-    z-index: 50;
+    /*z-index: 50;*/
 }
 .sub-header 
 { 
@@ -321,7 +321,7 @@ nav.navigation h4 > i{
 
 .topcoat-switch.genre
 {
-	z-index: 2;
+	/*z-index: 2;*/
 	margin-top: 0.7rem;
 	margin-left: 0.7rem;
 }
