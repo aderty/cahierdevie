@@ -321,7 +321,7 @@ nav.navigation h4 > i{
 
 .topcoat-switch.genre
 {
-	/*z-index: 2;*/
+	z-index: 2;
 	margin-top: 0.7rem;
 	margin-left: 0.7rem;
 }
