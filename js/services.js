@@ -457,14 +457,12 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         var params = new Object();
         params.email = cahier.email;
         options.params = params;
-        alert(JSON.stringify(options));
-        alert(url + cahier.id);
         var ft = new FileTransfer();
         ft.upload(filePath, encodeURI(url + cahier.id), function (r) {
             /*console.log("Code = " + r.responseCode);
             console.log("Response = " + r.response);
             console.log("Sent = " + r.bytesSent);*/
-            deferred.notify(10);
+            defered.notify(10);
             sendPicture();
 
         }, function (error) {
@@ -489,7 +487,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             defered.resolve(r);
             return;
         }
-        deferred.notify(pictures.length * 100 / cahier.nbPictures);
+        defered.notify(pictures.length * 100 / cahier.nbPictures);
         picture = pictures.shift();
         var options = new FileUploadOptions();
         options.chunkedMode = false;
