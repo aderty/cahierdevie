@@ -498,9 +498,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         options.fileKey = "file";
         options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
         options.mimeType = "image/jpeg";
-        var params = new Object();
-        params.name = fileName;
-        options.params = params;
+        alert(picture);
         var ft = new FileTransfer();
         ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
             sendPicture();
