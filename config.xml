@@ -33,7 +33,7 @@
   <author href="http://www.appytek.com/" email="support@phonegap.com">
     Aderty
   </author>
-  
+    <preference name="orientation" value="portrait" />
     <preference name="AllowInlineMediaPlayback" value="false" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="BackupWebStorage" value="cloud" />

@@ -24,6 +24,7 @@
             <button class="topcoat-button-bar__button full btn-send" ng-click="send()">
                 <i class="topcoat-icon cloud-icon"></i>
                 Transmettre
+                <i ng-if="progress" class="topcoat-icon">{{progress}}</i>
             </button>
         </div>
     </div>

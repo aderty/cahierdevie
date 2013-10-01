@@ -464,13 +464,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             /*console.log("Code = " + r.responseCode);
             console.log("Response = " + r.response);
             console.log("Sent = " + r.bytesSent);*/
-            alert("upload ok");
-            if (pictures.length > 0) {
-                sendPicture(pictures.shift());
-            }
-            else {
-                defered.resolve(r);
-            }
+            deferred.notify(10);
+            sendPicture();
 
         }, function (error) {
             try {
@@ -489,11 +484,13 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         }, options);
     }
 
-    function sendPicture(picture) {
-        alert("sendPicture" + picture);
+    function sendPicture() {
         if (pictures.length == 0) {
             defered.resolve(r);
+            return;
         }
+        deferred.notify(pictures.length * 100 / cahier.nbPictures);
+        picture = pictures.shift();
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
@@ -501,8 +498,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         options.mimeType = "image/jpeg";
 
         var ft = new FileTransfer();
-        ft.upload(picture, encodeURI(url + cahier.id), function (r) {
-            sendPicture(pictures.shift());
+        ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
+            sendPicture();
         }, function (error) {
             try {
                 if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {

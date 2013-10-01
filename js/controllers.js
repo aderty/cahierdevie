@@ -169,6 +169,8 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             alert("Cahier envoyé !");
         }, function () {
             alert("Problème lors de l'envoie du cahier...");
+        }, function (progress) {
+            $scope.progress = progress;
         })
     }
     
