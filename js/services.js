@@ -385,8 +385,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 alert("Pas de cahier");
                 return;
             }
-            alert(email);
-            var defered = $q.defer();
+            defered = $q.defer();
             /*$http({
                 method: 'POST',
                 url: url + current.id,
@@ -410,89 +409,23 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 fileSys.root.getDirectory(myFolderApp,
                             { create: true, exclusive: false },
                             function (directoryRoot) {
-                                alert("directoryRoot");
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
-                                    alert("getFile");
                                     fileEntry.createWriter(function (writer) {
-                                        alert("createWriter");
                                         writer.onwrite = function (evt) {
                                             //setTimeout(function () {
-                                                var options = new FileUploadOptions();
-                                                options.chunkedMode = false;
-                                                options.fileKey = "file";
-                                                options.fileName = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
-                                                options.mimeType = "text/json";
-
-                                                var params = new Object();
-                                                params.email = email;
-                                                options.params = params;
-
-                                                var ft = new FileTransfer();
-                                                ft.upload(fileEntry.fullPath, encodeURI(url + current.id), function (r) {
-                                                    /*console.log("Code = " + r.responseCode);
-                                                    console.log("Response = " + r.response);
-                                                    console.log("Sent = " + r.bytesSent);*/
-
-                                                    function sendPicture(picture) {
-                                                        alert("sendPicture" + picture);
-                                                        if (pictures.length == 0) {
-                                                            defered.resolve(r);
-                                                        }
-                                                        var options = new FileUploadOptions();
-                                                        options.chunkedMode = false;
-                                                        options.fileKey = "file";
-                                                        options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
-                                                        options.mimeType = "image/jpeg";
-
-                                                        var ft = new FileTransfer();
-                                                        ft.upload(picture, encodeURI(url + current.id), function (r) {
-                                                            sendPicture(pictures.shift());
-                                                        }, function (error) {
-                                                            try {
-                                                                if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
-                                                                    alert("FILE_NOT_FOUND_ERR");
-                                                                }
-                                                                if (error.code == FileTransferError.INVALID_URL_ERR) {
-                                                                    alert("INVALID_URL_ERR");
-                                                                    alert(url + current.id);
-                                                                }
-                                                                if (error.code == FileTransferError.CONNECTION_ERR) {
-                                                                    alert("CONNECTION_ERR");
-                                                                }
-                                                            } catch (e) { }
-                                                            defered.reject(error);
-                                                        }, options);
-                                                    }
-
-                                                    sendPicture(pictures.shift());
-                                                    
-                                                }, function (error) {
-                                                    try {
-                                                        if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
-                                                            alert("FILE_NOT_FOUND_ERR");
-                                                        }
-                                                        if (error.code == FileTransferError.INVALID_URL_ERR) {
-                                                            alert("INVALID_URL_ERR");
-                                                            alert(url + current.id);
-                                                        }
-                                                        if (error.code == FileTransferError.CONNECTION_ERR) {
-                                                            alert("CONNECTION_ERR");
-                                                        }
-                                                    } catch (e) { }
-                                                    defered.reject(error);
-                                                }, options);
+                                            sendCahier(fileEntry.fullPath);
                                             //}, 150);
                                         };
-                                        var cahier = angular.clone(current);
-                                        var pictures = [];
+                                        cahier = angular.copy(current);
+                                        pictures = [];
                                         cahier.email = email;
-                                        cahier.ngPictures = 0;
+                                        cahier.nbPictures = 0;
                                         var i = 0, l = cahier.events.length;
                                         for(;i<l;i++){
-                                            cahier.ngPictures += cahier.events[i].pictures.length;
+                                            cahier.nbPictures += cahier.events[i].pictures.length;
                                             pictures = pictures.concat(cahier.events[i].pictures);
                                         }
-                                        alert(cahier.ngPictures);
+                                        alert(cahier.nbPictures);
                                         alert(JSON.stringify(pictures));
                                         writer.write(JSON.stringify(cahier));
                                         //writer.abort();
@@ -512,6 +445,75 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             return defered.promise;
         }
     };
+    var defered = $q.defer();
+    var cahier;
+    var pictures = [];
+    function sendCahier(filePath) {
+        var options = new FileUploadOptions();
+        options.chunkedMode = false;
+        options.fileKey = "file";
+        options.fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+        options.mimeType = "text/json";
+
+        var params = new Object();
+        params.email = email;
+        options.params = params;
+
+        var ft = new FileTransfer();
+        ft.upload(filePath, encodeURI(url + cahier.id), function (r) {
+            /*console.log("Code = " + r.responseCode);
+            console.log("Response = " + r.response);
+            console.log("Sent = " + r.bytesSent);*/
+
+            sendPicture(pictures.shift());
+
+        }, function (error) {
+            try {
+                if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
+                    alert("FILE_NOT_FOUND_ERR");
+                }
+                if (error.code == FileTransferError.INVALID_URL_ERR) {
+                    alert("INVALID_URL_ERR");
+                    alert(url + current.id);
+                }
+                if (error.code == FileTransferError.CONNECTION_ERR) {
+                    alert("CONNECTION_ERR");
+                }
+            } catch (e) { }
+            defered.reject(error);
+        }, options);
+    }
+
+    function sendPicture(picture) {
+        alert("sendPicture" + picture);
+        if (pictures.length == 0) {
+            defered.resolve(r);
+        }
+        var options = new FileUploadOptions();
+        options.chunkedMode = false;
+        options.fileKey = "file";
+        options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
+        options.mimeType = "image/jpeg";
+
+        var ft = new FileTransfer();
+        ft.upload(picture, encodeURI(url + cahier.id), function (r) {
+            sendPicture(pictures.shift());
+        }, function (error) {
+            try {
+                if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
+                    alert("FILE_NOT_FOUND_ERR");
+                }
+                if (error.code == FileTransferError.INVALID_URL_ERR) {
+                    alert("INVALID_URL_ERR");
+                    alert(url + current.id);
+                }
+                if (error.code == FileTransferError.CONNECTION_ERR) {
+                    alert("CONNECTION_ERR");
+                }
+            } catch (e) { }
+            defered.reject(error);
+        }, options);
+    }
     
     function deleteEvent(event){
         // Suppression des images des évènements
