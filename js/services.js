@@ -487,8 +487,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             defered.resolve(r);
             return;
         }
-        defered.notify(pictures.length * 100 / cahier.nbPictures);
+        
+        //defered.notify(pictures.length * 100 / cahier.nbPictures);
         picture = pictures.shift();
+        alert(picture);
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
