@@ -45,4 +45,17 @@ angular.module('myApp.directives', [])
                 });
             }
         };
+    } ])
+    .directive('scroll', [function() {
+        return {
+            restrict: 'A',
+            replace: false,
+            link: function(scope, elm, attr) {
+                var myScroll = new IScroll(elm[0], { mouseWheel: true });
+
+                scope.$on('destroy', function() {
+                    myScroll.destroy();
+                });
+            }
+        };
     } ]);

@@ -289,6 +289,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     var cahierChangeCb = [];
     var ip = "192.168.1.18:1480";
     var url = "http://" + ip + '/send-cahier/';
+    var urlPicture = "http://" + ip + '/send-picture-cahier/';
     var myFolderApp = "CahierDeVie";
     var d = new Date();
     var current = null;
@@ -420,17 +421,47 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
 
                                                 var params = new Object();
                                                 params.email = email;
-                                                params.cahier = current;
                                                 options.params = params;
-
-                                                alert(email);
 
                                                 var ft = new FileTransfer();
                                                 ft.upload(fileEntry.fullPath, encodeURI(url + current.id), function (r) {
                                                     /*console.log("Code = " + r.responseCode);
                                                     console.log("Response = " + r.response);
                                                     console.log("Sent = " + r.bytesSent);*/
-                                                    defered.resolve(r);
+
+                                                    function sendPicture(picture) {
+                                                        alert("sendPicture" + picture);
+                                                        if (pictures.length == 0) {
+                                                            defered.resolve(r);
+                                                        }
+                                                        var options = new FileUploadOptions();
+                                                        options.chunkedMode = false;
+                                                        options.fileKey = "file";
+                                                        options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
+                                                        options.mimeType = "image/jpeg";
+
+                                                        var ft = new FileTransfer();
+                                                        ft.upload(picture, encodeURI(url + current.id), function (r) {
+                                                            sendPicture(pictures.shift());
+                                                        }, function (error) {
+                                                            try {
+                                                                if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
+                                                                    alert("FILE_NOT_FOUND_ERR");
+                                                                }
+                                                                if (error.code == FileTransferError.INVALID_URL_ERR) {
+                                                                    alert("INVALID_URL_ERR");
+                                                                    alert(url + current.id);
+                                                                }
+                                                                if (error.code == FileTransferError.CONNECTION_ERR) {
+                                                                    alert("CONNECTION_ERR");
+                                                                }
+                                                            } catch (e) { }
+                                                            defered.reject(error);
+                                                        }, options);
+                                                    }
+
+                                                    sendPicture(pictures.shift());
+                                                    
                                                 }, function (error) {
                                                     try {
                                                         if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
@@ -448,7 +479,18 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                                 }, options);
                                             //}, 150);
                                         };
-                                        writer.write(JSON.stringify(current));
+                                        var cahier = angular.clone(current);
+                                        var pictures = [];
+                                        cahier.email = email;
+                                        cahier.ngPictures = 0;
+                                        var i = 0, l = cahier.events.length;
+                                        for(;i<l;i++){
+                                            cahier.ngPictures += cahier.events[i].pictures.length;
+                                            pictures = pictures.concat(cahier.events[i].pictures);
+                                        }
+                                        alert(cahier.ngPictures);
+                                        alert(JSON.stringify(pictures));
+                                        writer.write(JSON.stringify(cahier));
                                         //writer.abort();
                                     }, function (error) {
                                         alert("create writer " + error.code);

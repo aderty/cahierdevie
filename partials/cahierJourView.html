@@ -29,17 +29,21 @@
     </div>
     <div id="content" class="topcoat-list__container list" >
         <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
-        <ul class="topcoat-list events" >
-            <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
-                <div class="list-inner">
-                     <h3>{{ event.title }}</h3>
-                    <p>{{event.desc}}</p>
-                </div>
-                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">
-                    <i class="topcoat-icon delete-icon"></i>
-                </a>
-            </li>
-        </ul>
+        <div id="wrapper" scroll>
+        <div>
+            <ul class="topcoat-list events" >
+                <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
+                    <div class="list-inner">
+                         <h3>{{ event.title }}</h3>
+                        <p>{{event.desc}}</p>
+                    </div>
+                    <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">
+                        <i class="topcoat-icon delete-icon"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        </div>
     </div>
 </section>
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >

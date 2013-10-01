@@ -47,7 +47,7 @@ input, textarea {
     user-select: auto !important;
 
     -webkit-transform: translate3d(0, 0, 0);
-	-webkit-user-modify: read-write-plaintext-only;
+	/*webkit-user-modify: read-write-plaintext-only;*/
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
@@ -201,6 +201,11 @@ button.delete {
 }
 
 .list ul {
+    min-height: 55rem;
+    position: relative;
+    background-color: Transparent;
+}
+.list li {
     background-color: #fff;
 }
 .list-inner {
@@ -258,7 +263,7 @@ button.delete {
 	width: 90%;
 }
 .header {
-    position: fixed;
+    /*position: fixed;*/
     /*height: 4rem;*/
     top: 0;
     width: 100%;
@@ -280,6 +285,35 @@ button.delete {
 { 
        /*margin-top: 2.4rem;*/
 } 
+#content {
+	position: absolute;
+	z-index: 1;
+	top: 3.5rem;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+}
+.sub-header + #content
+{
+	top: 6.5rem;
+}
+#wrapper
+{
+	position: absolute;
+	z-index: 1;
+	top: 2rem;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+}
+#content > ul
+{
+	min-width: 100%;
+	min-height: 100%;
+	position: relative;
+}
 
 nav.navigation .topcoat-icon{
     float: right;
@@ -342,9 +376,9 @@ nav.navigation h4 > i{
     width: 100%;
     left: 0;
 }*/
-section {
+/*section {
     padding-top: 3rem;
-}
+}*/
 /*#content ul {
     padding-bottom: 4rem;
 }*/
