@@ -488,9 +488,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             });
             return;
         }
-        $timeout(function () {
+        /*$timeout(function () {
             defered.notify(100 - (pictures.length * 100 / cahier.nbPictures + 1));
-        });
+        });*/
         var picture = pictures.shift();
 
         var options = new FileUploadOptions();
