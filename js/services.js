@@ -488,9 +488,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             });
             return;
         }
-        /*$timeout(function () {
+        $timeout(function () {
             defered.notify(100 - (pictures.length * 100 / cahier.nbPictures + 1));
-        });*/
+        });
         var picture = pictures.shift();
 
         var options = new FileUploadOptions();
@@ -498,7 +498,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         options.fileKey = "file";
         options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
         options.mimeType = "image/jpeg";
-        alert(picture);
+
         var ft = new FileTransfer();
         ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
             sendPicture();
