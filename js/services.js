@@ -385,6 +385,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 alert("Pas de cahier");
                 return;
             }
+            alert(email);
             var defered = $q.defer();
             /*$http({
                 method: 'POST',
@@ -409,8 +410,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 fileSys.root.getDirectory(myFolderApp,
                             { create: true, exclusive: false },
                             function (directoryRoot) {
+                                alert("directoryRoot");
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
+                                    alert("getFile");
                                     fileEntry.createWriter(function (writer) {
+                                        alert("createWriter");
                                         writer.onwrite = function (evt) {
                                             //setTimeout(function () {
                                                 var options = new FileUploadOptions();
