@@ -455,7 +455,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         options.mimeType = "text/json";
 
         var params = new Object();
-        params.email = email;
+        params.email = cahier.email;
         options.params = params;
         alert(JSON.stringify(options));
         alert(url + cahier.id);
