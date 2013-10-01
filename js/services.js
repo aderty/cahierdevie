@@ -482,21 +482,22 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     }
 
     function sendPicture() {
-        alert("sendPicture " + pictures.length);
         if (pictures.length == 0) {
-            defered.resolve(r);
+            defered.resolve(true);
             return;
         }
         
-        //defered.notify(pictures.length * 100 / cahier.nbPictures);
+        defered.notify(parseFloat(pictures.length * 100 / cahier.nbPictures).toFixed(0));
         var picture = pictures.shift();
-        alert(picture);
+
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
         options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
         options.mimeType = "image/jpeg";
-
+        var params = new Object();
+        params.name = fileName;
+        options.params = params;
         var ft = new FileTransfer();
         ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
             sendPicture();
