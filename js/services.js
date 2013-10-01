@@ -447,7 +447,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     var cahier;
     var pictures = [];
     function sendCahier(filePath) {
-        alert(filePath);
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
@@ -472,7 +471,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 }
                 if (error.code == FileTransferError.INVALID_URL_ERR) {
                     alert("INVALID_URL_ERR");
-                    alert(url + current.id);
+                    alert(url + cahier.id);
                 }
                 if (error.code == FileTransferError.CONNECTION_ERR) {
                     alert("CONNECTION_ERR");
@@ -483,13 +482,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     }
 
     function sendPicture() {
+        alert("sendPicture " + pictures.length);
         if (pictures.length == 0) {
             defered.resolve(r);
             return;
         }
         
         //defered.notify(pictures.length * 100 / cahier.nbPictures);
-        picture = pictures.shift();
+        var picture = pictures.shift();
         alert(picture);
         var options = new FileUploadOptions();
         options.chunkedMode = false;
@@ -507,7 +507,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                 }
                 if (error.code == FileTransferError.INVALID_URL_ERR) {
                     alert("INVALID_URL_ERR");
-                    alert(url + current.id);
+                    alert(urlPicture + cahier.id);
                 }
                 if (error.code == FileTransferError.CONNECTION_ERR) {
                     alert("CONNECTION_ERR");
