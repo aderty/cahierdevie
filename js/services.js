@@ -483,11 +483,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
 
     function sendPicture() {
         if (pictures.length == 0) {
-            defered.resolve(true);
+            $timeout(function () {
+                defered.resolve(true);
+            });
             return;
         }
-        
-        defered.notify(pictures.length * 100 / cahier.nbPictures);
+        $timeout(function () {
+            defered.notify(100 - (pictures.length * 100 / cahier.nbPictures + 1));
+        });
         var picture = pictures.shift();
 
         var options = new FileUploadOptions();
