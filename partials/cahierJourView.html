@@ -28,10 +28,9 @@
             </button>
         </div>
     </div>
-    <div id="content" class="topcoat-list__container list" >
+    <div class="topcoat-list__container list" >
         <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
         <div id="wrapper" scroll>
-        <div>
             <ul class="topcoat-list events" >
                 <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
                     <div class="list-inner">
@@ -43,7 +42,6 @@
                     </a>
                 </li>
             </ul>
-        </div>
         </div>
     </div>
 </section>

@@ -51,10 +51,27 @@ angular.module('myApp.directives', [])
             restrict: 'A',
             replace: false,
             link: function(scope, elm, attr) {
-                var myScroll = new IScroll(elm[0], { mouseWheel: true });
+                setTimeout(function() {
+                    var myScroll = new IScroll(document.getElementById(elm[0].id), { scrollbars: true, mouseWheel: true, interactiveScrollbars: true });
+                    elm.data('scroll', myScroll);
+                    myScroll.hasVerticalScroll = true;
 
-                scope.$on('destroy', function() {
-                    myScroll.destroy();
+                    scope.$on('destroy', function() {
+                        myScroll.destroy();
+                    });
+                }, 500);
+            }
+        };
+    } ])
+    .directive('focusscroll', [function() {
+        return {
+            restrict: 'A',
+            replace: false,
+            link: function(scope, elm, attr) {
+                elm.bind("focus", function() {
+                    var me = $(this);
+                    //me.closest("[scroll]")[0].scrollTop = me.position().top;
+                    me.closest("[scroll]").data('scroll').scrollToElement(me[0]);
                 });
             }
         };

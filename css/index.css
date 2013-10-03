@@ -201,7 +201,6 @@ button.delete {
 }
 
 .list ul {
-    min-height: 55rem;
     position: relative;
     background-color: Transparent;
 }
@@ -286,32 +285,60 @@ button.delete {
        /*margin-top: 2.4rem;*/
 } 
 #content {
-	position: absolute;
+	/*position: absolute;
 	z-index: 1;
 	top: 3.5rem;
 	bottom: 0;
 	left: 0;
-	width: 100%;
+	width: 100%;*/
 	overflow: hidden;
 }
 .sub-header + #content
 {
 	top: 6.5rem;
 }
+.sub-header + div>#wrapper
+{
+	top: 8.2rem;
+}
+#content,
 #wrapper
 {
 	position: absolute;
 	z-index: 1;
-	top: 2rem;
+	top: 5rem;
 	bottom: 0;
 	left: 0;
 	width: 100%;
 	overflow: hidden;
 }
+#content > form,
+#wrapper > div {
+	position: absolute;
+	z-index: 1;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	width: 100%;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	-ms-transform: translateZ(0);
+	-o-transform: translateZ(0);
+	transform: translateZ(0);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+	-ms-text-size-adjust: none;
+	-o-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
 #content > ul
 {
 	min-width: 100%;
-	min-height: 100%;
+	/*min-height: 100%;*/
 	position: relative;
 }
 

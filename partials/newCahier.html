@@ -1,4 +1,19 @@
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<div class="topcoat-navigation-bar header">
+    <div class="topcoat-navigation-bar__item left quarter">
+        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
+            <span class="topcoat-icon listview-icon"></span>
+        </a>
+    </div>
+    <div class="topcoat-navigation-bar__item center half">
+        <h1 class="topcoat-navigation-bar__title">{{title}}</h1>
+    </div>
+    <div class="topcoat-navigation-bar__item right quarter">
+        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+            <span class="topcoat-icon home-icon"></span>
+        </a>
+    </div>
+</div>
 <div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full first" ng-click="add(enfant)">
@@ -37,37 +52,22 @@
         </div>
         <div class="center field">
             <span class="field-label">Allergies</span>
-            <textarea ng-model="enfant.allergies" class="field-input" rows="6" cols="36" placeholder="Allergies"></textarea>
+            <textarea ng-model="enfant.allergies" class="field-input" rows="6" cols="36" focusscroll placeholder="Allergies"></textarea>
         </div>
         <div class="center field">
             <span class="field-label">Il / elle aime</span>
-            <textarea ng-model="enfant.love" class="field-input" rows="6" cols="36" placeholder="Il / elle aime..."></textarea>
+            <textarea ng-model="enfant.love" class="field-input" rows="6" cols="36" focusscroll placeholder="Il / elle aime..."></textarea>
         </div>
         <div class="center field">
             <span class="field-label">Il / elle n'aime pas</span>
-            <textarea ng-model="enfant.hate" class="field-input" rows="6" cols="36" placeholder="Il / elle n'aime pas..."></textarea>
+            <textarea ng-model="enfant.hate" class="field-input" rows="6" cols="36" focusscroll placeholder="Il / elle n'aime pas..."></textarea>
         </div>
         <div class="center field last">
             <span class="field-label">Infos compl&eacute;mentaires</span>
-            <textarea ng-model="enfant.infos" class="field-input" rows="6" cols="36" placeholder="Infos"></textarea>
+            <textarea ng-model="enfant.infos" class="field-input" rows="6" cols="36" focusscroll placeholder="Infos"></textarea>
         </div>
             </div> 
     </form>
-</div>
-<div class="topcoat-navigation-bar header">
-    <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
-            <span class="topcoat-icon listview-icon"></span>
-        </a>
-    </div>
-    <div class="topcoat-navigation-bar__item center half">
-        <h1 class="topcoat-navigation-bar__title">{{title}}</h1>
-    </div>
-    <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-            <span class="topcoat-icon home-icon"></span>
-        </a>
-    </div>
 </div>
 </section>
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >

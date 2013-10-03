@@ -14,11 +14,12 @@
         </a>
     </div>
 </div>
-<div id="content" class="topcoat-list__container list" >
+<div class="topcoat-list__container list" >
+<h3 class="topcoat-list__header">Cahiers des enfants du {{currentDate}}</h3>
 <div>
-    <h3 class="topcoat-list__header">Cahiers des enfants du {{currentDate}}</h3>
+    
     <div id="wrapper" scroll>
-        <div>
+    <div id="scroller" >
     <ul class="topcoat-list enfants">
         <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]" class="topcoat-list__item noSelect">
             <div class="list-inner">
