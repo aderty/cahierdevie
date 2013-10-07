@@ -46,7 +46,7 @@
         </h3>
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
-                <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">
+                <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item">
                     <div class="list-inner">
                          <h3>{{ event.title }}</h3>
                         <p>{{event.desc}}</p>
