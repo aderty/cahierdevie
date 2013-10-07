@@ -434,9 +434,9 @@ nav.navigation h4 > i{
 	float: right;
 }
 
-.enfants li:active, .events li:active {
+/*.enfants li:active, .events li:active {
     background-color: rgb(187, 231, 179);
-}
+}*/
 
 .enfants .li-thumb {
     left: -1rem;
@@ -575,6 +575,13 @@ nav.navigation h4 > i{
 
 .delete-icon {
     background: url("../img/delete.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.back-icon {
+    background: url("../img/back.svg") no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;

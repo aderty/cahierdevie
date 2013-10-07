@@ -2,6 +2,8 @@
 
 /* Services */
 
+//device.uuid
+
 // Simple value service.
 angular.module('myApp.services', []).
   value('version', '0.1');
