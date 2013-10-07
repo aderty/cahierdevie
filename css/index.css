@@ -459,9 +459,9 @@ nav.navigation h4 > i{
     margin-right: 4rem;
     float: right;
 }
-.enfants li:active .next-icon {
+/*.enfants li:active .next-icon {
     background: url("../img/refresh.svg") no-repeat;
-}
+}*/
 
 
 .fille .li-thumb 

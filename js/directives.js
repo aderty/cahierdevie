@@ -102,9 +102,8 @@ angular.module('myApp.directives', [])
                     function refresh() {
                         myScroll.refresh();
                     }
-                    scope.$on('refresh-scroll', refresh);
+                    scope.$root.$on('refresh-scroll', refresh);
                     scope.$on('destroy', function() {
-                        scope.$off('refresh-scroll', refresh);
                         myScroll.destroy();
                     });
                 }, 500);
