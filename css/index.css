@@ -149,6 +149,31 @@ html, body {
 	font-size: 114%;
 	font-weight: inherit;
 }
+
+.selection-date {
+    line-height: 3rem;
+    margin-top: 0;
+    padding-top: 0;
+    height: 2.6rem;
+    overflow: hidden;
+    padding-bottom: 0;
+}
+.selection-date > div {
+    float: left;
+    display: inline-block;
+}
+.selection-date .half {
+    line-height: 2.7rem;
+    width: 49%;
+}
+
+.snap-drawers {
+    display: none;
+}
+.ready .snap-drawers {
+    display: block;
+}
+
 .btn-cancel
 {
 	background-color: rgb(221, 96, 91);
@@ -173,6 +198,14 @@ html, body {
 {
 	background-color: rgb(116, 186, 233);
 }
+
+.btn-send.sync {
+    background-color: rgb(139, 107, 168);
+}
+.btn-send.sync:hover {
+    background-color: rgb(198, 135, 248);
+}
+
 
 .btn-photo > div
 {

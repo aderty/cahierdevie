@@ -1,6 +1,11 @@
 'use strict';
 
-myApp.run(["$rootScope", function ($rootScope) {
+myApp.run(["$rootScope", "phonegapReady", function ($rootScope, phonegapReady) {
+    phonegapReady(function () {
+        $rootScope.ready = true;
+    });
+
+
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
     $rootScope.isCurrentDate = function(){
@@ -142,7 +147,9 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     function loadEnfants(){
         EnfantService.list().then(function (enfants) {
             $scope.enfants = enfants;
-            $scope.$emit("refresh-scroll");
+            $timeout(function () {
+                $scope.$emit("refresh-scroll");
+            }, 150);
         });
     }
     

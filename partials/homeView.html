@@ -10,14 +10,14 @@
     </div>
 </div>
 <div class="topcoat-list__container list" >
-<h3 class="topcoat-list__header" ng-class="{'now':isCurrentDate()}">
+<h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
     <div class="left quarter">
         <a class="topcoat-icon-button--quiet backDate" title="back" ng-click="backDate()">
              <i class="topcoat-icon back-icon"></i>
         </a>
     </div>
         <div class="center half">
-            <datemodelpicker ng-model="currentDate">Journ&eacute;e du {{currentDate}}</datemodelpicker>
+            <datemodelpicker ng-model="currentDate">Journ&eacute;e du {{currentDate | datesimple}}</datemodelpicker>
         </div>
     <div class="right quarter">
         <a class="topcoat-icon-button--quiet nextDate" title="next" ng-click="nextDate()">
@@ -47,7 +47,7 @@
     </div>
 </div>
 </section>
-<nav class="topcoat-list__container snapjs-left navigation" id="homeNav" snap-drawer >
+<nav class="topcoat-list__container snapjs-left navigation" id="homeNav" snap-drawer ng-class="{'ready': ready}" >
 
   <ng-include src="'partials/navigationMain.html'"></ng-include>
 
