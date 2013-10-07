@@ -297,12 +297,12 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     
     $scope.takePic = function () {
         var options = {
-            quality: 75,
+            quality: 50,
             destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
-            encodingType: 0//,     // 0=JPG 1=PNG
-            /*targetWidth: 250,
-            targetHeight: 250*/
+            encodingType: 0,     // 0=JPG 1=PNG
+            targetWidth: 250,
+            targetHeight: 250
         }
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
