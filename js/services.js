@@ -329,7 +329,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
                 // Suppression des images des évènements
-                if(elem.value.events && elem.value.events.length){
+                if (elem.value.idEnfant == idEnfant && elem.value.events && elem.value.events.length) {
                     var i=0, l = elem.value.events.length;
                     for(;i<l;i++){
                         deleteEvent(elem.value.events[i]);
