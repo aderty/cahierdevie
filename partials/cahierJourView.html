@@ -29,7 +29,15 @@
         </div>
     </div>
     <div class="topcoat-list__container list" >
-        <h3 class="topcoat-list__header">Ev&egrave;nements du jour : {{currentCahier.date}}</h3>
+        <h3 class="topcoat-list__header" ng-class="{'now':isCurrentDate()}">
+            <a class="topcoat-icon-button--quiet backDate left" title="back" ng-click="backDate()">
+                 <i class="topcoat-icon back_light-icon"></i>
+            </a>
+            <datemodelpicker ng-model="currentDate">Journ&eacute;e du {{currentCahier.date}}</datemodelpicker>
+            <a class="topcoat-icon-button--quiet nextDate right" title="next" ng-click="nextDate()">
+                  <i class="topcoat-icon next-icon"></i>
+            </a>
+        </h3>
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
                 <li ng-repeat="event in currentCahier.events" ng-click="editEvent(event)" class="topcoat-list__item">

@@ -298,7 +298,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         return id + "_" + date.getFullYear() + (date.getMonth() < 9 || date.getMonth() > 11  ? '0' : '') +  (date.getMonth() + 1) + date.getDate();
     }
     
-    return {
+    var me = {
         "new": function (idEnfant, date) {
             return {
                 id: genKey(idEnfant, date),
@@ -483,8 +483,15 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
 
     function sendPicture() {
         if (pictures.length == 0) {
-            $timeout(function () {
-                defered.resolve(true);
+            current.lastSync = new Date();
+            me.save(current).then(function(){
+                $timeout(function () {
+                    defered.resolve(true);
+                });
+            },function(){
+                $timeout(function () {
+                    defered.reject("Problème lors de la mise à jour de l'état du cahier.");
+                });
             });
             return;
         }
@@ -549,6 +556,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
         console.log("Response = " + r.response);
         console.log("Sent = " + r.bytesSent);
     }
+    
+    return me;
 });
 
 myApp.factory('EventService', function ($q, db) {

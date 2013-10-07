@@ -3,6 +3,17 @@
 myApp.run(["$rootScope", function ($rootScope) {
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    $rootScope.isCurrentDate = function(){
+        return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)) == 0;
+    }
+    $rootScope.backDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+    $rootScope.nextDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
 }]);
 
 /* Controllers */
@@ -29,14 +40,14 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
 }
 
 function NavigationCtrl($scope, navSvc, $rootScope) {
-    $scope.backDate = function(){
+    /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }
     $scope.nextDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
-    }
+    }*/
 }
 
 function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notification){
@@ -62,14 +73,10 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 }
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
-    $scope.showEdition = false;
     CahierService.setCurrent(null);
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
-    $scope.edit = function () {
-        $scope.showEdition = !$scope.showEdition;
-    }
     $scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -135,6 +142,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     function loadEnfants(){
         EnfantService.list().then(function (enfants) {
             $scope.enfants = enfants;
+            $scope.$emit("refresh-scroll");
         });
     }
     
@@ -166,9 +174,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     //}
     $scope.send = function () {
         CahierService.send(EnfantService.getCurrent().email).then(function () {
-            alert("Cahier envoyé !");
+            alert("Cahier envoyÃ© !");
         }, function () {
-            alert("Problème lors de l'envoie du cahier...");
+            alert("ProblÃ¨me lors de l'envoie du cahier...");
         }, function (progress) {
             $scope.progress = progress + "%";
         })
@@ -193,7 +201,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         navSvc.slidePage("/viewEvent");
     }
     $scope.removeEvent = function (event, index) {
-        if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
+        if (!confirm("Etes-vous sÃ»re de vouloir supprimer cet Ã©vÃ¨nement ?")) return false;
         if(event.pictures && event.pictures.length){
             var i=0, l = event.pictures.length;
             for(;i<l;i++){
@@ -247,6 +255,18 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
             navSvc.back();
             $scope.$apply();
         });
+    }
+    $scope.remove = function (enfant) {
+        if (confirm("Etes-vous sur ?")) {
+            EnfantService.remove(enfant).then(function () {
+                navSvc.back();
+                $scope.$apply();
+            });
+        }
+        /*if(notification.confirm("Etes-vous sur ?", function(){
+            $scope.closeOverlay();
+            EnfantService.remove(EnfantService.getCurrent());
+        });*/
     }
     $scope.cancel = function () {
         navSvc.back();

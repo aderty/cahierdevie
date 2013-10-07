@@ -8,14 +8,17 @@
     <div class="topcoat-navigation-bar__item center half">
         <h1 class="topcoat-navigation-bar__title">Cahier de vie</h1>
     </div>
-    <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" title="edit">
-            <i class="topcoat-icon" ng-class="{true:'cancel-icon', false:'brush-icon'}[showEdition]" ng-click="edit()"></i>
-        </a>
-    </div>
 </div>
 <div class="topcoat-list__container list" >
-<h3 class="topcoat-list__header">Cahiers des enfants du {{currentDate}}</h3>
+<h3 class="topcoat-list__header" ng-class="{'now':isCurrentDate()}">
+<a class="topcoat-icon-button--quiet backDate left" title="back" ng-click="backDate()">
+     <i class="topcoat-icon back_light-icon"></i>
+</a>
+<datemodelpicker ng-model="currentDate">Journ&eacute;e du {{currentDate}}</datemodelpicker>
+<a class="topcoat-icon-button--quiet nextDate right" title="next" ng-click="nextDate()">
+      <i class="topcoat-icon next-icon"></i>
+</a>
+</h3>
 <div>
     
     <div id="wrapper" scroll>
@@ -23,16 +26,10 @@
     <ul class="topcoat-list enfants">
         <li ng-repeat="enfant in enfants" ng-click="showCahier(enfant)" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]" class="topcoat-list__item noSelect">
             <div class="list-inner">
-                <img ng-src="{{enfant.photo}}" class="li-thumb">
+                <img ng-src="{{enfant.photo}}" class="li-thumb" ng-click="update(enfant);$event.stopPropagation();">
                  <h3>{{ enfant.prenom }}</h3>
              </div>
-            <i ng-if="!showEdition" class="topcoat-icon next-icon"></i>
-            <a ng-if="showEdition" class="topcoat-icon-button--quiet edit" title="edit" ng-click="update(enfant);$event.stopPropagation();">
-                <i class="topcoat-icon brush-icon"></i>
-            </a>
-            <a ng-if="showEdition" class="topcoat-icon-button--quiet remove" title="remove" ng-click="remove(enfant);$event.stopPropagation();">
-                <i class="topcoat-icon error-icon"></i>
-            </a>
+            <i class="topcoat-icon next-icon"></i>
         </li>
         <li class="topcoat-list__item" ng-click="newCahier()">
             <span class="topcoat-icon plus-icon"></span> Nouveau cahier
