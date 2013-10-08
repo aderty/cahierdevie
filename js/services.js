@@ -289,7 +289,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
 myApp.factory('CahierService', function ($q, db, $timeout, $http) {
     
     var cahierChangeCb = [];
-    var ip = "192.168.1.18:1480";
+    var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
     var url = "http://" + ip + '/send-cahier/';
     var urlPicture = "http://" + ip + '/send-picture-cahier/';
     var myFolderApp = "CahierDeVie";
