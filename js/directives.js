@@ -152,18 +152,20 @@ angular.module('myApp.directives', [])
                             var target = e.target; 
                             while (target.nodeType != 1) target = target.parentNode; 
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
-                                e.preventDefault();
                                 timer = null;
+                                input = null;
                             }
                             else {
                                 timer = new Date().getTime();
                                 input = target;
                             }
+                            e.preventDefault();
                         },
                         onScrollEnd: function (e) {
                             if (!timer) return;
                             if (this.distY < DELTA && this.distY > -DELTA && (new Date().getTime() - timer) < TIMEOUT) {
                                 setTimeout(function () {
+                                    input.click();
                                     input.focus();
                                 }, 50);
                             }
