@@ -286,8 +286,8 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     };
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout, $http) {
-    
+myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
+    var orderBy = $filter('orderBy');
     var cahierChangeCb = [];
     var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
     var url = "http://" + ip + '/send-cahier/';
@@ -414,11 +414,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (writer) {
                                         writer.onwrite = function (evt) {
-                                            //setTimeout(function () {
                                             sendCahier(fileEntry.fullPath);
-                                            //}, 150);
                                         };
                                         cahier = angular.copy(current);
+                                        cahier.events = orderBy(cahier.events, 'time');
                                         pictures = [];
                                         cahier.email = email;
                                         cahier.nbPictures = 0;
@@ -485,8 +484,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http) {
 
     function sendPicture() {
         if (pictures.length == 0) {
-            current.lastSync = new Date();
-            me.save(current).then(function(){
+            cahier.lastSync = new Date();
+            me.save(cahier).then(function(){
                 $timeout(function () {
                     defered.resolve(true);
                 });

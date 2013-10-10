@@ -164,7 +164,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     }
 }
 
-function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
+function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $filter) {
     function loadCahier(){
         if(!EnfantService.getCurrent()) return;
         CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
@@ -278,6 +278,57 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     $scope.cancel = function () {
         navSvc.back();
     }
+    $scope.takePic = function(){
+        var options = {
+            quality: 45,
+            destinationType: Camera.DestinationType.DATA_URL, //Camera.DestinationType.DATA_URL,
+            sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+            encodingType: 0,     // 0=JPG 1=PNG
+            targetWidth: 1000,
+            targetHeight: 1000
+        }
+        // Take picture using device camera and retrieve image as base64-encoded string
+        navigator.camera.getPicture(onSuccess, onFail, options);
+    }
+    var onSuccess = function (imageData) {
+        var image = document.createElement("img");
+        image.onload = function () {
+            var square = 200;
+            var canvas = document.createElement('canvas');
+
+            canvas.width = square;
+            canvas.height = square;
+
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, square, square);
+            var imageWidth;
+            var imageHeight;
+            var offsetX = 0;
+            var offsetY = 0;
+
+            if (this.width > this.height) {
+                imageWidth = Math.round(square * this.width / this.height);
+                imageHeight = square;
+                offsetX = - Math.round((imageWidth - square) / 2);
+            } else {
+                imageHeight = Math.round(square * this.height / this.width);
+                imageWidth = square;    
+                offsetY = - Math.round((imageHeight - square) / 2);            
+            }
+
+            context.drawImage(this, offsetX, offsetY, imageWidth, imageHeight);
+            var data = canvas.toDataURL('image/jpeg');
+            
+            $scope.$apply(function(){
+                $scope.enfant.photo = data;
+            });
+            
+        };
+        image.src = "data:image/jpeg;base64," + imageData;
+    };
+    var onFail = function (e) {
+        console.log("On fail " + e);
+    };
 }
 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {

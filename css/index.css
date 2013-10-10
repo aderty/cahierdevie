@@ -255,8 +255,30 @@ button.delete {
 	float: left;
 	left: 1px;
 	top: 0;
-	max-height: 80px;
-	max-width: 80px;
+	height: 80px;
+	width: 80px;
+}
+
+h1 .li-thumb 
+{
+	position: relative;
+	float:none;
+	max-height: 2.5rem;
+	max-width: 2.5rem;
+	margin-bottom: -1rem;
+	padding-right: 1rem;
+	left:auto;
+}
+
+#cahierForm .btn-photo,
+#cahierForm .btn-photo img
+{
+	width: 100px;
+	height: 100px;
+}
+#cahierForm .btn-photo.has-photo
+{
+	padding:0;
 }
 
 .list .delete {

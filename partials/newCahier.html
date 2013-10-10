@@ -51,6 +51,19 @@
             </label>
         </div>
         <div class="center field">
+            <span class="field-label">Date de naissance</span>
+            <input type="text" datepicker ng-model="enfant.birth" placeholder="Date de naissance" class="field-input" />
+        </div>
+        <div class="center field">
+            <span class="field-label">Photo</span>
+            <button class="topcoat-button-bar__button btn-photo" ng-class="{'has-photo' : enfant.photo != null}" ng-click="takePic()">
+                <div ng-if="enfant.photo == null">
+                    <i class="neo160"></i>&nbsp;
+                </div>
+                <img ng-if="enfant.photo != null" ng-src="{{enfant.photo}}" class="evt-photo-item" />
+            </button>
+        </div>
+        <div class="center field">
             <span class="field-label">Allergies</span>
             <textarea ng-model="enfant.allergies" class="field-input" rows="6" cols="36" focusscroll placeholder="Allergies"></textarea>
         </div>

@@ -6,7 +6,7 @@
             </a>
         </div>
         <div class="topcoat-navigation-bar__item center half">
-            <h1 class="topcoat-navigation-bar__title">Cahier de {{currentEnfant.prenom}}</h1>
+            <h1 class="topcoat-navigation-bar__title"><img ng-src="{{currentEnfant.photo}}" class="li-thumb" />{{currentEnfant.prenom}}</h1>
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
             <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
@@ -14,22 +14,7 @@
             </a>
         </div>
     </div>
-    <div class="topcoat-button-bar full sub-header">
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
-                <i class="topcoat-icon plus-icon"></i>
-            </button>
-        </div>
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': cahier.lastSync}" ng-click="send()">
-                <i class="topcoat-icon cloud-icon"></i>
-                Transmettre
-                {{progress}}
-            </button>
-        </div>
-    </div>
-    <div class="topcoat-list__container list" >
-        <h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
+    <h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
             <div class="left quarter">
                 <a class="topcoat-icon-button--quiet backDate" title="back" ng-click="backDate()">
                      <i class="topcoat-icon back-icon"></i>
@@ -44,12 +29,30 @@
                 </a>
             </div>
         </h3>
+    <div class="topcoat-button-bar full sub-header">
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
+                <i class="topcoat-icon plus-icon"></i>
+            </button>
+        </div>
+        <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': cahier.lastSync != undefined}" ng-click="send()">
+                <i class="topcoat-icon cloud-icon"></i>
+                Transmettre
+                {{progress}}
+            </button>
+        </div>
+    </div>
+    <div class="topcoat-list__container list" >
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
                 <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item">
                     <div class="list-inner">
                          <h3>{{ event.title }}</h3>
                         <p>{{event.desc}}</p>
+                        <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
+                            <img class="evt-photo-item" ng-src="{{picData}}" />
+                        </div> 
                     </div>
                     <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">
                         <i class="topcoat-icon delete-icon"></i>

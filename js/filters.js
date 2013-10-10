@@ -14,6 +14,6 @@ angular.module('myApp.filters', [])
         if (month < 10) {
             month = '0' + month;
         }
-        return date.getDate() + '/' + month + '/' + date.getFullYear();
+        return date.getDate() + '/' + month + '/' + date.getFullYear() || date.getYear();
     }
 });
