@@ -149,7 +149,7 @@ angular.module('myApp.directives', [])
                         mouseWheel: true, 
                         interactiveScrollbars: true,
                         onBeforeScrollStart: function (e) {
-                            valid = true;
+                            valid = false;
                             var target = e.target; 
                             while (target.nodeType != 1) target = target.parentNode; 
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
@@ -166,6 +166,7 @@ angular.module('myApp.directives', [])
                                         if (valid) {
                                             input.canFocus = true;
                                             input.focus();
+                                            input.click();
                                         }
                                     }
                                 })(target), 250);
@@ -174,8 +175,8 @@ angular.module('myApp.directives', [])
                         },
                         onScrollEnd: function (e) {
                             //if (!timer) return;
-                            if (this.distY > DELTA || this.distY < -DELTA){// && (new Date().getTime() - timer) < TIMEOUT) {
-                                valid = false;
+                            if (this.distY < DELTA && this.distY > -DELTA){// && (new Date().getTime() - timer) < TIMEOUT) {
+                                valid = true;
                             }
                             //timer = null;
                         }
