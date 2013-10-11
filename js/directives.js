@@ -152,8 +152,7 @@ angular.module('myApp.directives', [])
                             var target = e.target; 
                             while (target.nodeType != 1) target = target.parentNode; 
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
-                                timer = null;
-                                input = null;
+
                             }
                             else {
                                 timer = new Date().getTime();
@@ -164,11 +163,14 @@ angular.module('myApp.directives', [])
                         onScrollEnd: function (e) {
                             if (!timer) return;
                             if (this.distY < DELTA && this.distY > -DELTA && (new Date().getTime() - timer) < TIMEOUT) {
-                                setTimeout(function () {
-                                    input.click();
-                                    input.focus();
-                                }, 50);
+                                setTimeout((function (inp) {
+                                    return function () {
+                                        inp.focus();
+                                    }
+                                })(input), 150);
                             }
+                            timer = null;
+                            input = null;
                         }
                     });
                     elm.data('scroll', myScroll);
