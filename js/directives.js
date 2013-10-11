@@ -139,7 +139,7 @@ angular.module('myApp.directives', [])
             replace: false,
             link: function(scope, elm, attr) {
                 var timer = null; 
-                var input = null;
+                var valid = true;
                 var DELTA = 10; 
                 var TIMEOUT = 800; 
 
@@ -148,29 +148,36 @@ angular.module('myApp.directives', [])
                         scrollbars: true, 
                         mouseWheel: true, 
                         interactiveScrollbars: true,
-                        onBeforeScrollStart: function(e) { 
+                        onBeforeScrollStart: function (e) {
+                            valid = true;
                             var target = e.target; 
                             while (target.nodeType != 1) target = target.parentNode; 
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
 
                             }
                             else {
-                                timer = new Date().getTime();
-                                input = target;
+                                if (target.canFocus) {
+                                    target.canFocus = false;
+                                    return;
+                                }
+                                //timer = new Date().getTime();
+                                setTimeout((function (input) {
+                                    return function () {
+                                        if (valid) {
+                                            input.canFocus = true;
+                                            input.focus();
+                                        }
+                                    }
+                                })(target), 250);
                             }
                             e.preventDefault();
                         },
                         onScrollEnd: function (e) {
-                            if (!timer) return;
-                            if (this.distY < DELTA && this.distY > -DELTA && (new Date().getTime() - timer) < TIMEOUT) {
-                                setTimeout((function (inp) {
-                                    return function () {
-                                        inp.focus();
-                                    }
-                                })(input), 150);
+                            //if (!timer) return;
+                            if (this.distY > DELTA || this.distY < -DELTA){// && (new Date().getTime() - timer) < TIMEOUT) {
+                                valid = false;
                             }
-                            timer = null;
-                            input = null;
+                            //timer = null;
                         }
                     });
                     elm.data('scroll', myScroll);
