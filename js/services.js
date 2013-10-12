@@ -193,7 +193,7 @@ myApp.factory('config', function ($http) {
     };
     var url = "http://" + configGlobal.url + '/getConfig';
     
-    return {
+    var conf = {
         init: function () {
             $http({
                 method: 'POST',
@@ -209,13 +209,17 @@ myApp.factory('config', function ($http) {
             }).
             error(function (data, status, headers, config) {
                   // called asynchronously if an error occurs
-                  // or server returns response with an error status.
+                // or server returns response with an error status.
+                setTimeout(function () {
+                    conf.init();
+                }, 5000);
             });
         },
         getUrlUpload: function () {
             return configGlobal.urlUpload;
         }
     };
+    return conf;
 });
 
 myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
@@ -510,7 +514,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             cahier.lastSync = new Date();
             me.save(cahier).then(function(){
                 $timeout(function () {
-                    defered.notify(100);
                     defered.resolve(true);
                 });
             },function(){

@@ -244,7 +244,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         navSvc.slidePage('/viewNewCahier');
     }
     function setlabelTransmi() {
-        if (!$scope.sending || $scope.progress == '99 %' || $scope.progress == '100 %') {
+        if (!$scope.sending) {
             $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
         }
         else {
