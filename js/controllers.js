@@ -194,6 +194,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
             alert("Cahier envoyé !");
+            $scope.progress = "Envoyé !";
             $scope.$apply();
         }, function () {
             $scope.sending = false;
@@ -367,7 +368,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.event = {
             creation: true,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
-            pictures: ['img/User.png', 'img/User2.png', 'img/User3.png']
+            pictures: []
         };
         EventService.setCurrent($scope.event);
     }
