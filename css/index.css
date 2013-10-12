@@ -712,6 +712,13 @@ nav.navigation h4 > i{
     background-size: cover;
 }
 
+.wifi-icon {
+    background: url("../img/wifi.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
 .neo160
 {
 	margin-top: 1rem;

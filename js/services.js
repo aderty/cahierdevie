@@ -186,6 +186,35 @@ myApp.factory('db', function () {
     };
 });
 
+myApp.factory('config', function () {
+    var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
+    var url = "http://" + ip + '/getConfig';
+    return {
+        init: function () {
+            alert("init");
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    id: device.uuid || 'unknown'
+                }
+            }).
+            success(function (data, status, headers, config) {
+                  // this callback will be called asynchronously
+                // when the response is available
+                    alert(data);
+                  defered.resolve(true);
+            }).
+            error(function (data, status, headers, config) {
+                alert("ko");
+                  // called asynchronously if an error occurs
+                  // or server returns response with an error status.
+                  defered.reject(data);
+            });
+        }
+    };
+});
+
 myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     var current, enfants = [];
     var enfantChangeCb = [];
@@ -495,6 +524,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
             cahier.lastSync = new Date();
             me.save(cahier).then(function(){
                 $timeout(function () {
+                    defered.notify(100);
                     defered.resolve(true);
                 });
             },function(){

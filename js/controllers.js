@@ -1,8 +1,9 @@
 'use strict';
 
-myApp.run(["$rootScope", "phonegapReady", function ($rootScope, phonegapReady) {
+myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phonegapReady, config) {
     phonegapReady(function () {
         $rootScope.ready = true;
+        config.init();
     });
 
 
@@ -186,13 +187,16 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         loadCahier();
     //}
     $scope.send = function () {
+        $scope.sending = true;
         CahierService.send(EnfantService.getCurrent().email).then(function () {
+            $scope.sending = false;
             alert("Cahier envoyé !");
         }, function () {
+            $scope.sending = false;
             alert("Problème lors de l'envoie du cahier...");
         }, function (progress) {
-            $scope.progress = progress + "%";
-        })
+            $scope.progress = progress;
+        });
     }
     
     EnfantService.onChange(loadCahier);
@@ -233,9 +237,17 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         navSvc.slidePage('/viewNewCahier');
     }
     function setlabelTransmi() {
-        $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
+        if (!$scope.sending || $scope.progress == 100) {
+            $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
+        }
+        else {
+            $scope.labelTransmi = $scope.progress + ' %';
+        }
     }
     $scope.$watch('currentCahier.lastSync', function () {
+        setlabelTransmi();
+    });
+    $scope.$watch('progress', function () {
         setlabelTransmi();
     });
     setlabelTransmi();
