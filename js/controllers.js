@@ -7,9 +7,9 @@ myApp.run(["$rootScope", "phonegapReady", function ($rootScope, phonegapReady) {
 
 
     var date = new Date(); 
-    $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     $rootScope.isCurrentDate = function(){
-        return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)) == 0;
+        return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate())) == 0;
     }
     $rootScope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
@@ -232,8 +232,13 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     $scope.modifierEnfant = function(){
         navSvc.slidePage('/viewNewCahier');
     }
-
-    $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
+    function setlabelTransmi() {
+        $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
+    }
+    $scope.$watch('currentCahier.lastSync', function () {
+        setlabelTransmi();
+    });
+    setlabelTransmi();
     
     function deletePic(file) {
         window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
