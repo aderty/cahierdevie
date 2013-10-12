@@ -187,11 +187,14 @@ myApp.factory('db', function () {
 });
 
 myApp.factory('config', function ($http) {
-    var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
-    var url = "http://" + ip + '/getConfig';
+    var configGlobal = {
+        url: "upload.moncahierdevie.com", //"192.168.1.18:1480";
+        urlUpload: "upload.moncahierdevie.com"
+    };
+    var url = "http://" + configGlobal.url + '/getConfig';
+    
     return {
         init: function () {
-            alert(device.uuid);
             $http({
                 method: 'POST',
                 url: url,
@@ -202,15 +205,15 @@ myApp.factory('config', function ($http) {
             success(function (data, status, headers, config) {
                   // this callback will be called asynchronously
                 // when the response is available
-                    alert(data);
-                  defered.resolve(true);
+                angular.extend(configGlobal, data);
             }).
             error(function (data, status, headers, config) {
-                alert("ko");
                   // called asynchronously if an error occurs
                   // or server returns response with an error status.
-                  defered.reject(data);
             });
+        },
+        getUrlUpload: function () {
+            return configGlobal.urlUpload;
         }
     };
 });
@@ -315,10 +318,10 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     };
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
+myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, config) {
     var orderBy = $filter('orderBy');
     var cahierChangeCb = [];
-    var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
+    var ip = config.getUrlUpload();
     var url = "http://" + ip + '/send-cahier/';
     var urlPicture = "http://" + ip + '/send-picture-cahier/';
     var myFolderApp = "CahierDeVie";
@@ -477,6 +480,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
         params.email = cahier.email;
         options.params = params;
         var ft = new FileTransfer();
+        url = "http://" + config.getUrlUpload() + '/send-cahier/';
         ft.upload(filePath, encodeURI(url + cahier.id), function (r) {
             /*console.log("Code = " + r.responseCode);
             console.log("Response = " + r.response);
@@ -528,6 +532,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
         options.mimeType = "image/jpeg";
 
         var ft = new FileTransfer();
+        urlPicture = "http://" + ip + '/send-picture-cahier/';
         ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
             sendPicture();
         }, function (error) {
