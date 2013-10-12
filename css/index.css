@@ -149,6 +149,9 @@ html, body {
 	font-size: 114%;
 	font-weight: inherit;
 }
+select.field-input {
+    -webkit-appearance: value;
+}
 
 .selection-date {
     line-height: 3rem;
@@ -542,11 +545,21 @@ nav.navigation h4 > i{
     /*width: 95%;
     position: absolute;*/
 }
+
+.evts-photos {
+    max-width: 15.5rem;
+    height: 100px;
+    position: absolute;
+    right: 10rem;
+    margin-top: -6.5rem;
+    overflow: hidden;
+}
 .evt-photos
 {
 	width: 80px;
     height: 100px;
 }
+.evts-photos > img,
 .evt-photos > img
 {
 	width: 80px;

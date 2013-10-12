@@ -45,6 +45,14 @@
         </div>
         <div class="center field">
             <span class="field-label">Titre</span>
+            <select ng-model="event.titleDef" class="field-input">
+                <option value="0">Gouter</option>
+                <option value="1">Sieste</option>
+                <option value="3">Autre...</option>
+            </select>
+        </div>
+         <div class="center field">
+            <span class="field-label"></span>
             <input ng-model="event.title" type="text" value="" placeholder="Titre" class="field-input">
         </div>
         <div class="center field" ng-class="{'last': currentPhoto == ''}">

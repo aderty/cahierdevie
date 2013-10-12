@@ -49,8 +49,8 @@
                     <div class="list-inner">
                          <h3>{{ event.title }}</h3>
                         <p>{{event.desc}}</p>
-                        <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
-                            <img class="evt-photo-item" ng-src="{{picData}}" />
+                        <div class="evts-photos" ng-animate="'slide'">
+                            <img class="evt-photo-item" ng-repeat="picData in event.pictures" ng-src="{{picData}}" />
                         </div> 
                     </div>
                     <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">

@@ -190,6 +190,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     //}
     $scope.send = function () {
         $scope.sending = true;
+        $scope.progress = "Envoi en cours...";
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
             alert("Cahier envoyé !");
@@ -199,7 +200,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             alert("Problème lors de l'envoie du cahier...");
             $scope.$apply();
         }, function (progress) {
-            $scope.progress = progress;
+            $scope.progress = progress + ' %';
         });
     }
     
@@ -241,11 +242,11 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         navSvc.slidePage('/viewNewCahier');
     }
     function setlabelTransmi() {
-        if (!$scope.sending || $scope.progress == 100) {
+        if (!$scope.sending || $scope.progress == '99 %' || $scope.progress == '100 %') {
             $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
         }
         else {
-            $scope.labelTransmi = $scope.progress + ' %';
+            $scope.labelTransmi = $scope.progress;
         }
     }
     $scope.$watch('currentCahier.lastSync', function () {
@@ -366,7 +367,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.event = {
             creation: true,
             time: new Date().getHours() + ":" + new Date().getMinutes(),
-            pictures: []
+            pictures: ['img/User.png', 'img/User2.png', 'img/User3.png']
         };
         EventService.setCurrent($scope.event);
     }
