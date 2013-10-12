@@ -2,10 +2,11 @@
 
 myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phonegapReady, config) {
     phonegapReady(function () {
+        console.log("phonegapReady");
         $rootScope.ready = true;
-        config.init();
     });
 
+    config.init();
 
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
