@@ -5,8 +5,9 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
         console.log("phonegapReady");
         $rootScope.ready = true;
     });
-
-    config.init();
+    setTimeout(function () {
+        config.init();
+    }, 2000);
 
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -192,9 +193,11 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
             alert("Cahier envoyé !");
+            $scope.$apply();
         }, function () {
             $scope.sending = false;
             alert("Problème lors de l'envoie du cahier...");
+            $scope.$apply();
         }, function (progress) {
             $scope.progress = progress;
         });

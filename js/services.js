@@ -186,12 +186,12 @@ myApp.factory('db', function () {
     };
 });
 
-myApp.factory('config', function () {
+myApp.factory('config', function ($http) {
     var ip = "upload.moncahierdevie.com";//"192.168.1.18:1480";
     var url = "http://" + ip + '/getConfig';
     return {
         init: function () {
-            alert("init");
+            alert(device.uuid);
             $http({
                 method: 'POST',
                 url: url,
@@ -425,24 +425,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
                 return;
             }
             defered = $q.defer();
-            /*$http({
-                method: 'POST',
-                url: url + current.id,
-                data: {
-                    email: email,
-                    cachier: current
-                }
-            }).
-              success(function (data, status, headers, config) {
-                  // this callback will be called asynchronously
-                  // when the response is available
-                  defered.resolve(true);
-              }).
-              error(function (data, status, headers, config) {
-                  // called asynchronously if an error occurs
-                  // or server returns response with an error status.
-                  defered.reject(data);
-              });*/
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
                 fileSys.root.getDirectory(myFolderApp,
