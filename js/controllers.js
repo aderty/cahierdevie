@@ -190,11 +190,12 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     //}
     $scope.send = function () {
         $scope.sending = true;
-        $scope.progress = "Envoi en cours...";
+        $scope.labelTransmi = "Envoi en cours...";
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
             alert("Cahier envoyé !");
-            $scope.progress = "Envoyé !";
+            $scope.currentCahier = CahierService.getCurrent();
+            $scope.labelTransmi = "Envoyé !";
             $scope.$apply();
         }, function () {
             $scope.sending = false;
