@@ -36,9 +36,9 @@
             </button>
         </div>
         <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': cahier.lastSync != undefined}" ng-click="send()">
+            <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': currentCahier.lastSync != undefined}" ng-click="send()">
                 <i class="topcoat-icon cloud-icon"></i>
-                Transmettre
+                {{labelTransmi}}
                 {{progress}}
             </button>
         </div>

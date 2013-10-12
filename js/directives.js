@@ -2,12 +2,12 @@
 
 /* Directives */
 angular.module('myApp.directives', [])
-    .directive('appVersion', ['version', function(version) {
-        return function(scope, elm, attrs) {
+    .directive('appVersion', ['version', function (version) {
+        return function (scope, elm, attrs) {
             elm.text(version);
         }
-    } ])
-    .directive('timepicker', ['$compile', function($compile) {
+    }])
+    .directive('timepicker', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             scope: {
@@ -15,7 +15,7 @@ angular.module('myApp.directives', [])
             },
             replace: false,
             require: 'ngModel',
-            link: function(scope, elm, attr, ngModel) {
+            link: function (scope, elm, attr, ngModel) {
                 var first = true;
                 elm.scroller({
                     preset: 'time',
@@ -27,26 +27,26 @@ angular.module('myApp.directives', [])
                 });
 
 
-                elm.change(function(e) {
+                elm.change(function (e) {
                     ngModel.$setViewValue(e.target.value);
                     if (first) {
                         first = false;
                         return;
                     }
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         scope.model = e.target.value;
                     });
                 });
 
                 elm.scroller('setValue', scope.model, true);
 
-                scope.$on('destroy', function() {
+                scope.$on('destroy', function () {
                     elm.scroller('destroy');
                 });
             }
         };
-    } ])
-    .directive('datepicker', ['$compile', function($compile) {
+    }])
+    .directive('datepicker', ['$compile', function ($compile) {
         return {
             restrict: 'A',
             scope: {
@@ -54,7 +54,7 @@ angular.module('myApp.directives', [])
             },
             replace: false,
             require: 'ngModel',
-            link: function(scope, elm, attr, ngModel) {
+            link: function (scope, elm, attr, ngModel) {
                 var first = true;
                 elm.scroller({
                     preset: 'date',
@@ -65,13 +65,13 @@ angular.module('myApp.directives', [])
                     animate: 'none'
                 });
 
-                elm.change(function(e) {
+                elm.change(function (e) {
                     ngModel.$setViewValue(elm.scroller('getDate'));
                     if (first) {
                         first = false;
                         return;
                     }
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         scope.model = elm.scroller('getDate');
                     });
                 });
@@ -81,13 +81,13 @@ angular.module('myApp.directives', [])
                 else {
                     first = false;
                 }
-                scope.$on('destroy', function() {
+                scope.$on('destroy', function () {
                     elm.scroller('destroy');
                 });
             }
         };
-    } ])
-.directive('datemodelpicker', ['$compile', '$timeout', function($compile, $timeout) {
+    }])
+.directive('datemodelpicker', ['$compile', '$timeout', function ($compile, $timeout) {
     return {
         restrict: 'E',
         scope: {
@@ -95,9 +95,9 @@ angular.module('myApp.directives', [])
         },
         replace: true,
         transclude: true,
-        template: '<a ng-click="show();$event.stopPropagation();"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></a>',
+        template: '<button class="topcoat-button--quiet" ng-click="show();$event.stopPropagation();"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></button>',
         require: 'ngModel',
-        link: function(scope, elm, attr, ngModel) {
+        link: function (scope, elm, attr, ngModel) {
             var first = true;
             var scroller = elm.find('input');
             scroller.scroller({
@@ -108,18 +108,18 @@ angular.module('myApp.directives', [])
                 display: 'bottom',
                 animate: 'none'
             });
-            scope.show = function(e) {
+            scope.show = function (e) {
                 scroller.scroller('show');
             }
 
-            scroller.change(function(e) {
+            scroller.change(function (e) {
                 if (first) {
                     first = false;
                     return;
                 }
-                scope.$apply(function() {
+                scope.$apply(function () {
                     scope.$root[attr.ngModel] = scroller.scroller('getDate');
-                    $timeout(function() {
+                    $timeout(function () {
                         scroller.scroller('hide');
                     });
                 });
@@ -127,31 +127,31 @@ angular.module('myApp.directives', [])
 
             scroller.scroller('setValue', scope.model, true);
 
-            scope.$on('destroy', function() {
+            scope.$on('destroy', function () {
                 scroller.scroller('destroy');
             });
         }
     };
-} ])
-    .directive('scroll', [function() {
+}])
+    .directive('scroll', [function () {
         return {
             restrict: 'A',
             replace: false,
-            link: function(scope, elm, attr) {
-                var timer = null; 
+            link: function (scope, elm, attr) {
+                var timer = null;
                 var valid = true;
-                var DELTA = 10; 
-                var TIMEOUT = 800; 
+                var DELTA = 10;
+                var TIMEOUT = 800;
 
-                setTimeout(function() {
-                    var myScroll = new iScroll(document.getElementById(elm[0].id), { 
-                        scrollbars: true, 
-                        mouseWheel: true, 
+                setTimeout(function () {
+                    var myScroll = new iScroll(document.getElementById(elm[0].id), {
+                        scrollbars: true,
+                        mouseWheel: true,
                         interactiveScrollbars: true,
                         onBeforeScrollStart: function (e) {
-                            valid = false;
-                            var target = e.target; 
-                            while (target.nodeType != 1) target = target.parentNode; 
+                            valid = true;
+                            var target = e.target;
+                            while (target.nodeType != 1) target = target.parentNode;
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
 
                             }
@@ -166,20 +166,25 @@ angular.module('myApp.directives', [])
                                         if (valid) {
                                             input.canFocus = true;
                                             input.focus();
-                                            input.click();
+                                            var e = document.createEvent('MouseEvents');
+                                            e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, true, false, false, true, 0, null);
+                                            input.dispatchEvent(e);
                                         }
                                     }
                                 })(target), 250);
                             }
                             e.preventDefault();
                         },
+                        onBeforeScrollMove: function (e) {
+                            valid = false;
+                        }/*,
                         onScrollEnd: function (e) {
                             //if (!timer) return;
                             if (this.distY < DELTA && this.distY > -DELTA){// && (new Date().getTime() - timer) < TIMEOUT) {
                                 valid = true;
                             }
                             //timer = null;
-                        }
+                        }*/
                     });
                     elm.data('scroll', myScroll);
                     myScroll.hasVerticalScroll = true;
@@ -187,23 +192,23 @@ angular.module('myApp.directives', [])
                         myScroll.refresh();
                     }
                     scope.$root.$on('refresh-scroll', refresh);
-                    scope.$on('destroy', function() {
+                    scope.$on('destroy', function () {
                         myScroll.destroy();
                     });
                 }, 500);
             }
         };
-    } ])
-    .directive('focusscroll', [function() {
+    }])
+    .directive('focusscroll', [function () {
         return {
             restrict: 'A',
             replace: false,
-            link: function(scope, elm, attr) {
-                elm.bind("focus", function() {
+            link: function (scope, elm, attr) {
+                elm.bind("focus", function () {
                     var me = $(this);
                     //me.closest("[scroll]")[0].scrollTop = me.position().top;
                     me.closest("[scroll]").data('scroll').scrollToElement(me[0]);
                 });
             }
         };
-    } ]);
+    }]);

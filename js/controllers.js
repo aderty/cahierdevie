@@ -174,6 +174,12 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             CahierService.setCurrent(cahier);
         });
     }
+
+    function changeCahier(cahier) {
+        $scope.currentCahier = cahier;
+        $scope.currentEnfant = EnfantService.getCurrent();
+    }
+
     $scope.currentCahier = CahierService.getCurrent();
     $scope.currentEnfant = EnfantService.getCurrent();
     //if (!$scope.currentCahier) {
@@ -192,13 +198,12 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     EnfantService.onChange(loadCahier);
     
     $scope.$on('$destroy', function() {
-          EnfantService.removeOnChange(loadCahier);
+        EnfantService.removeOnChange(loadCahier);
+        CahierService.removeOnChange(changeCahier);
     });
     
-    CahierService.onChange(function(cahier){
-        $scope.currentCahier = cahier;
-        $scope.currentEnfant = EnfantService.getCurrent();
-    });
+    CahierService.onChange(changeCahier);
+
     $scope.newEvent = function () {
         EventService.setCurrent(null);
         navSvc.slidePage("/viewEvent");
@@ -227,6 +232,8 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     $scope.modifierEnfant = function(){
         navSvc.slidePage('/viewNewCahier');
     }
+
+    $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
     
     function deletePic(file) {
         window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);

@@ -163,8 +163,16 @@ html, body {
     display: inline-block;
 }
 .selection-date .half {
-    line-height: 2.7rem;
+    line-height: 2.5rem;
     width: 49%;
+}
+.selection-date .topcoat-button--quiet,
+.selection-date .topcoat-icon-button--quiet {
+    line-height: 2.4rem;
+}
+.selection-date .topcoat-button--quiet:hover,
+.selection-date .topcoat-icon-button--quiet:hover {
+    background-color: #BBA693;
 }
 
 .snap-drawers {

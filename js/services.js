@@ -382,6 +382,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter) {
         onChange: function (callback) {
             cahierChangeCb.push(callback);
         },
+        removeOnChange: function(callback){
+            var i = 0, l = cahierChangeCb.length;
+            for(;i<l; i++){
+                if (callback == cahierChangeCb[i]) {
+                    cahierChangeCb.splice(i, 1);
+                }
+            }
+        },
         send: function (email) {
             if (!current) {
                 alert("Pas de cahier");
