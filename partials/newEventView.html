@@ -36,7 +36,6 @@
         </div>
     </div>
 <div id="content" class="pad" scroll >
-    <div>
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
         <div class="center field first">
@@ -47,12 +46,7 @@
             <span class="field-label">Titre</span>
             <select id="selectTitle" class="btn-titre">
                 <option value="">Titre pr&eacute;d&eacute;fini</option>
-                <option>Arriv&eacute;e</option>
-                <option>Activit&eacute;</option>
-                <option>D&eacute;jeuner</option>
-                <option>Sieste</option>
-                <option>Gouter</option>
-                <option>D&eacute;part</option>
+                <option ng-repeat="title in predefTitle">{{title}}</option>
             </select>
             <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
         </div>
@@ -68,7 +62,6 @@
         </div>
         </div>
     </form>
-    </div>
 </div>
 </section>
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >

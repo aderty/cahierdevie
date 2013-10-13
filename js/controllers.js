@@ -22,6 +22,14 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }
+    $rootScope.predefTitle = [
+        'Arrivée',
+        'Départ',
+        'Activité',
+        'Déjeuner',
+        'Sieste',
+        'Gouter'
+    ];
 }]);
 
 /* Controllers */

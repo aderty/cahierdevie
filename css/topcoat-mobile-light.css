@@ -3063,3 +3063,10 @@ so that the dialog is resting on a dark, transparent background
   padding-left: 2rem;
 }
 
+
+.topcoat-notification {
+  padding: 0.15em 0.5em 0.2em;
+  border-radius: 2px;
+  background-color: #ec514e;
+  color: #fff;
+}

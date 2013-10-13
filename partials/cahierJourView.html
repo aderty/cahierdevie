@@ -50,7 +50,8 @@
                          <h3>{{ event.title }}</h3>
                         <p>{{event.desc}}</p>
                         <div class="evts-photos" ng-animate="'slide'">
-                            <img class="evt-photo-item" ng-repeat="picData in event.pictures" ng-src="{{picData}}" />
+                            <img class="evt-photo-item" ng-if="event.pictures.length > 0" ng-src="{{event.pictures[0]}}" />
+                            <span ng-if="event.pictures.length > 1" class="topcoat-notification counter">{{event.pictures.length}}</span>
                         </div> 
                     </div>
                     <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">

@@ -517,7 +517,6 @@ nav.navigation h4 > i{
     line-height: 4rem;
 }
 #eventForm .btn-titre+.field-input {
-   margin-top: 4rem;
     position: absolute;
     left: 33%;
 }
@@ -586,6 +585,13 @@ nav.navigation h4 > i{
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
 }
+
+.evts-photos .counter {
+    position: absolute;
+    right: 0.1rem;
+    top: 0.1rem;
+}
+
 .photo-field > div
 {
 	margin-left: 50%;
