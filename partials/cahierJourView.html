@@ -37,7 +37,7 @@
         </div>
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': currentCahier.lastSync != undefined}" ng-click="send()">
-                <i class="topcoat-icon" ng-class="{true:'wifi-icon', false:'cloud-icon'}[sending == true]"></i>
+                <i class="topcoat-icon" ng-class="{true:'wifi-icon sending', false:'cloud-icon'}[sending == true]"></i>
                 {{labelTransmi}}
             </button>
         </div>

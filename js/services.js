@@ -223,25 +223,30 @@ myApp.factory('config', function ($http) {
 });
 
 myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
-    var current, enfants = [];
+    var current, enfants = [], init = false;
     var enfantChangeCb = [];
     
     return {
         list: function (idEnfant) {
             var defered = $q.defer();
-            enfants = [];
-            db.getInstance().objectStore("enfants").each(function (data) {
-                if (!data.value.photo) {
-                    data.value.photo = 'res/user.png';
-                }
-                enfants.push(data.value);
-            }).done(function (data) {
-                $timeout(function () {
-                    defered.resolve(enfants);
+            if (init) {
+                defered.resolve(enfants);
+            }
+            else {
+                db.getInstance().objectStore("enfants").each(function (data) {
+                    if (!data.value.photo) {
+                        data.value.photo = 'res/user.png';
+                    }
+                    enfants.push(data.value);
+                }).done(function (data) {
+                    init = true;
+                    $timeout(function () {
+                        defered.resolve(enfants);
+                    });
+                }).fail(function () {
+                    defered.reject(null);
                 });
-            }).fail(function () {
-                defered.reject(null);
-            });
+            }
             return defered.promise;
         },
         next: function () {
@@ -276,6 +281,24 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
         },
         save: function (enfant) {
             var defered = $q.defer();
+            /*var i = 0, l = enfants.length, found = false;
+            for (; i < l; i++) {
+                if (enfants.id == enfant.id) {
+                    enfants[i] = enfant;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                enfants.push(enfant);
+            }*/
+            var index = enfants.indexOf(enfant);
+            if (index == -1) {
+                if(!enfant.photo){
+                    enfant.photo = 'res/user.png';
+                }
+                enfants.push(enfant);
+            }
             return db.getInstance().objectStore("enfants").put(enfant).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
@@ -288,7 +311,11 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
         remove: function(enfant) {
             var defered = $q.defer();
             CahierService.removeAll(enfant.id).then(function(){
-                db.getInstance().objectStore("enfants").delete(enfant.id).done(function() {
+                db.getInstance().objectStore("enfants").delete(enfant.id).done(function () {
+
+                    var index = enfants.indexOf(enfant);
+                    enfants.splice(index, 1);
+
                     $timeout(function() {
                         defered.resolve(true);
                     });
@@ -524,7 +551,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             return;
         }
         $timeout(function () {
-            defered.notify(100 - (pictures.length * 100 / cahier.nbPictures + 1));
+            var progress = 100 - (pictures.length * 100 / cahier.nbPictures + 1);
+            if (progress == 99) {
+                progress = 100;
+            }
+            defered.notify(progress.toFixed(0));
         });
         var picture = pictures.shift();
 

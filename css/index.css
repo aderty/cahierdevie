@@ -168,6 +168,12 @@ select.field-input {
 .selection-date .half {
     line-height: 2.5rem;
 }
+.selection-date .topcoat-button--quiet {
+    background-color: #F8C392;
+    text-shadow: 0 1px #fff;
+    border: 1px solid #a5a8a8;
+    box-shadow: inset 0 1px #fff;
+}
 .selection-date .topcoat-button--quiet,
 .selection-date .topcoat-icon-button--quiet {
     line-height: 2.4rem;
@@ -618,6 +624,44 @@ nav.navigation h4 > i{
     border: 1px solid rgba(0,0,0,0.36);
     -webkit-border-radius: 6px;
     border-radius: 6px;
+}
+.sending {
+    -moz-animation:spinPulse 2s infinite ease-in-out; 
+    -webkit-animation:spinPulse 2s infinite linear; 
+}
+@-moz-keyframes spinPulse {
+    0% {
+        -moz-transform: rotate(160deg);
+        opacity: 0;
+        box-shadow: 0 0 1px rgba(249, 88, 74, 0.9);
+    }
+
+    50% {
+        -moz-transform: rotate(145deg);
+        opacity: 1;
+    }
+
+    100% {
+        -moz-transform: rotate(-320deg);
+        opacity: 0;
+    }
+}
+@-webkit-keyframes spinPulse {
+    0%  
+    {
+        -webkit-transform:/*rotate(160deg)*/ scale(0.2); 
+        opacity:0; 
+        box-shadow:0 0 1px #2187e7; 
+    }
+    50% {
+        -moz-transform: scale(0.65);
+        opacity: 1;
+    }
+    100%  
+    {
+    	-webkit-transform:/*rotate(145deg)*/ scale(1.1); 
+    	opacity:1;
+    }
 }
 
 
