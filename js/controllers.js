@@ -168,6 +168,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
 }
 
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $filter) {
+    $scope.sending = false;
     function loadCahier(){
         if(!EnfantService.getCurrent()) return;
         CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
@@ -189,17 +190,21 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         loadCahier();
     //}
     $scope.send = function () {
+            if (!EnfantService.getCurrent().email) {
+                return alert("Aucune adresse email définie pour l'enfant.");
+            }
         $scope.sending = true;
         $scope.labelTransmi = "Envoi en cours...";
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
-            alert("Cahier envoyé !");
             $scope.currentCahier = CahierService.getCurrent();
             $scope.labelTransmi = "Envoyé !";
+            alert("Cahier envoyé !");
             $scope.$apply();
-        }, function () {
+        }, function (err) {
             $scope.sending = false;
-            alert("Problème lors de l'envoie du cahier...");
+            //alert("Problème lors de l'envoie du cahier...");
+            alert(err);
             $scope.$apply();
         }, function (progress) {
             $scope.progress = progress + ' %';

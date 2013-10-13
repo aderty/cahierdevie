@@ -186,10 +186,11 @@ myApp.factory('db', function () {
     };
 });
 
-myApp.factory('config', function ($http) {
+myApp.factory('config', function ($http, version) {
     var configGlobal = {
         url: "upload.moncahierdevie.com", //"192.168.1.18:1480";
-        urlUpload: "upload.moncahierdevie.com"
+        urlUpload: "upload.moncahierdevie.com",
+        version: version
     };
     var url = "http://" + configGlobal.url + '/getConfig';
     
@@ -199,7 +200,8 @@ myApp.factory('config', function ($http) {
                 method: 'POST',
                 url: url,
                 data: {
-                    id: device.uuid || 'unknown'
+                    id: device.uuid || 'unknown',
+                    version: version
                 }
             }).
             success(function (data, status, headers, config) {
@@ -459,6 +461,13 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
                 return;
             }
             defered = $q.defer();
+            // Développement
+            /*setTimeout(function () {
+                defered.notify(100);
+                $timeout(function () {
+                    defered.resolve(true);
+                });
+            }, 1000);*/
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
                 fileSys.root.getDirectory(myFolderApp,
@@ -516,20 +525,27 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             /*console.log("Code = " + r.responseCode);
             console.log("Response = " + r.response);
             console.log("Sent = " + r.bytesSent);*/
-            defered.notify(10);
+            if (pictures.length == 0) {
+                defered.notify(100);
+            }
+            else {
+                defered.notify(10);
+            }
             sendPicture();
 
         }, function (error) {
             try {
                 if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
-                    alert("FILE_NOT_FOUND_ERR");
+                    //alert("FILE_NOT_FOUND_ERR");
+                    return defered.reject("Problème technique, veuillez recommencer dans quelques instants...");
                 }
                 if (error.code == FileTransferError.INVALID_URL_ERR) {
-                    alert("INVALID_URL_ERR");
-                    alert(url + cahier.id);
+                    //alert("INVALID_URL_ERR");
+                    return defered.reject("Problème technique...");
                 }
                 if (error.code == FileTransferError.CONNECTION_ERR) {
-                    alert("CONNECTION_ERR");
+                    //alert("CONNECTION_ERR");
+                    return defered.reject("Vous devez être connecté pour envoyer le cahier de vie.");
                 }
             } catch (e) { }
             defered.reject(error);
