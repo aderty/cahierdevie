@@ -530,6 +530,12 @@ nav.navigation h4 > i{
 	/*box-shadow: inset -2px 0px 15px 5px rgb(180, 217, 252);*/
 	box-shadow: 0px 0px 10px 5px rgb(180, 217, 252);
 }
+
+.enfants .li-thumb:active {
+        -webkit-animation: userPulse 1s 1 linear;
+}
+
+
 .enfants .next-icon {
     margin-top: -2.6rem;
     float: right;
@@ -685,6 +691,23 @@ nav.navigation h4 > i{
     {
     	-webkit-transform:/*rotate(145deg)*/ scale(1.1); 
     	opacity:1;
+    }
+}
+
+@-webkit-keyframes userPulse {
+    0%  
+    {
+        -webkit-transform:scale(1); 
+        opacity: 1;
+    }
+    80% {
+        -moz-transform: scale(1.2);
+        opacity: 0.7;
+    }
+    100%  
+    {
+    	-webkit-transform: scale(1); 
+        opacity: 1;
     }
 }
 

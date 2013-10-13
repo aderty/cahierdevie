@@ -18,6 +18,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewEvent', { templateUrl: 'partials/newEventView.html', controller: 'EventCtrl' });
         $routeProvider.when('/viewPhotos', { templateUrl: 'partials/photoView.html', controller: 'PhotosEventCtrl' });
         $routeProvider.when('/viewNewCahier', { templateUrl: 'partials/newCahier.html', controller: 'CahierCtrl' });
+        $routeProvider.when('/viewAbout', { templateUrl: 'partials/aboutView.html' });
         $routeProvider.otherwise({redirectTo: '/'});
   }]);
 myApp.initialize = function () {
@@ -69,6 +70,7 @@ myApp.initDB = function () {
             //loadFromDB("cart");
             //loadFromDB("wishlist");
             //downloadCatalog();
+            $("html").addClass("ready");
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e.stack + " \n file : " + f + " \n ligne :" + l);
