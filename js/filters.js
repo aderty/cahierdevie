@@ -35,3 +35,4 @@ angular.module('myApp.filters', [])
         return 'le ' + date.getDate() + '/' + month + '/' + date.getFullYear() || date.getYear();
     }
 });
+

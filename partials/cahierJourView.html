@@ -47,7 +47,8 @@
             <ul class="topcoat-list events" >
                 <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item">
                     <div class="list-inner">
-                         <h3>{{ event.title }}</h3>
+                        <div class="time">{{ event.time }}</div>
+                        <h3>{{ event.title }}</h3>
                         <p>{{event.desc}}</p>
                         <div class="evts-photos" ng-animate="'slide'">
                             <img class="evt-photo-item" ng-if="event.pictures.length > 0" ng-src="{{event.pictures[0]}}" />

@@ -553,6 +553,23 @@ nav.navigation h4 > i{
     background: url("../img/refresh.svg") no-repeat;
 }*/
 
+.events li h3 {
+    text-overflow: ellipsis;
+    margin-right: 15rem;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.events li p {
+    text-overflow: ellipsis;
+    margin-right: 15rem;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.events li div.time {
+    position: absolute;
+    margin-top: -2rem;
+    right: 1rem;
+}
 
 .fille .li-thumb 
 {
@@ -700,7 +717,7 @@ nav.navigation h4 > i{
         -webkit-transform:scale(1); 
         opacity: 1;
     }
-    80% {
+    20% {
         -moz-transform: scale(1.2);
         opacity: 0.7;
     }
