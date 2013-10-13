@@ -176,12 +176,18 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
                  cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
             }
             CahierService.setCurrent(cahier);
+            $timeout(function () {
+                $scope.$emit("refresh-scroll");
+            }, 150);
         });
     }
 
     function changeCahier(cahier) {
         $scope.currentCahier = cahier;
         $scope.currentEnfant = EnfantService.getCurrent();
+        $timeout(function () {
+            $scope.$emit("refresh-scroll");
+        }, 150);
     }
 
     $scope.currentCahier = CahierService.getCurrent();
@@ -190,9 +196,10 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         loadCahier();
     //}
     $scope.send = function () {
-            if (!EnfantService.getCurrent().email) {
-                return alert("Aucune adresse email définie pour l'enfant.");
-            }
+        if (!confirm("Etes-vous sûre de vouloir envoyer le cahier de vie ?")) return false;
+        if (!EnfantService.getCurrent().email) {
+            return alert("Aucune adresse email définie pour l'enfant.");
+        }
         $scope.sending = true;
         $scope.labelTransmi = "Envoi en cours...";
         CahierService.send(EnfantService.getCurrent().email).then(function () {
@@ -381,6 +388,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     if($scope.event.pictures.length){
         $scope.currentPhoto = $scope.event.pictures[0];
     }
+    $scope.$emit("refresh-scroll");
     
     $scope.takePic = function () {
         var options = {
@@ -428,6 +436,13 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     }
     $scope.showPhotos = function(){
         navSvc.slidePage("/viewPhotos");
+    }
+    document.getElementById("selectTitle").addEventListener("change", function (e) {
+        $scope.event.title = e.target.value;
+        $scope.$apply();
+    }, false);
+    $scope.showTitles = function () {
+        document.getElementById("selectTitle").focus();
     }
 
     function movePic(file) {

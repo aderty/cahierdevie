@@ -509,6 +509,20 @@ nav.navigation h4 > i{
 /*.enfants li:active, .events li:active {
     background-color: rgb(187, 231, 179);
 }*/
+#eventForm .field.titre {
+    height: 8rem;
+}
+#eventForm .btn-titre {
+   width: 67%;
+    height: 4rem;
+    line-height: 4rem;
+    float: left;
+}
+#eventForm .btn-titre+.field-input {
+   margin-top: 4rem;
+    position: absolute;
+    left: 33%;
+}
 
 .enfants .li-thumb {
     left: -1rem;

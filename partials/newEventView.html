@@ -43,17 +43,20 @@
             <span class="field-label">Heure</span>
             <input type="text" timepicker ng-model="event.time" class="field-input" />
         </div>
-        <div class="center field">
+        <div class="center field titre">
             <span class="field-label">Titre</span>
-            <select ng-model="event.titleDef" class="field-input">
-                <option value="0">Gouter</option>
-                <option value="1">Sieste</option>
-                <option value="3">Autre...</option>
+            <select id="selectTitle">
+                <option></option>
+                <option>Arrivée</option>
+                <option>Activité</option>
+                <option>Déjeuner</option>
+                <option>Sieste</option>
+                <option>Gouter</option>
+                <option>Départ</option>
+                <option>Autre...</option>
             </select>
-        </div>
-         <div class="center field">
-            <span class="field-label"></span>
-            <input ng-model="event.title" type="text" value="" placeholder="Titre" class="field-input">
+            <button class="topcoat-button-bar__button btn-titre" ng-click="showTitles()">Titre pr&eacute;d&eacute;fini</button>
+            <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
         </div>
         <div class="center field" ng-class="{'last': currentPhoto == ''}">
             <span class="field-label">Description</span>
