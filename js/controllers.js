@@ -438,12 +438,13 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         navSvc.slidePage("/viewPhotos");
     }
     document.getElementById("selectTitle").addEventListener("change", function (e) {
-        $scope.event.title = e.target.value;
+        if (e.target.value != "") {
+            $scope.event.title = e.target.value;
+            e.target.value = "";
+        }
+        e.preventDefault();
         $scope.$apply();
     }, false);
-    $scope.showTitles = function () {
-        document.getElementById("selectTitle").focus();
-    }
 
     function movePic(file) {
         window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError);

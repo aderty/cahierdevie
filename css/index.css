@@ -513,10 +513,8 @@ nav.navigation h4 > i{
     height: 8rem;
 }
 #eventForm .btn-titre {
-   width: 67%;
     height: 4rem;
     line-height: 4rem;
-    float: left;
 }
 #eventForm .btn-titre+.field-input {
    margin-top: 4rem;

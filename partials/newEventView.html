@@ -45,17 +45,15 @@
         </div>
         <div class="center field titre">
             <span class="field-label">Titre</span>
-            <select id="selectTitle">
-                <option></option>
-                <option>Arrivée</option>
-                <option>Activité</option>
-                <option>Déjeuner</option>
+            <select id="selectTitle" class="btn-titre">
+                <option value="">Titre pr&eacute;d&eacute;fini</option>
+                <option>Arriv&eacute;e</option>
+                <option>Activit&eacute;</option>
+                <option>D&eacute;jeuner</option>
                 <option>Sieste</option>
                 <option>Gouter</option>
-                <option>Départ</option>
-                <option>Autre...</option>
+                <option>D&eacute;part</option>
             </select>
-            <button class="topcoat-button-bar__button btn-titre" ng-click="showTitles()">Titre pr&eacute;d&eacute;fini</button>
             <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
         </div>
         <div class="center field" ng-class="{'last': currentPhoto == ''}">
