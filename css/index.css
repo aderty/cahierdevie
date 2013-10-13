@@ -650,8 +650,8 @@ nav.navigation h4 > i{
     -webkit-animation:none; 
 }
 .sending {
-    -moz-animation:spinPulse 2s infinite ease-in-out; 
-    -webkit-animation:spinPulse 2s infinite linear; 
+    -moz-animation:spinPulse 2s 3 ease-in-out; 
+    -webkit-animation:spinPulse 2s 3 linear; 
 }
 @-moz-keyframes spinPulse {
     0% {
