@@ -191,7 +191,7 @@ angular.module('myApp.directives', [])
                     function refresh() {
                         myScroll.refresh();
                     }
-                    scope.$root.$on('refresh-scroll', refresh);
+                    scope.$on('refresh-scroll', refresh);
                     scope.$on('destroy', function () {
                         myScroll.destroy();
                     });

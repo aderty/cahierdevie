@@ -151,7 +151,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         EnfantService.list().then(function (enfants) {
             $scope.enfants = enfants;
             $timeout(function () {
-                $scope.$emit("refresh-scroll");
+                $scope.$broadcast("refresh-scroll");
             }, 150);
         });
     }
@@ -167,7 +167,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     }
 }
 
-function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $filter) {
+function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
     $scope.sending = false;
     function loadCahier(){
         if(!EnfantService.getCurrent()) return;
@@ -177,7 +177,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             }
             CahierService.setCurrent(cahier);
             $timeout(function () {
-                $scope.$emit("refresh-scroll");
+                $scope.$broadcast("refresh-scroll");
             }, 150);
         });
     }
@@ -186,7 +186,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         $scope.currentCahier = cahier;
         $scope.currentEnfant = EnfantService.getCurrent();
         $timeout(function () {
-            $scope.$emit("refresh-scroll");
+            $scope.$broadcast("refresh-scroll");
         }, 150);
     }
 
@@ -388,7 +388,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     if($scope.event.pictures.length){
         $scope.currentPhoto = $scope.event.pictures[0];
     }
-    $scope.$emit("refresh-scroll");
+    $scope.$broadcast("refresh-scroll");
     
     $scope.takePic = function () {
         var options = {
