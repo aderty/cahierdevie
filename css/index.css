@@ -512,13 +512,14 @@ nav.navigation h4 > i{
 #eventForm .field.titre {
     height: 8rem;
 }
-#eventForm .btn-titre {
-    height: 4rem;
-    line-height: 4rem;
+#eventForm .field.titre > div{
+    display: block;
 }
-#eventForm .btn-titre+.field-input {
-    position: absolute;
-    left: 33%;
+#eventForm .btn-titre {
+    height: 3.5rem;
+    width: 100%;
+    /*float: left;
+    width: 20rem;*/
 }
 
 .enfants .li-thumb {

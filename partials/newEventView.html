@@ -44,11 +44,13 @@
         </div>
         <div class="center field titre">
             <span class="field-label">Titre</span>
-            <select id="selectTitle" class="btn-titre">
-                <option value="">Titre pr&eacute;d&eacute;fini</option>
-                <option ng-repeat="title in predefTitle">{{title}}</option>
-            </select>
-            <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
+            <div class="field-input">
+                <select id="selectTitle" class="btn-titre">
+                    <option value="">Titre pr&eacute;d&eacute;fini</option>
+                    <option ng-repeat="title in predefTitle">{{title}}</option>
+                </select>
+                <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
+            </div>
         </div>
         <div class="center field" ng-class="{'last': currentPhoto == ''}">
             <span class="field-label">Description</span>
