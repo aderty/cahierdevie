@@ -644,6 +644,10 @@ nav.navigation h4 > i{
     -webkit-border-radius: 6px;
     border-radius: 6px;
 }
+.no-sending {
+    -moz-animation:none; 
+    -webkit-animation:none; 
+}
 .sending {
     -moz-animation:spinPulse 2s infinite ease-in-out; 
     -webkit-animation:spinPulse 2s infinite linear; 
