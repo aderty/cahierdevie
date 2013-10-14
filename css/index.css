@@ -46,8 +46,8 @@ input, textarea {
     -ms-user-select: auto !important;
     user-select: auto !important;
 
-    -webkit-transform: translate3d(0, 0, 0);
-	/*webkit-user-modify: read-write-plaintext-only;*/
+    /*-webkit-transform: translate3d(0, 0, 0);
+	webkit-user-modify: read-write-plaintext-only;*/
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
@@ -552,23 +552,21 @@ nav.navigation h4 > i{
 /*.enfants li:active .next-icon {
     background: url("../img/refresh.svg") no-repeat;
 }*/
-
-.events li h3 {
+.events li h3,
+.events li p {
     text-overflow: ellipsis;
-    margin-right: 9rem;
+    margin-right: 3rem;
     overflow: hidden;
     white-space: nowrap;
 }
-.events li p {
-    text-overflow: ellipsis;
+.events li.has-photo h3,
+.events li.has-photo p {
     margin-right: 9rem;
-    overflow: hidden;
-    white-space: nowrap;
 }
 .events li div.time {
     position: absolute;
     margin-top: -2rem;
-    right: 1rem;
+    right: 0rem;
 }
 
 .fille .li-thumb 

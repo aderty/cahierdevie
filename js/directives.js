@@ -153,7 +153,6 @@ angular.module('myApp.directives', [])
                             var target = e.target;
                             while (target.nodeType != 1) target = target.parentNode;
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
-
                             }
                             else {
                                 if (target.canFocus) {

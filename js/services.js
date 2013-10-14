@@ -390,6 +390,13 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             });
             return defered.promise;
         },
+        removeEvent: function(cahier, index){
+            var events = cahier.events.splice(index, 1);
+            if(events && events.length){
+                deleteEvent(events[0]);
+            }
+            return me.save(cahier);
+        },
         removeAll: function(idEnfant){
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
@@ -476,7 +483,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
                                 directoryRoot.getFile(current.id + ".json", { create: true }, function (fileEntry) {
                                     fileEntry.createWriter(function (writer) {
                                         writer.onwrite = function (evt) {
-                                            sendCahier(fileEntry.fullPath);
+                                            sendCahier(fileEntry);
                                         };
                                         cahier = angular.copy(current);
                                         cahier.events = orderBy(cahier.events, 'time');
@@ -509,11 +516,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
     var defered = $q.defer();
     var cahier;
     var pictures = [];
-    function sendCahier(filePath) {
+    function sendCahier(fileEntry) {
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
-        options.fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+        options.fileName = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
         options.mimeType = "text/json";
 
         var params = new Object();
@@ -521,7 +528,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
         options.params = params;
         var ft = new FileTransfer();
         url = "http://" + config.getUrlUpload() + '/send-cahier/';
-        ft.upload(filePath, encodeURI(url + cahier.id), function (r) {
+        ft.upload(fileEntry.fullPath, encodeURI(url + cahier.id), function (r) {
+            // suppression du json envoyé
+            fileEntry.remove();
             /*console.log("Code = " + r.responseCode);
             console.log("Response = " + r.response);
             console.log("Sent = " + r.bytesSent);*/
@@ -534,6 +543,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             sendPicture();
 
         }, function (error) {
+            // suppression du json envoyé
+            fileEntry.remove();
             try {
                 if (error.code == FileTransferError.FILE_NOT_FOUND_ERR) {
                     //alert("FILE_NOT_FOUND_ERR");

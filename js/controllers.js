@@ -246,14 +246,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.removeEvent = function (event, index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
-        if(event.pictures && event.pictures.length){
-            var i=0, l = event.pictures.length;
-            for(;i<l;i++){
-                deletePic(event.pictures[i]);
-            }
-        }
-        $scope.currentCahier.events.splice(index, 1);
-        CahierService.save($scope.currentCahier);
+        CahierService.removeEvent($scope.currentCahier, index);
     }
     $scope.prevEnfant = function(){
         EnfantService.prev();
@@ -279,17 +272,6 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         setlabelTransmi();
     });
     setlabelTransmi();
-    
-    function deletePic(file) {
-        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
-    }
-
-    function deleteOnSuccess(entry) {
-        //new file name
-        entry.remove(function (entry) {
-            console.log("Removal succeeded");
-        }, resOnError);
-    }
 }
 
 function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
@@ -298,17 +280,25 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     $scope.title = "Nouveau cahier";
     if (!$scope.enfant) {
         $scope.enfant = {
-            id: new Date().getTime()
+            id: new Date().getTime(),
+            creation: true
         }
     }
     else {
         $scope.title = "Modification de cahier";
+        $scope.enfantSaved = angular.copy($scope.enfant);
     }
 
     $scope.add = function (enfant) {
-        if(!enfant || !enfant.prenom || enfant.prenom == "") return;
+        if(!enfant) return;
+        if(!enfant.prenom || enfant.prenom == ""){
+            return alert("Veuillez saisir un prénom.");
+        }
         if (!enfant.id) {
             enfant.id = new Date().getTime();
+        }
+        if (enfant.creation) {
+            delete enfant.creation;
         }
         EnfantService.save(enfant).then(function () {
             navSvc.back();
@@ -328,6 +318,10 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
         });*/
     }
     $scope.cancel = function () {
+        if(!$scope.enfant.creation){
+            angular.extend($scope.enfant, $scope.enfantSaved);
+            $scope.enfantSaved = null;
+        }
         navSvc.back();
     }
     $scope.takePic = function(){
@@ -394,6 +388,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         };
         EventService.setCurrent($scope.event);
     }
+    else{
+        $scope.eventSaved = angular.copy($scope.event);
+    }
     if($scope.event.pictures.length){
         $scope.currentPhoto = $scope.event.pictures[0];
     }
@@ -401,12 +398,12 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     
     $scope.takePic = function () {
         var options = {
-            quality: 50,
+            quality: 60,
             destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
             encodingType: 0,     // 0=JPG 1=PNG
-            targetWidth: 250,
-            targetHeight: 250
+            targetWidth: 1000,
+            targetHeight: 1000
         }
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
@@ -424,7 +421,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     };
 
     $scope.add = function (event) {
-        if(!event || !event.title || event.title == "") return;
+        if(!event) return;
+        if(!event.title || event.title == ""){
+            return alert("Veuillez saisir un titre.");
+        }
         var cahier = CahierService.getCurrent();
         if (event.creation) {
             delete event.creation;
@@ -441,6 +441,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         navSvc.back();
     }
     $scope.cancel = function(){
+        if(!$scope.event.creation){
+            angular.extend($scope.event, $scope.eventSaved);
+            $scope.eventSaved = null;
+        }
         navSvc.back();
     }
     $scope.showPhotos = function(){
@@ -473,7 +477,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             fileSys.root.getDirectory(myFolderApp,
                             { create: true, exclusive: false },
                             function (directoryRoot) {
-                                directoryRoot.getDirectory(EnfantService.getCurrent().id + "_" + EnfantService.getCurrent().prenom,
+                                directoryRoot.getDirectory(EnfantService.getCurrent().prenom + "_" + EnfantService.getCurrent().id,
                                         { create: true, exclusive: false },
                                         function (directory) {
                                             entry.moveTo(directory, newFileName, successMove, resOnError);
@@ -527,6 +531,7 @@ function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierServic
     }
 
     $scope.deleteImg = function (index) {
+        if (!confirm("Etes-vous sûre de vouloir supprimer cette photo ?")) return false;
         deletePic($scope.event.pictures[index]);
         $scope.event.pictures.splice(index, 1);
         if($scope.event.pictures.length){

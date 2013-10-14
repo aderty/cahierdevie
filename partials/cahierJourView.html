@@ -45,7 +45,7 @@
     <div class="topcoat-list__container list" >
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
-                <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item">
+                <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item" ng-class="{'has-photo': event.pictures.length > 0}">
                     <div class="list-inner">
                         <div class="time">{{ event.time }}</div>
                         <h3>{{ event.title }}</h3>
