@@ -227,11 +227,22 @@ select.field-input {
     background-color: rgb(198, 135, 248);
 }
 
-button.humeur {
-    height: 3.2rem;
+.humeur {
+    width: 4rem;
 }
-button.humeur img {
+.humeur button {
     height: 3.1rem;
+    padding: 0;
+}
+.humeur button img {
+    height: 3.1rem;
+}
+ul.humeurs {
+    list-style: none;
+    padding-left: 1.1rem;
+}
+ul.humeurs img {
+    width: 3.5rem;
 }
 
 .popover.bottom {
@@ -239,9 +250,11 @@ button.humeur img {
 }
 .popover {
     position: absolute;
-    left: 45%;
     z-index: 1010;
     max-width: 60%;
+    width: 8rem;
+    left: 50%;
+    margin-left: -3.8rem;
     padding: 1px;
     text-align: left;
     white-space: normal;
