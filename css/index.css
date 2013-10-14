@@ -555,13 +555,13 @@ nav.navigation h4 > i{
 
 .events li h3 {
     text-overflow: ellipsis;
-    margin-right: 15rem;
+    margin-right: 8rem;
     overflow: hidden;
     white-space: nowrap;
 }
 .events li p {
     text-overflow: ellipsis;
-    margin-right: 15rem;
+    margin-right: 8rem;
     overflow: hidden;
     white-space: nowrap;
 }

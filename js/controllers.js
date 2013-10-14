@@ -218,6 +218,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             $scope.$apply();
         }, function (err) {
             $scope.sending = false;
+            $scope.labelTransmi = "Réessayer";
             //alert("Problème lors de l'envoie du cahier...");
             alert(err);
             $scope.$apply();
