@@ -37,6 +37,9 @@
              </div>
             <i class="topcoat-icon next-icon"></i>
         </li>
+        <li class="topcoat-list__item loading" ng-if="!loaded">
+            <img src="img/ajax-loader.gif" /><span>Chargement...</span>
+        </li>
         <li class="topcoat-list__item" ng-click="newCahier()">
             <span class="topcoat-icon plus-icon"></span> Nouveau cahier
         </li>

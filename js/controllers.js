@@ -90,6 +90,7 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
     CahierService.setCurrent(null);
+    $scope.loaded = false;
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
@@ -158,6 +159,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     function loadEnfants(){
         EnfantService.list().then(function (enfants) {
             $scope.enfants = enfants;
+            $scope.loaded = true;
             $timeout(function () {
                 $scope.$broadcast("refresh-scroll");
             }, 150);
@@ -176,13 +178,16 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
 }
 
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
+    $scope.loaded = false;
     $scope.sending = false;
     function loadCahier(){
-        if(!EnfantService.getCurrent()) return;
+        if (!EnfantService.getCurrent()) return;
+        $scope.loaded = false;
         CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
             if (!cahier) {
                  cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
             }
+            $scope.loaded = true;
             CahierService.setCurrent(cahier);
             $timeout(function () {
                 $scope.$broadcast("refresh-scroll");

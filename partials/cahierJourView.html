@@ -45,6 +45,9 @@
     <div class="topcoat-list__container list" >
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
+                <li class="topcoat-list__item loading" ng-if="!loaded">
+                    <img src="img/ajax-loader.gif" /><span>Chargement...</span>
+                </li>
                 <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item" ng-class="{'has-photo': event.pictures.length > 0}">
                     <div class="list-inner">
                         <div class="time">{{ event.time }}</div>
