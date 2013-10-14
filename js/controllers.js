@@ -309,13 +309,8 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
         if (confirm("Etes-vous sur ?")) {
             EnfantService.remove(enfant).then(function () {
                 navSvc.back();
-                $scope.$apply();
             });
         }
-        /*if(notification.confirm("Etes-vous sur ?", function(){
-            $scope.closeOverlay();
-            EnfantService.remove(EnfantService.getCurrent());
-        });*/
     }
     $scope.cancel = function () {
         if(!$scope.enfant.creation){

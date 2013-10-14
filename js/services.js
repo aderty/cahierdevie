@@ -318,9 +318,29 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                     var index = enfants.indexOf(enfant);
                     enfants.splice(index, 1);
 
-                    $timeout(function() {
-                        defered.resolve(true);
-                    });
+                    var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
+
+                    window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+                    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
+                        //The folder is created if doesn't exist
+                        fileSys.root.getDirectory(myFolderApp,
+                                        { create: true, exclusive: false },
+                                        function (directoryRoot) {
+                                            directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id,
+                                                    { create: true, exclusive: false },
+                                                    function (directory) {
+                                                        directory.removeRecursively(function () {
+                                                            
+                                                        }, resOnError);
+                                                    },
+                                            resOnError);
+                                        },
+                                        resOnError);
+                    },
+                    resOnError);
+
+                    defered.resolve(true);
+
                 }).fail(function(e, l, f) {
                     alert(e.stack + " \n file : " + f + " \n ligne :" + l);
                 });
@@ -349,6 +369,10 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
             }
         }
     };
+
+    function resOnError(error) {
+        alert(error.code);
+    }
 });
 
 myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, config) {
@@ -401,17 +425,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
                 // Suppression des images des évènements
-                if (elem.value.idEnfant == idEnfant && elem.value.events && elem.value.events.length) {
-                    var i=0, l = elem.value.events.length;
-                    for(;i<l;i++){
-                        deleteEvent(elem.value.events[i]);
-                    }
+                if (elem.value.idEnfant == idEnfant) {
+                    elem.delete();
                 }
-                elem.delete();
             }, idEnfant).done(function () {
-                $timeout(function () {
-                    defered.resolve(true);
-                });
+                defered.resolve(true);
             }).fail(function () {
                 defered.reject(arguments);
             });
