@@ -30,6 +30,38 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
         'Sieste',
         'Gouter'
     ];
+    $rootScope.smileys = [
+        {
+            id: 0,
+            name: 'joyeux',
+            img: 'img/smileys/joyeux.gif'
+        },
+        {
+            id: 1,
+            name: 'fatigué',
+            img: 'img/smileys/fatigue.gif'
+        },
+        {
+            id: 2,
+            name: 'triste',
+            img: 'img/smileys/triste.gif'
+        },
+        {
+            id: 3,
+            name: 'énervé',
+            img: 'img/smileys/enerve.gif'
+        },
+        {
+            id: 4,
+            name: 'malade',
+            img: 'img/smileys/malade.gif'
+        },
+        {
+            id: 5,
+            name: 'zen',
+            img: 'img/smileys/zen.gif'
+        }
+    ];
 }]);
 
 /* Controllers */
@@ -180,6 +212,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
     $scope.loaded = false;
     $scope.sending = false;
+    $scope.showSmiley = false;
     function loadCahier(){
         if (!EnfantService.getCurrent()) return;
         $scope.loaded = false;
@@ -231,6 +264,14 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             $scope.progress = progress + ' %';
         });
     }
+    $scope.showHumeur = function () {
+        $scope.showSmiley = !$scope.showSmiley;
+    }
+    $scope.setHumeur = function (smiley) {
+        $scope.currentCahier.humeur = smiley;
+        $scope.showSmiley = false;
+        CahierService.save($scope.currentCahier);
+    }
     
     EnfantService.onChange(loadCahier);
     
@@ -251,7 +292,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.removeEvent = function (event, index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
-        CahierService.removeEvent($scope.currentCahier, index);
+        CahierService.removeEvent($scope.currentCahier, index).then(function () {
+            $scope.$broadcast("refresh-scroll");
+        });
     }
     $scope.prevEnfant = function(){
         EnfantService.prev();
@@ -377,7 +420,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     };
 }
 
-function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService) {
+function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     if (!$scope.event) {
@@ -493,7 +536,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
         $scope.event.pictures.push(entry.toURL());
-        $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length -1];
+        $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length - 1];
+        $timeout(function () {
+            $scope.$broadcast("refresh-scroll");
+        });
         $scope.$apply();
     }
     function resOnError(error) {

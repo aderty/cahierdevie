@@ -36,6 +36,24 @@
             </button>
         </div>
         <div class="topcoat-button-bar__item">
+            <button class="topcoat-button-bar__button full humeur" ng-click="showHumeur()">
+                <img ng-src="{{currentCahier.humeur.img}}"></img>
+            </button>
+            <div class="popover bottom" ng-if="showSmiley">
+                <div class="arrow"></div>
+                <h3 class="popover-title">Humeur du jour</h3>
+                <div class="popover-content">
+                  <p>
+                      <ul class="topcoat-list events" >
+                        <li  ng-repeat="smiley in smileys" ng-click="editEvent(event)">
+                            <button ng-click="setHumeur(smiley);$event.stopPropagation();"><img ng-src="{{smiley.img}}" /></button>
+                        </li>
+                      </ul>
+                  </p>
+                </div>
+              </div>
+        </div>
+        <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': currentCahier.lastSync != undefined}" ng-click="send()">
                 <i class="topcoat-icon" ng-class="{'wifi-icon sending': sending == true, 'cloud-icon no-sending': sending == false}"></i>
                 {{labelTransmi}}

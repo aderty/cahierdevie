@@ -375,7 +375,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     }
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, config) {
+myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config) {
     var orderBy = $filter('orderBy');
     var cahierChangeCb = [];
     var ip = config.getUrlUpload();
@@ -395,6 +395,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, confi
                 id: genKey(idEnfant, date),
                 idEnfant: idEnfant,
                 date: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+                humeur: $rootScope.smileys[0],
                 events: []
             }
         },
