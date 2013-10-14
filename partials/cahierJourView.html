@@ -46,7 +46,7 @@
                   <p>
                       <ul class="topcoat-list humeurs" >
                         <li  ng-repeat="smiley in smileys" ng-click="editEvent(event)">
-                            <button ng-click="setHumeur(smiley);$event.stopPropagation();"><img ng-src="{{smiley.img}}" /></button>
+                            <img ng-src="{{smiley.img}}" ng-click="setHumeur(smiley);$event.stopPropagation();" />
                         </li>
                       </ul>
                   </p>
