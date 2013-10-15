@@ -1172,7 +1172,7 @@ input[type="checkbox"]:focus + .topcoat-checkbox__checkmark:before {
   border-radius: 6px;
 }
 
-.topcoat-icon-button:hover,
+/*.topcoat-icon-button:hover,
 .topcoat-icon-button--quiet:hover,
 .topcoat-icon-button--large:hover,
 .topcoat-icon-button--large--quiet:hover {
@@ -1193,7 +1193,7 @@ input[type="checkbox"]:focus + .topcoat-checkbox__checkmark:before {
   border: 1px solid #0940fd;
   box-shadow: 0 0 0 2px #6fb5f1;
   outline: 0;
-}
+}*/
 
 /* topdoc
   name: Quiet Icon Button
@@ -1225,7 +1225,7 @@ input[type="checkbox"]:focus + .topcoat-checkbox__checkmark:before {
   box-shadow: none;
 }
 
-.topcoat-icon-button--quiet:hover,
+/*.topcoat-icon-button--quiet:hover,
 .topcoat-icon-button--large--quiet:hover {
   text-shadow: 0 1px #fff;
   border: 1px solid #a5a8a8;
@@ -1239,7 +1239,7 @@ input[type="checkbox"]:focus + .topcoat-checkbox__checkmark:before {
   background-color: #d3d7d7;
   border: 1px solid #a5a8a8;
   box-shadow: inset 0 1px rgba(0,0,0,0.12);
-}
+}*/
 
 /* topdoc
   name: Large Icon Button
