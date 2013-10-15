@@ -109,8 +109,11 @@ angular.module('myApp.directives', [])
                 animate: 'none'
             });
             scope.show = function (e) {
+                scroller.scroller('show');
+                //scroller.scroller('hide');
                 setTimeout(function () {
                     scroller.scroller('show');
+
                 }, 150);
             }
 

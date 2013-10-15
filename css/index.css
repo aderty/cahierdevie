@@ -201,7 +201,7 @@ select.field-input {
     line-height: 2.5rem;
 }
 .selection-date .topcoat-button--quiet {
-    background-color: #F8C392;
+    background-color: #FFCAD0;
     text-shadow: 0 1px #fff;
     border: 1px solid #a5a8a8;
     box-shadow: inset 0 1px #fff;
@@ -279,7 +279,7 @@ select.field-input {
     width: 4rem;
 }
 .humeur button {
-    height: 3.1rem;
+    height: 3.15rem;
     padding: 0;
 }
 .humeur button img {
@@ -559,7 +559,7 @@ nav.navigation h4 > i{
 }
 .topcoat-list__header.now
 {
-	background-color: rgb(255, 188, 161);
+	background-color: #FFDFE3;
 }
 
 .topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
@@ -674,10 +674,10 @@ nav.navigation h4 > i{
 .enfants .li-thumb {
     left: -1rem;
     top: -1.8rem;
-    border: 2px solid rgb(180, 217, 252);
+    border: 3px solid rgb(180, 217, 252);
 	border-radius: 1rem;
 	/*box-shadow: inset -2px 0px 15px 5px rgb(180, 217, 252);*/
-	box-shadow: 0px 0px 10px 5px rgb(180, 217, 252);
+	box-shadow: 0px 0px 10px 2px rgb(180, 217, 252);
 }
 
 .enfants .li-thumb:active {
@@ -704,6 +704,9 @@ nav.navigation h4 > i{
 .events .list-inner {
     min-height: 5.5rem;
 }
+.events li {
+    margin-top: 0.5rem;
+}
 .events li h3,
 .events li p {
     text-overflow: ellipsis;
@@ -717,15 +720,18 @@ nav.navigation h4 > i{
 }
 .events li div.time {
     position: absolute;
-    margin-top: -2rem;
-    right: 0rem;
+    left: 0;
+    width: 100%;
+    background-color: #A7CA86;
+    margin-top: -1.26rem;
+    padding-left: 50%;
 }
 
 .fille .li-thumb 
 {
-	border: 2px solid rgb(247, 203, 255);
+	border: 3px solid rgb(247, 203, 255);
 	/*box-shadow: inset -2px 0px 15px 5px rgb(247, 203, 255);*/
-	box-shadow: 0px 0px 10px 5px rgb(247, 203, 255);
+	box-shadow: 0px 0px 10px 2px rgb(247, 203, 255);
 }
 
 .enfants h3 {
