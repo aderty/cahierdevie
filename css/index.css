@@ -385,8 +385,8 @@ button.delete {
     background-color: #fff;
 }
 .list-inner {
-    width: 100%;
-	height: 100%;
+    /*width: 100%;
+	height: 100%;*/
 	position: relative;
 	-webkit-box-flex: 1;
 	box-flex: 1;
@@ -429,7 +429,7 @@ h1 .li-thumb
 .list .delete {
     position: absolute;
     right: 1rem;
-    margin-top: -4.5rem;
+    margin-top: -5.8rem;
 }
 .wrapper {
     /*min-height: 100%;
@@ -703,28 +703,29 @@ nav.navigation h4 > i{
 }*/
 .events .list-inner {
     min-height: 5.5rem;
+    padding: 1.25rem;
 }
 .events li {
-    margin-top: 0.5rem;
+    margin-top: 2rem;
+    padding:0;
 }
 .events li h3,
 .events li p {
     text-overflow: ellipsis;
     margin-right: 3rem;
     overflow: hidden;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 .events li.has-photo h3,
 .events li.has-photo p {
     margin-right: 9rem;
 }
 .events li div.time {
-    position: absolute;
-    left: 0;
-    width: 100%;
+    /*width: 100%;*/
     background-color: #A7CA86;
     margin-top: -1.26rem;
-    padding-left: 50%;
+    padding-left: 1rem;
+    color: rgb(99, 0, 39);
 }
 
 .fille .li-thumb 
@@ -749,7 +750,7 @@ nav.navigation h4 > i{
     height: 100px;
     position: absolute;
     right: 4.5rem;
-    margin-top: -6.5rem;
+    margin-top: -7.5rem;
     overflow: hidden;
 }
 .evt-photos
