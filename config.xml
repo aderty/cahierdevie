@@ -49,6 +49,7 @@
     <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="SuppressesIncrementalRendering" value="false" />
     <preference name="TopActivityIndicator" value="gray" />
+    <preference name="android-windowSoftInputMode" value="adjustResize" />
 
     <content src="index.html" />
 

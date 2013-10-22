@@ -206,12 +206,30 @@ angular.module('myApp.directives', [])
     .directive('focusscroll', [function () {
         return {
             restrict: 'A',
+            scope: false,
             replace: false,
-            link: function (scope, elm, attr) {
-                elm.bind("focus", function () {
-                    var me = $(this);
-                    //me.closest("[scroll]")[0].scrollTop = me.position().top;
-                    me.closest("[scroll]").data('scroll').scrollToElement(me[0]);
+            require: 'ngModel',
+            link: function (scope, elm, attr, ngModel) {
+                elm.bind("focus", function (e) {
+                    var btnDone = "<button class='topcoat-button-bar__button full valid'><i class='topcoat-icon checkmark-icon'></i></button>";
+                    var btnCancel = "<button class='topcoat-button-bar__button full btn-cancel cancel'><i class='topcoat-icon error-icon'></i></button>";
+                    var tmpl = "<div id='zonearea'><div class='dwo'></div><div class='saisiearea'><div class='textarea'><textarea id='saisiearea' rows='6' cols='36' placeholder=\"" + attr.placeholder + "\"/></div><div class='action'>" + btnDone + btnCancel + "</div></div></div>";
+                    var input = $(tmpl);
+                    input.on('click', '.valid', function (e) {
+                        ngModel.$setViewValue(document.getElementById('saisiearea').value);
+                        scope.$apply(function () {
+                            elm.val(document.getElementById('saisiearea').value);
+                        });
+                        document.body.removeChild(document.getElementById('zonearea'));
+                    });
+                    input.on('click', '.cancel', function (e) {
+                        document.body.removeChild(document.getElementById('zonearea'));
+                    });
+                    document.body.appendChild(input[0]);
+                    var value = scope.$eval(attr.ngModel);
+                    if (value) {
+                        document.getElementById('saisiearea').value = value;
+                    }
                 });
             }
         };

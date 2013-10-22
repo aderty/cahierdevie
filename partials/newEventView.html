@@ -44,9 +44,9 @@
         </div>
         <div class="center field titre">
             <span class="field-label">Titre</span>
-            <div class="field-input">
-                <select id="selectTitle" class="btn-titre">
-                    <option value="">Titre pr&eacute;d&eacute;fini</option>
+            <div>
+                <select id="selectTitle" class="field-input btn-titre">
+                    <option value="">Choisir un titre pr&eacute;d&eacute;fini</option>
                     <option ng-repeat="title in predefTitle">{{title}}</option>
                 </select>
                 <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
@@ -54,7 +54,7 @@
         </div>
         <div class="center field" ng-class="{'last': currentPhoto == ''}">
             <span class="field-label">Description</span>
-            <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" placeholder="Description"></textarea>
+            <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
         <div class="center field last" ng-if="currentPhoto != ''" ng-click="showPhotos()">
             <span class="field-label">Photos</span>

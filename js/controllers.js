@@ -237,7 +237,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
             return alert("Aucune adresse email définie pour l'enfant.");
         }
         $scope.sending = true;
-        $scope.labelTransmi = "Envoi en cours...";
+        $scope.labelTransmi = "Envoi...";
         CahierService.send(EnfantService.getCurrent().email).then(function () {
             $scope.sending = false;
             $scope.currentCahier = CahierService.getCurrent();
@@ -297,7 +297,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     function setlabelTransmi() {
         if (!$scope.sending) {
-            $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Transmettre';
+            $scope.labelTransmi = $scope.currentCahier && $scope.currentCahier.lastSync ? 'Transmi ' + $filter('dateortime')($scope.currentCahier.lastSync) : 'Envoyer';
         }
         else {
             $scope.labelTransmi = $scope.progress;
@@ -414,9 +414,17 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     if (!$scope.event) {
+        var heure = new Date().getHours();
+        if(heure < 10){
+            heure = '0' + heure;
+        }
+        var minutes = new Date().getMinutes();
+        if(minutes < 10){
+            minutes = '0' + minutes;
+        }
         $scope.event = {
             creation: true,
-            time: new Date().getHours() + ":" + new Date().getMinutes(),
+            time: heure  + ":" + minutes,
             pictures: []
         };
         EventService.setCurrent($scope.event);
