@@ -817,6 +817,7 @@ nav.navigation h4 > i{
 {
 	width: 80px;
     height: 100px;
+    display: inline;
 }
 .evts-photos > img,
 .evt-photos > img
