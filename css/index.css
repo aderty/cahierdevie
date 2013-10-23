@@ -261,7 +261,7 @@ select.field-input {
         top:0;
         right:0;
         /*padding: 3px;*/
-        /*background-color: #e5e9e8*/
+        background-color: #e5e9e8;
 }
 .saisiearea button
 {
@@ -515,6 +515,9 @@ h1 .li-thumb
     /*background-color:#bcbfbf;
     background-color:rgb(255, 246, 210);*/
     background-color: #F1F0F0;
+    background-image: url('../img/cahier.jpg');
+    background-size: cover;
+    background-position-x: -20px;
 }
 
 .box-shadow-menu {
