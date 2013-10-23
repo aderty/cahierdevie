@@ -16,7 +16,7 @@
 </div>
 <div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full first btn-photo" ng-click="takePic()">
+            <button class="topcoat-button-bar__button full first btn-photo" ng-disabled="event.pictures.length >= 3" ng-click="takePic()">
                 <div>
                     <i class="neo160"></i>&nbsp;
                 </div>
@@ -38,11 +38,7 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-        <div class="center field first">
-            <span class="field-label">Heure</span>
-            <input type="text" timepicker ng-model="event.time" class="field-input" />
-        </div>
-        <div class="center field titre">
+        <div class="center field titre first">
             <span class="field-label">Titre</span>
             <div>
                 <select id="selectTitle" class="field-input btn-titre">
@@ -52,15 +48,19 @@
                 <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
             </div>
         </div>
-        <div class="center field" ng-class="{'last': currentPhoto == ''}">
+        <div class="center field">
             <span class="field-label">Description</span>
             <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
-        <div class="center field last" ng-if="currentPhoto != ''" ng-click="showPhotos()">
+        <div class="center field last" ng-if="event.pictures.length > 0" ng-click="showPhotos()">
             <span class="field-label">Photos</span>
             <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
                 <img class="evt-photo-item" ng-src="{{picData}}" />
             </div> 
+        </div>
+        <div class="center field">
+            <span class="field-label">Heure</span>
+            <input type="text" timepicker ng-model="event.time" class="field-input" />
         </div>
         </div>
     </form>

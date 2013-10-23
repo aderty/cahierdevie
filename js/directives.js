@@ -205,7 +205,7 @@ angular.module('myApp.directives', [])
                 elm.bind("focus", function (e) {
                     var btnDone = "<button class='topcoat-button-bar__button full valid'><i class='topcoat-icon checkmark-icon'></i></button>";
                     var btnCancel = "<button class='topcoat-button-bar__button full btn-cancel cancel'><i class='topcoat-icon error-icon'></i></button>";
-                    var tmpl = "<div id='zonearea'><div class='dwo'></div><div class='saisiearea'><div class='textarea'><textarea id='saisiearea' rows='6' cols='36' placeholder=\"" + attr.placeholder + "\"/></div><div class='action'>" + btnDone + btnCancel + "</div></div></div>";
+                    var tmpl = "<div id='zonearea'><div class='modal'></div><div class='saisiearea'><div class='textarea'><textarea id='saisiearea' rows='6' cols='36' placeholder=\"" + attr.placeholder + "\"/></div><div class='action'>" + btnDone + btnCancel + "</div></div></div>";
                     var input = $(tmpl);
                     input.on('click', '.valid', function (e) {
                         ngModel.$setViewValue(document.getElementById('saisiearea').value);

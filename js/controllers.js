@@ -432,9 +432,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     else{
         $scope.eventSaved = angular.copy($scope.event);
     }
-    if($scope.event.pictures.length){
-        $scope.currentPhoto = $scope.event.pictures[0];
-    }
     $scope.$broadcast("refresh-scroll");
     
     $scope.takePic = function () {
@@ -534,7 +531,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     function successMove(entry) {
         //I do my insert with "entry.fullPath" as for the path
         $scope.event.pictures.push(entry.toURL());
-        $scope.currentPhoto = $scope.event.pictures[$scope.event.pictures.length - 1];
         $timeout(function () {
             $scope.$broadcast("refresh-scroll");
         });
