@@ -540,7 +540,6 @@ h1 .li-thumb
     /*background-color:#bcbfbf;
     background-color:rgb(255, 246, 210);*/
     background-color: #FFF;
-    margin-top: 3rem;
 }
 
 .box-shadow-menu {
@@ -674,7 +673,6 @@ nav.navigation h4 > i{
         background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));*/
         background-color: rgb(238, 238, 238);
         background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(145, 145, 145)), color-stop(0.5, rgb(207, 214, 206)),color-stop(0.5, rgb(221, 217, 217)),color-stop(1, rgb(236, 236, 236)));
-        overflow: hidden;
 }
 
 .topcoat-navigation-bar .topcoat-icon-button:hover, .topcoat-navigation-bar .topcoat-icon-button--quiet:hover, .topcoat-navigation-bar .topcoat-icon-button--large:hover, .topcoat-navigation-bar .topcoat-icon-button--large--quiet:hover {

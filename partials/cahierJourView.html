@@ -1,4 +1,19 @@
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="prevEnfant()" ng-swipe-right="nextEnfant()" >
+    <div class="topcoat-navigation-bar header">
+        <div class="topcoat-navigation-bar__item left quarter">
+            <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left">
+                <i class="topcoat-icon listview-icon"></i>
+            </a>
+        </div>
+        <div class="topcoat-navigation-bar__item center half">
+            <h1 class="topcoat-navigation-bar__title"><img ng-src="{{currentEnfant.photo}}" class="li-thumb" />{{currentEnfant.prenom}}</h1>
+        </div>
+        <div class="topcoat-navigation-bar__item right quarter">
+            <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+                <i class="topcoat-icon home-icon"></i>
+            </a>
+        </div>
+    </div>
     <h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
             <div class="left quarter">
                 <a class="topcoat-icon-button--quiet backDate" title="back" ng-click="backDate()">
