@@ -158,26 +158,18 @@ angular.module('myApp.directives', [])
                             var target = e.target;
                             while (target.nodeType != 1) target = target.parentNode;
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
+                                e.preventDefault();
                             }
-                            else {
-                                if (target.canFocus) {
-                                    target.canFocus = false;
-                                    return;
-                                }
-                                //timer = new Date().getTime();
+                            else if (target.tagName.toLowerCase() == 'textarea') {
                                 setTimeout((function (input) {
                                     return function () {
                                         if (valid) {
-                                            input.canFocus = true;
                                             input.focus();
-                                            var e = document.createEvent('MouseEvents');
-                                            e.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0, true, false, false, true, 0, null);
-                                            input.dispatchEvent(e);
                                         }
                                     }
                                 })(target), 250);
+                                e.preventDefault();
                             }
-                            e.preventDefault();
                         },
                         onBeforeScrollMove: function (e) {
                             valid = false;
