@@ -9,7 +9,7 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
         config.init();
     }, 2000);
 
-    var date = new Date(); 
+    var date = new Date();
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     $rootScope.isCurrentDate = function(){
         return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate())) == 0;
@@ -111,6 +111,7 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 }
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
+    $rootScope.title = "Cahier de vie";
     CahierService.setCurrent(null);
     $scope.loaded = false;
     $scope.slidePage = function (path, type) {
@@ -200,11 +201,15 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
 }
 
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
+    if (EnfantService.getCurrent()) {
+        $rootScope.title = "<img ng-src=" + EnfantService.getCurrent().photo + " class='li-thumb' /> " + EnfantService.getCurrent().prenom;
+    }
     $scope.loaded = false;
     $scope.sending = false;
     $scope.showSmiley = false;
     function loadCahier(){
         if (!EnfantService.getCurrent()) return;
+        $rootScope.title = "<img ng-src=" + EnfantService.getCurrent().photo + " class='li-thumb' /> " + EnfantService.getCurrent().prenom;
         $scope.loaded = false;
         CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
             if (!cahier) {
@@ -312,10 +317,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     setlabelTransmi();
 }
 
-function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
-
+function CahierCtrl($rootScope, $scope, navSvc, EnfantService, CahierService, EventService) {
     $scope.enfant = EnfantService.getCurrent();
-    $scope.title = "Nouveau cahier";
+    $rootScope.title = "Nouveau cahier";
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
@@ -323,7 +327,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
         }
     }
     else {
-        $scope.title = "Modification de cahier";
+        $rootScope.title = "Modification de cahier";
         $scope.enfantSaved = angular.copy($scope.enfant);
     }
 
@@ -411,6 +415,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 }
 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout) {
+    $rootScope.title = "Un instant...";
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     if (!$scope.event) {
