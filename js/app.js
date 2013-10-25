@@ -23,7 +23,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
   }]);
 myApp.initialize = function () {
     myApp.modal = document.createElement("div");
-    myApp.modal.innerHTML = "Chargement...";
+    myApp.modal.innerHTML = "<span>Chargement...<span>";
     myApp.modal.classList.add("loading-modal");
     document.body.appendChild(myApp.modal);
     window.setTimeout(function () {

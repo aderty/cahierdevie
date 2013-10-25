@@ -64,12 +64,25 @@ html, body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    z-index: 1000;
     color:#FFF;
     text-align: center;
-    padding-top: 20%;
+    /*padding-top: 45%;*/
     font-weight: bold;
     font-size: 18pt;
+
+    display: -webkit-flexbox;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-align: center;
+      -ms-flex-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      text-align: center;
+}
+.loading-modal span {
+    width: 100%;
 }
 
 li.loading span {
@@ -361,6 +374,9 @@ select.field-input {
 
 .btn-send.sync {
     background-color: rgb(139, 107, 168);
+    height: 3.15rem;
+    line-height: normal;
+    white-space: normal;
 }
 .btn-send.sync:hover {
     background-color: rgb(198, 135, 248);
