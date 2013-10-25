@@ -51,6 +51,9 @@ input, textarea {
 	outline-style: none;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
+input {
+    webkit-user-modify: read-write-plaintext-only;
+}
 
 html, body {
     height: 100%;
@@ -270,7 +273,7 @@ select.field-input {
         top:0;
         left:0px;
         width:100%;
-        height:80%;
+        height:90%;
 }
 .saisiearea .textarea
 {
@@ -291,7 +294,7 @@ select.field-input {
 {
         position: fixed;
         width: 5rem;
-        height: 80%;
+        height: 90%;
         top:0;
         right:0;
         /*padding: 3px;*/
