@@ -75,7 +75,7 @@ myApp.initDB = function () {
             //loadFromDB("wishlist");
             //downloadCatalog();
             $("html").addClass("ready");
-            //document.body.removeChild(myApp.modal);
+            document.body.removeChild(myApp.modal);
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e.stack + " \n file : " + f + " \n ligne :" + l);
