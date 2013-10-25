@@ -24,7 +24,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
 
 function createModal() {
     var modal = document.createElement("div");
-    modal.innerHTML = "<span>Chargement...<span>";
+    modal.innerHTML = "<span>Chargement...<span><input />";
     modal.classList.add("loading-modal");
     return modal;
 }
@@ -82,11 +82,6 @@ myApp.initDB = function () {
             //downloadCatalog();
             $("html").addClass("ready");
             document.body.removeChild(myApp.modal);
-            myApp.modal = createModal();
-            document.body.appendChild(myApp.modal);
-            window.setTimeout(function () {
-                document.body.removeChild(myApp.modal);
-            }, 1000);
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e.stack + " \n file : " + f + " \n ligne :" + l);

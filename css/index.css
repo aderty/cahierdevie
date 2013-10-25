@@ -84,6 +84,11 @@ html, body {
 .loading-modal span {
     width: 100%;
 }
+.loading-modal input {
+    width: 1px;
+    background-color: transparent;
+    border: none;
+}
 
 li.loading span {
     position: absolute;
