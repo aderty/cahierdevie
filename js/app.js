@@ -20,11 +20,17 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewNewCahier', { templateUrl: 'partials/newCahier.html', controller: 'CahierCtrl' });
         $routeProvider.when('/viewAbout', { templateUrl: 'partials/aboutView.html' });
         $routeProvider.otherwise({redirectTo: '/'});
-  }]);
+    }]);
+
+function createModal() {
+    var modal = document.createElement("div");
+    modal.innerHTML = "<span>Chargement...<span>";
+    modal.classList.add("loading-modal");
+    return modal;
+}
+
 myApp.initialize = function () {
-    myApp.modal = document.createElement("div");
-    myApp.modal.innerHTML = "<span>Chargement...<span>";
-    myApp.modal.classList.add("loading-modal");
+    myApp.modal = createModal();
     document.body.appendChild(myApp.modal);
     window.setTimeout(function () {
         myApp.initDB();
@@ -76,6 +82,11 @@ myApp.initDB = function () {
             //downloadCatalog();
             $("html").addClass("ready");
             document.body.removeChild(myApp.modal);
+            myApp.modal = createModal();
+            document.body.appendChild(myApp.modal);
+            window.setTimeout(function () {
+                document.body.removeChild(myApp.modal);
+            }, 1000);
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e.stack + " \n file : " + f + " \n ligne :" + l);
