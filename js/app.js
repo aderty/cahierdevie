@@ -27,7 +27,7 @@ function createModal() {
 
     var btnDone = "<button class='topcoat-button-bar__button full valid'><i class='topcoat-icon checkmark-icon'></i></button>";
     var btnCancel = "<button class='topcoat-button-bar__button full btn-cancel cancel'><i class='topcoat-icon error-icon'></i></button>";
-    var tmpl = "<div id='zonearea'><div class='modal'></div><div class='saisiearea'><div class='textarea'><textarea id='saisiearea' rows='6' cols='36' placeholder=\"" + attr.placeholder + "\"/></div><div class='action'>" + btnDone + btnCancel + "</div></div></div>";
+    var tmpl = "<div id='zonearea'><div class='modal'></div><div class='saisiearea'><div class='textarea'><textarea id='saisiearea' rows='6' cols='36' /></div><div class='action'>" + btnDone + btnCancel + "</div></div></div>";
 
     modal.innerHTML = tmpl; //"<span>Chargement...<span><input />";
     modal.classList.add("loading-modal");
