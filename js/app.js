@@ -22,6 +22,10 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.otherwise({redirectTo: '/'});
   }]);
 myApp.initialize = function () {
+    myApp.modal = document.createElement("div");
+    myApp.modal.innerHTML = "Chargement...";
+    myApp.modal.classList.add("loading-modal");
+    document.body.appendChild(myApp.modal);
     window.setTimeout(function () {
         myApp.initDB();
     }, 150);
@@ -71,6 +75,7 @@ myApp.initDB = function () {
             //loadFromDB("wishlist");
             //downloadCatalog();
             $("html").addClass("ready");
+            //document.body.removeChild(myApp.modal);
         }, 200);
         window.onerror = function (e, f, l) {
             alert(e.stack + " \n file : " + f + " \n ligne :" + l);

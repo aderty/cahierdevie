@@ -158,9 +158,9 @@ angular.module('myApp.directives', [])
                             var target = e.target;
                             while (target.nodeType != 1) target = target.parentNode;
                             if (target.tagName.toLowerCase() != 'select' && target.tagName.toLowerCase() != 'input' && target.tagName.toLowerCase() != 'textarea') {
-                                
+                                e.preventDefault();
                             }
-                            else /*if (target.tagName.toLowerCase() == 'textarea')*/ {
+                            else if (target.tagName.toLowerCase() == 'textarea') {
                                 setTimeout((function (input) {
                                     return function () {
                                         if (valid) {
@@ -170,7 +170,6 @@ angular.module('myApp.directives', [])
                                 })(target), 250);
                                 e.preventDefault();
                             }
-                            e.preventDefault();
                         },
                         onBeforeScrollMove: function (e) {
                             valid = false;
