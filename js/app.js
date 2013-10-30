@@ -36,29 +36,27 @@ myApp.initialize = function () {
         myApp.initDB();
     }, 150);
 }
-myApp.initDB = function () {
+myApp.initDB = function() {
+    
     $.indexedDB("cahierdevie", {
         "schema": {
-            "1": function (versionTransaction) {
+            "1": function(versionTransaction) {
                 /*var catalog = versionTransaction.createObjectStore("enfants", {
-                    "autoIncrement": true,
-                    "keyPath": "id"
+                "autoIncrement": true,
+                "keyPath": "id"
                 });
                 catalog.createIndex("prenom", {
-                    "unique": false, // Uniqueness of Index, defaults to false
-                    "multiEntry": false // see explanation below
+                "unique": false, // Uniqueness of Index, defaults to false
+                "multiEntry": false // see explanation below
                 }, "prenom");
                 var cart = versionTransaction.createObjectStore("cahier", {
-                    "autoIncrement": true,
-                    "keyPath": "id"
+                "autoIncrement": true,
+                "keyPath": "id"
                 });
                 cart.createIndex("idEnfant", {
-                    "unique": false, // Uniqueness of Index, defaults to false
-                    "multiEntry": true // see explanation below
+                "unique": false, // Uniqueness of Index, defaults to false
+                "multiEntry": true // see explanation below
                 }, "idEnfant");*/
-            },
-            // This was added in the next version of the site
-            "2": function (versionTransaction) {
                 var catalog = versionTransaction.createObjectStore("enfants", {
                     "autoIncrement": false,
                     "keyPath": "id"
@@ -74,19 +72,20 @@ myApp.initDB = function () {
                 }, "idEnfant");
             }
         }
-    }).then(function () {
+    }).then(function() {
         // Once the DB is opened with the object stores set up, show data from all tables
-        window.setTimeout(function () {
+        window.setTimeout(function() {
             //loadFromDB("cart");
             //loadFromDB("wishlist");
             //downloadCatalog();
             $("html").addClass("ready");
             document.body.removeChild(myApp.modal);
         }, 200);
-        window.onerror = function (e, f, l) {
-            alert(e.stack + " \n file : " + f + " \n ligne :" + l);
+        window.onerror = function(e, f, l) {
+            alert(e);
+            //alert(e.stack + " \n file : " + f + " \n ligne :" + l);
         }
-    }, function () {
+    }, function() {
         alert("Looks like an error occured " + JSON.stringify(arguments))
     });
 }

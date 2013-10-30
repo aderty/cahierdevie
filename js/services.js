@@ -178,12 +178,114 @@ myApp.factory('contacts', function ($rootScope, phonegapReady) {
     }
 });
 
-myApp.factory('db', function () {
-    return {
+myApp.factory('db', function ($q) {
+    function resOnError(error) {
+        alert(error.code);
+    }
+    var QUOTA = 0;//4 * 1024 * 1024;
+    var fileSystem = null;
+    var entryEnfants = null;
+    var enfantsDir = {};
+    var me = {
       getInstance: function(){
           return $.indexedDB("cahierdevie");
+      },
+      getFileSystem: function(){     
+          if (webkitStorageInfo) {
+            webkitStorageInfo.requestQuota(
+              webkitStorageInfo.PERSISTENT,
+
+              QUOTA, // amount of bytes you need
+
+              function(availableBytes) {
+                  // you can use the filesystem now
+              }
+            );
+            if (window.webkitRequestFileSystem) {
+                window.requestFileSystem = window.webkitRequestFileSystem;
+            }
+        }
+          var defered = $q.defer();
+          if (fileSystem) {
+                defered.resolve(fileSystem);
+          }
+          window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+          window.requestFileSystem(LocalFileSystem.PERSISTENT, QUOTA, function (fileSys) {
+               //The folder is created if doesn't exist
+               fileSystem = fileSys;
+               defered.resolve(fileSystem);
+          },
+          resOnError);
+          return defered.promise;
+      },
+      getEnfantsEntry: function(){
+            var defered = $q.defer();
+            if (entryEnfants) {
+                defered.resolve(entryEnfants);
+            }
+                var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
+                    me.getFileSystem().then(function (fileSys) {
+                        //The folder is created if doesn't exist
+                        fileSys.root.getDirectory(myFolderApp,
+                                        { create: true, exclusive: false },
+                                        function (directoryRoot) {
+                                            directoryRoot.getFile("db.json",
+                                                    { create: true , exclusive: false},
+                                                    function (fileEntry) {
+                                                        entryEnfants = fileEntry;
+                                                        defered.resolve(entryEnfants);
+                                                    },
+                                            resOnError);
+                                        },
+                                        resOnError);
+                    });
+                    return defered.promise;
+      },
+      getEnfantDir: function(enfant){
+            var defered = $q.defer();
+            if (enfantsDir && enfantsDir[enfant.id]) {
+                defered.resolve(enfantsDir[enfant.id].base);
+            }
+                var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
+
+                    me.getFileSystem().then(function (fileSys) {
+                        //The folder is created if doesn't exist
+                        fileSys.root.getDirectory(myFolderApp, { create: true, exclusive: false }, function (directoryRoot) {
+                                            directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id, { create: true, exclusive: false }, function (directoryEnfant) {
+                                                    enfantsDir[enfant.id] = {base: directoryEnfant};
+                                                    directoryEnfant.getDirectory("pictures", { create: true, exclusive: false }, function (directory) {
+                                                         enfantsDir[enfant.id].pictures = directory;
+                                                         directoryEnfant.getDirectory("data", { create: true, exclusive: false }, function (directoryData) {
+                                                              enfantsDir[enfant.id].data = directoryData;
+                                                              defered.resolve(enfantsDir[enfant.id]);
+                                                          },
+                                                          resOnError);
+                                                     },
+                                                     resOnError);
+                                             },
+                                             resOnError);
+                          },
+                          resOnError);
+                    });
+                    return defered.promise;
+      },
+      getDataDir: function(enfant){
+            var defered = $q.defer();
+            me.getEnfantDir(enfant).then(function (directoryEnfant) {
+                  defered.resolve(directoryEnfant.data);
+            });
+            return defered.promise;
+      },
+      getPicturesDir: function(enfant){
+            var defered = $q.defer();
+            me.getEnfantDir(enfant).then(function (directoryEnfant) {
+                  defered.resolve(directoryEnfant.pictures);
+            });
+            return defered.promise;
       }
     };
+    
+    return me;
 });
 
 myApp.factory('config', function ($http, version) {
@@ -235,7 +337,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                 defered.resolve(enfants);
             }
             else {
-                db.getInstance().objectStore("enfants").each(function (data) {
+		db.getInstance().objectStore("enfants").each(function (data) {
                     if (!data.value.photo) {
                         data.value.photo = 'res/user.png';
                     }
@@ -245,9 +347,29 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                     $timeout(function () {
                         defered.resolve(enfants);
                     });
-                }).fail(function () {
+                }).fail(function (e) {
+               	    alert(e);
                     defered.reject(null);
                 });
+                /*db.getEnfantsEntry().then(function(fileEntry){
+                       fileEntry.file(function(file) {
+                             var reader = new FileReader();
+                             //asnycrhonous task has finished, fire the event:
+                             reader.onloadend = function(evt) {
+                                    init = true;
+                                    console.log("Read as text");
+                                    console.log(evt.target.result);
+                                    if(evt.target.result != ""){
+                                            //assign the data to the global var
+                                            enfants = JSON.parse(evt.target.result);
+                                    }
+                                    //keep working with jsonString here
+                                    defered.resolve(enfants);
+                             };
+                             reader.readAsText(file);
+                       },
+                       resOnError);
+                });*/
             }
             return defered.promise;
         },
@@ -283,17 +405,6 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
         },
         save: function (enfant) {
             var defered = $q.defer();
-            /*var i = 0, l = enfants.length, found = false;
-            for (; i < l; i++) {
-                if (enfants.id == enfant.id) {
-                    enfants[i] = enfant;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                enfants.push(enfant);
-            }*/
             var index = enfants.indexOf(enfant);
             if (index == -1) {
                 if(!enfant.photo){
@@ -301,13 +412,32 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                 }
                 enfants.push(enfant);
             }
-            return db.getInstance().objectStore("enfants").put(enfant).done(function () {
+	    return db.getInstance().objectStore("enfants").put(enfant).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
                 });
             }).fail(function (e, l, f) {
-                alert(e.stack + " \n file : " + f + " \n ligne :" + l);
+            	alert(e);
+                //alert(e.stack + " \n file : " + f + " \n ligne :" + l);
             });
+            /*db.getEnfantsEntry().then(function(fileEntry){
+                      fileEntry.createWriter(function (writer) {
+                          writer.onwrite = function (evt) {
+                                $timeout(function () {
+                                     defered.resolve(true);
+                                });
+                          };
+                          try{
+                            writer.write(JSON.stringify(enfants));
+                          }
+                          catch(e){
+                            writer.write(new Blob([JSON.stringify(enfants)], {type: 'text/plain'}));
+                          }
+                          //writer.abort();
+                      }, function (error) {
+                             alert("create writer " + error.code);
+                      });
+              });*/
             return defered.promise;
         },
         remove: function(enfant) {
@@ -440,6 +570,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             var defered = $q.defer();
             var cahiers = [];
             var key = genKey(idEnfant, date);
+            
             db.getInstance().objectStore("cahier").get(key).done(function (data) {
                 $timeout(function () {
                     defered.resolve(data);
