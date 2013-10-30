@@ -631,7 +631,8 @@ h1 .li-thumb
 {
 	position: absolute;
 	z-index: 1;
-	top: 5.7rem;
+	/*top: 5.7rem;*/
+    top:3rem;
 	bottom: 0;
 	left: 0;
 	width: 100%;
@@ -826,10 +827,10 @@ nav.navigation h4 > i{
 }
 .events li div.time {
     /*width: 100%;*/
-    background-color: #DBDBDB;
+    background-color: #C2BCBC;
     margin-top: -1.26rem;
     padding-left: 1rem;
-    color: #FFF;
+    color: #000;
     border-top-left-radius: 1rem;
 	border-top-right-radius: 1rem;
     font-size: 14pt;

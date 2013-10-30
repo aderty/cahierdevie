@@ -1,7 +1,7 @@
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
 <div id="header" class="topcoat-navigation-bar header" >
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu" snap-toggle="left">
+        <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu" ng-click="" snap-toggle="left">
             <i class="topcoat-icon listview-icon"></i>
         </a>
     </div>
@@ -9,22 +9,8 @@
         <h1 class="topcoat-navigation-bar__title">Cahier de vie</h1>
     </div>
 </div>
-<div class="topcoat-list__container list" >
-<h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
-    <div class="left quarter">
-        <a class="topcoat-icon-button--quiet backDate" title="back" ng-click="backDate()">
-             <i class="topcoat-icon back-icon"></i>
-        </a>
-    </div>
-        <div class="center half">
-            <datemodelpicker ng-model="currentDate">Journ&eacute;e du {{currentDate | datesimple}}</datemodelpicker>
-        </div>
-    <div class="right quarter">
-        <a class="topcoat-icon-button--quiet nextDate" title="next" ng-click="nextDate()">
-              <i class="topcoat-icon next-icon"></i>
-        </a>
-    </div>
-</h3>
+<div class="topcoat-list__container list">
+
 <div>
     
     <div id="wrapper" scroll>

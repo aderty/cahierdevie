@@ -38,6 +38,12 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
+         <div class="center field last" ng-if="event.pictures.length > 0" ng-click="showPhotos()">
+            <span class="field-label">Photos</span>
+            <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
+                <img class="evt-photo-item" ng-src="{{picData}}" />
+            </div> 
+        </div>
         <div class="center field titre first">
             <span class="field-label">Titre</span>
             <div>
@@ -51,12 +57,6 @@
         <div class="center field">
             <span class="field-label">Description</span>
             <textarea ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
-        </div>
-        <div class="center field last" ng-if="event.pictures.length > 0" ng-click="showPhotos()">
-            <span class="field-label">Photos</span>
-            <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
-                <img class="evt-photo-item" ng-src="{{picData}}" />
-            </div> 
         </div>
         <div class="center field">
             <span class="field-label">Heure</span>
