@@ -1110,6 +1110,12 @@ nav.navigation h4 > i{
     background-size: cover;
 }
 
+.question-icon {
+    background: url("../img/question.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
 .neo160
 {
 	margin-top: 1rem;
