@@ -43,13 +43,11 @@
                 <div class="arrow"></div>
                 <h3 class="popover-title">Humeur du jour</h3>
                 <div class="popover-content">
-                  <p>
-                      <ul class="topcoat-list humeurs" >
+                      <ul class="humeurs" >
                         <li  ng-repeat="smiley in smileys" ng-click="editEvent(event)">
                             <img ng-src="{{smiley.img}}" ng-click="setHumeur(smiley);$event.stopPropagation();" />
                         </li>
                       </ul>
-                  </p>
                 </div>
               </div>
         </div>
