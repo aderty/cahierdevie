@@ -33,23 +33,28 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
     $rootScope.smileys = [
         {
             id: 0,
-            name: 'soleil',
-            img: 'img/humeur/soleil.png'
+            name: 'cool',
+            img: 'img/humeur/cool.png'
         },
         {
             id: 1,
-            name: 'nuageux',
-            img: 'img/humeur/nuageux.png'
+            name: 'timide',
+            img: 'img/humeur/timide.png'
         },
         {
             id: 2,
-            name: 'pluie',
-            img: 'img/humeur/pluie.png'
+            name: 'ange',
+            img: 'img/humeur/ange.png'
         },
         {
             id: 3,
-            name: 'orage',
-            img: 'img/humeur/orage.png'
+            name: 'triste',
+            img: 'img/humeur/triste.png'
+        },
+        {
+            id: 4,
+            name: 'guerre',
+            img: 'img/humeur/guerre.png'
         }
     ];
 }]);
