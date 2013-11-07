@@ -95,7 +95,7 @@ angular.module('myApp.directives', [])
         },
         replace: true,
         transclude: true,
-        template: '<button class="topcoat-button--quiet" ng-click="show();$event.stopPropagation();"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></button>',
+        template: '<div ng-click="show();$event.stopPropagation();"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></div>',
         require: 'ngModel',
         link: function (scope, elm, attr, ngModel) {
             var first = true;
