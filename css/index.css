@@ -802,6 +802,7 @@ nav.navigation h4 > i{
 /*.enfants li:active .next-icon {
     background: url("../img/refresh.svg") no-repeat;
 }*/
+.enfants,
 .events{
 	border:0;
     background-color: transparent;
