@@ -402,10 +402,15 @@ select.field-input {
 
 .humeur {
     width: 4rem;
+    position:absolute;
+    right: 0;
+    margin-top: -2.7rem;
 }
 .humeur button {
     height: 3.14rem;
     padding: 0;
+    background:transparent;
+    border-radius: 1rem;
 }
 .humeur button img {
     height: 2.8rem;
@@ -414,8 +419,11 @@ ul.humeurs {
     list-style: none;
     padding-left: 50%;
 }
-ul.humeurs li {
+ul.humeurs li 
+{
+	margin: 0;
     margin-left: -1.75rem;
+    padding: 0;
 }
 ul.humeurs img {
     width: 3.5rem;
@@ -428,10 +436,10 @@ ul.humeurs img {
 .popover {
     position: absolute;
     z-index: 1010;
-    max-width: 60%;
+    /*max-width: 60%;*/
     width: 8rem;
     left: 50%;
-    margin-left: -4rem;
+    margin-left: -7.2rem;
     padding: 1px;
     text-align: left;
     white-space: normal;
@@ -445,7 +453,8 @@ ul.humeurs img {
 }
 .popover.bottom .arrow {
     top: -11px;
-    left: 50%;
+    /*left: 50%;*/
+    right: 0.6rem;
     margin-left: -11px;
     border-bottom-color: #999999;
     border-bottom-color: rgba(0, 0, 0, 0.25);
@@ -472,8 +481,12 @@ ul.humeurs img {
     border-bottom: 1px solid #ebebeb;
     border-radius: 5px 5px 0 0;
 }
-/*.popover-content {
-    padding: 9px 14px;
+.events .popover-title {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+/*.popover-content li {
+    margin: 0;
 }*/
 
 .btn-photo > div
@@ -506,9 +519,14 @@ button.delete {
     position: relative;
     background-color: Transparent;
     list-style-type: none;
+    min-height: 100%;
 }
 .list li {
     background-color: #fff;
+}
+
+.list .no-item{
+    min-height: 5rem;
 }
 
 .list-inner {
@@ -630,7 +648,7 @@ h1 .li-thumb
 }
 .sub-header + div>#wrapper
 {
-	top: 8.3rem;
+	top: 6.3rem;
 }
 #content,
 #wrapper
@@ -689,9 +707,22 @@ nav.navigation h4 > i{
 	line-height: 2rem;
 	font-size: 1.2em;
 }
-.topcoat-list__header.now
+.events .now
 {
-	background-color: #FFDFE3;
+	/*background-color: #FFDFE3;*/
+	background-image: -ms-linear-gradient(right, #FFFFFF 0%, #FFDFE3 100%);
+	/* Mozilla Firefox */ 
+	background-image: -moz-linear-gradient(right, #FFFFFF 0%, #FFDFE3 100%);
+	/* Opera */ 
+	background-image: -o-linear-gradient(right, #FFFFFF 0%, #FFDFE3 100%);
+	/* Webkit (Safari/Chrome 10) */ 
+	background-image: -webkit-gradient(linear, right top, left top, color-stop(0, #FFFFFF), color-stop(1, #FFDFE3));
+	/* Webkit (Chrome 11+) */ 
+	background-image: -webkit-linear-gradient(right, #FFFFFF 0%, #FFDFE3 100%);
+	/* W3C Markup, IE10 Release Preview */ 
+	background-image: linear-gradient(to left, #FFFFFF 0%, #FFDFE3 100%);
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
 }
 
 .topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
@@ -823,6 +854,9 @@ nav.navigation h4 > i{
 	/*border: 2px solid rgb(102, 102, 102);*/
 	/*background: -webkit-radial-gradient( 21% 1%, ellipse farthest-corner, rgba(160, 155, 155, 1) -65%, rgb(245, 245, 245) 60% );*/
     background-color: transparent;
+}
+.events li:first-child{
+    min-height: 2.2rem;
 }
 /*.events li.topcoat-list__item:first-child {
     border: 2px solid rgb(102, 102, 102);

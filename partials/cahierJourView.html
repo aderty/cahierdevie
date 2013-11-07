@@ -14,32 +14,11 @@
             </a>
         </div>
     </div>
-    <h3 class="topcoat-list__header selection-date" ng-class="{'now':isCurrentDate()}">
-          <div class="center full">
-               Journ&eacute;e du {{currentCahier.date | datesimple}}
-          </div>
-    </h3>
     <div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
                 <i class="topcoat-icon plus-icon"></i>
             </button>
-        </div>
-        <div class="topcoat-button-bar__item humeur">
-            <button class="topcoat-button-bar__button full" ng-click="showHumeur()">
-                <img ng-src="{{currentCahier.humeur.img}}" />
-            </button>
-            <div class="popover bottom" ng-if="showSmiley">
-                <div class="arrow"></div>
-                <h3 class="popover-title">Humeur du jour</h3>
-                <div class="popover-content">
-                      <ul class="humeurs" >
-                        <li  ng-repeat="smiley in smileys" ng-click="editEvent(event)">
-                            <img ng-src="{{smiley.img}}" ng-click="setHumeur(smiley);$event.stopPropagation();" />
-                        </li>
-                      </ul>
-                </div>
-              </div>
         </div>
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full btn-send" ng-class="{'sync': currentCahier.lastSync != undefined}" ng-click="send()">
@@ -51,6 +30,25 @@
     <div class="topcoat-list__container list" >
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
+                <li class="topcoat-list__item loading" ng-class="{'now':isCurrentDate()}">
+                    <h3>Journ&eacute;e du {{currentCahier.date | datesimple}}</h3>
+                        <div class="humeur">
+                            <button ng-click="showHumeur()">
+                                <img ng-src="{{currentCahier.humeur.img}}" />
+                            </button>
+                            <div class="popover bottom" ng-if="showSmiley">
+                                <div class="arrow"></div>
+                                <h3 class="popover-title">Humeur du jour</h3>
+                                <div class="popover-content">
+                                    <ul class="humeurs">
+                                        <li ng-repeat="smiley in smileys" ng-click="editEvent(event)">
+                                            <img ng-src="{{smiley.img}}" ng-click="setHumeur(smiley);$event.stopPropagation();" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                </li>
                 <li class="topcoat-list__item loading" ng-if="!loaded">
                     <img src="img/ajax-loader.gif" /><span>Chargement...</span>
                 </li>
