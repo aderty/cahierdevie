@@ -920,7 +920,7 @@ nav.navigation h4 > i{
 .evts-photos > img,
 .evt-photos > img
 {
-	width: 62px;
+	/*width: 62px;*/
     height: 70px;
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
