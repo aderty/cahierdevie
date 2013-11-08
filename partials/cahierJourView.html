@@ -31,7 +31,7 @@
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
                 <li class="topcoat-list__item loading" ng-class="{'now':isCurrentDate()}">
-                    <h3>Journ&eacute;e du {{currentCahier.date | datesimple}}</h3>
+                    <h3>{{currentCahier.date | moment:'dddd D MMMM YYYY'}}</h3>
                         <div class="humeur">
                             <button ng-click="showHumeur()">
                                 <img ng-src="{{currentCahier.humeur.img}}" />

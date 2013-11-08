@@ -34,5 +34,11 @@ angular.module('myApp.filters', [])
         }
         return 'le ' + date.getDate() + '/' + month + '/' + date.getFullYear() || date.getYear();
     }
+}).
+filter('moment', function () {
+    return function (dateString, format) {
+        if (!dateString) return "";
+        return moment(dateString).format(format);
+    };
 });
 
