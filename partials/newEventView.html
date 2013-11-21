@@ -66,8 +66,23 @@
     </form>
 </div>
 </section>
-<nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
+<div ng-if="showPhotoMenu" class="overlay default dw-bottom dw-webkit">
+        <div class="dw-persp">
+            <div class="dwo"></div>
+            <div class="dw dwbg action-menu">
+                <span class="dwbw dwb-s action-btn">
+                    <a href="" class="dwb dwb-e action" role="button" ng-click="takePic(1)">Appareil photo</a>
+                </span>
+                <span class="dwbw dwb-c action-btn">
+                    <a href="" class="dwb dwb-e action" role="button" ng-click="takePic(0)">Ma biblioth&egrave;que</a>
+                </span>
+                <span class="dwbw dwb-c action-btn">
+                    <a href="" class="dwb dwb-e action" role="button" ng-click="takePic()">Annuler</a>
+                </span>
+            </div>
+        </div>
+</div>
 
-  <ng-include src="'partials/navigationMain.html'"></ng-include>
-
+<nav class="topcoat-list__container snapjs-left navigation" snap-drawer>
+      <ng-include src="'partials/navigationMain.html'"></ng-include>
 </nav>

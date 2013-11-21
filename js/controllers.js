@@ -316,6 +316,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Nouveau cahier";
+    
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
@@ -357,7 +358,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
         }
         navSvc.back();
     }
-    $scope.takePic = function(){
+    $scope.takePic = function () {
         var options = {
             quality: 45,
             destinationType: Camera.DestinationType.DATA_URL, //Camera.DestinationType.DATA_URL,
@@ -370,6 +371,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
     }
+    
     var onSuccess = function (imageData) {
         var image = document.createElement("img");
         image.onload = function () {
@@ -414,6 +416,8 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
+    $scope.showPhotoMenu = false;
+
     if (!$scope.event) {
         var heure = new Date().getHours();
         if(heure < 10){
@@ -435,11 +439,16 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     }
     $scope.$broadcast("refresh-scroll");
     
-    $scope.takePic = function () {
+    $scope.takePic = function (type) {
+        if (type === undefined) {
+            $scope.showPhotoMenu = !$scope.showPhotoMenu;
+            return;
+        }
+        $scope.showPhotoMenu = false;
         var options = {
             quality: 60,
             destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
-            sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
+            sourceType: type,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
             encodingType: 0,     // 0=JPG 1=PNG
             targetWidth: 1000,
             targetHeight: 1000,

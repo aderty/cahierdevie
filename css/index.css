@@ -323,6 +323,29 @@ select.field-input {
     box-shadow: inset 0 1px #fff;
 }
 
+.overlay .action-menu{
+    width: 100%;
+    left:10%;
+    top:auto;
+    bottom:3rem; 
+    background: transparent; 
+    text-align: center;
+}
+
+.overlay .action-btn{
+    width:80%;
+    display: block;
+    margin-bottom:1rem;
+}
+
+.overlay .action-btn .action.ng-click-active {
+    background: #3c7500;
+    background: linear-gradient(#94c840 50%,#3c7500 50%);
+    background: -webkit-gradient(linear,left bottom,left top,color-stop(0.5, #3c7500),color-stop(0.5, #94c840));
+    background: -webkit-linear-gradient(#94c840 50%,#3c7500 50%);
+    background: -moz-linear-gradient(#94c840 50%,#3c7500 50%);
+}
+
 .selection-date {
     line-height: 3rem;
     margin-top: 0;
