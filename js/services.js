@@ -625,6 +625,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                     defered.resolve(true);
                 });
             }, 1000);*/
+            var email = enfant.email, prenom = enfant.prenom;
             window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
                 fileSys.root.getDirectory(myFolderApp,
@@ -639,14 +640,15 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                         cahier.date = $filter("moment")(cahier.date, 'dddd D MMMM YYYY');
                                         cahier.events = orderBy(cahier.events, 'time');
                                         pictures = [];
-                                        cahier.prenom = enfant.prenom;
-                                        cahier.email = enfant.email;
+                                        cahier.prenom = prenom;
+                                        cahier.email = email;
                                         cahier.nbPictures = 0;
                                         var i = 0, l = cahier.events.length;
                                         for(;i<l;i++){
                                             cahier.nbPictures += cahier.events[i].pictures.length;
                                             pictures = pictures.concat(cahier.events[i].pictures);
                                         }
+                                        alert(cahier.prenom);
                                         writer.write(JSON.stringify(cahier));
                                         //writer.abort();
                                     }, function (error) {
