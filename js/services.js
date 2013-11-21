@@ -612,7 +612,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 }
             }
         },
-        send: function (email) {
+        send: function (enfant) {
             if (!current) {
                 alert("Pas de cahier");
                 return;
@@ -636,9 +636,11 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                             sendCahier(fileEntry);
                                         };
                                         cahier = angular.copy(current);
+                                        cahier.date = $filter("moment")(cahier.date, 'dddd D MMMM YYYY');
                                         cahier.events = orderBy(cahier.events, 'time');
                                         pictures = [];
-                                        cahier.email = email;
+                                        cahier.prenom = enfant.prenom;
+                                        cahier.email = enfant.email;
                                         cahier.nbPictures = 0;
                                         var i = 0, l = cahier.events.length;
                                         for(;i<l;i++){

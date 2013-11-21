@@ -238,7 +238,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
         }
         $scope.sending = true;
         $scope.labelTransmi = "Envoi...";
-        CahierService.send(EnfantService.getCurrent().email).then(function () {
+        CahierService.send(EnfantService.getCurrent()).then(function () {
             $scope.sending = false;
             $scope.currentCahier = CahierService.getCurrent();
             $scope.labelTransmi = "Envoyé !";
