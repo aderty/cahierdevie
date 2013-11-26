@@ -33,7 +33,7 @@
         <div class="panel-inner">
         <div class="center field photo-field first last" ng-show="currentPhoto != ''" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
             <div class="center">
-                <img class="evt-photo" ng-src="{{currentPhoto}}" />
+                <img class="evt-photo {{currentPhoto.dir}}" ng-src="{{currentPhoto.url}}" />
             </div>
         </div>
         </div>

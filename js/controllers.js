@@ -413,7 +413,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     };
 }
 
-function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout) {
+function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
@@ -456,14 +456,201 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         }
         // Take picture using device camera and retrieve image as base64-encoded string
         navigator.camera.getPicture(onSuccess, onFail, options);
+        //initFallBack();
+    }
+    
+    function initFallBack(){
+        function handleFileSelect(evt) {
+            var files = evt.target.files; // FileList object
+
+            // Loop through the FileList and render image files as thumbnails.
+            for (var i = 0, f; f = files[i]; i++) {
+               if(i == 3) return;
+              // Only process image files.
+              if (!f.type.match('image.*')) {
+                continue;
+              }
+
+              var reader = new FileReader();
+
+              // Closure to capture the file information.
+              reader.onload = (function(theFile) {
+                return function(e) {
+                  setTimeout((function(url){
+                      return function(){
+                        onSuccess(url);
+                      }
+                  })(e.target.result), 50);
+                };
+              })(f);
+
+              // Read in the image file as a data URL.
+              reader.readAsDataURL(f);
+            }
+      }
+
+      //document.getElementById('filesEvent').addEventListener('change', handleFileSelect, false);
+      $(document.getElementById('filesEvent')).one('change', handleFileSelect).click();
+  }
+  
+ /*var dataURLToBlob = function(dataURL) {
+    var BASE64_MARKER = ';base64,';
+    if (dataURL.indexOf(BASE64_MARKER) == -1) {
+      var parts = dataURL.split(',');
+      var contentType = parts[0].split(':')[1];
+      var raw = parts[1];
+
+      return new Blob([raw], {type: contentType});
     }
 
+    var parts = dataURL.split(BASE64_MARKER);
+    var contentType = parts[0].split(':')[1];
+    var raw = window.atob(parts[1]);
+    var rawLength = raw.length;
+
+    var uInt8Array = new Uint8Array(rawLength);
+
+    for (var i = 0; i < rawLength; ++i) {
+      uInt8Array[i] = raw.charCodeAt(i);
+    }
+
+    return new Blob([uInt8Array], {type: contentType});
+};*/
+    
+    function dataURItoBlob(dataURI, callback) {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs
+        var byteString = atob(dataURI.split(',')[1]);
+
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+        // write the bytes of the string to an ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return ia;
+        // write the ArrayBuffer to a blob, and you're done
+        /*var bb = new BlobBuilder();
+        bb.append(ab);
+        return bb.getBlob(mimeString);*/
+    };
+    
+    var lastName = "";
     var onSuccess = function (imageData) {
         console.log("On Success! ");
         //$scope.picData = "data:image/jpeg;base64," + imageData;
         /*$scope.imgs.push(imageData);
         $scope.$apply();*/
-        movePic(imageData);
+        var image = document.createElement("img");
+        image.onload = function () {
+            var maxWidth = 600,
+            maxHeight = 900,
+            imageWidth = this.width,
+            imageHeight = this.height,
+            portrait = true,
+            offsetX = 0,
+            offsetY = 0,
+            startX = 0,
+            startY = 0;
+
+            if (imageWidth > imageHeight) {
+                // On inverse
+                maxWidth = 900;
+                maxHeight = 600;
+                portrait = false;
+              if (imageWidth > maxWidth) {
+                imageHeight *= maxWidth / imageWidth;
+                imageWidth = maxWidth;
+              }
+            }
+            else {
+              if (imageHeight > maxHeight) {
+                imageWidth *= maxHeight / imageHeight;
+                imageHeight = maxHeight;
+              }
+            }
+            
+            var canvas = document.createElement('canvas');
+            canvas.width = maxWidth;
+            canvas.height = maxHeight;
+            
+            console.log("width : " + this.width);
+            console.log("height : " + this.height);
+
+            var context = canvas.getContext('2d');          
+            
+            this.width = imageWidth;
+            this.height = imageHeight;
+
+            if(this.width > maxWidth){
+                startX = (this.width - maxWidth) / 2;
+            }
+            else{
+                offsetX = - Math.round((this.width - maxWidth) / 2);
+            }
+            if(this.height > maxHeight){
+                startY = (this.height - maxHeight) / 2;
+            }
+            else{
+                offsetY = - Math.round((this.height - maxHeight) / 2);
+            }
+            
+            context.drawImage(this, startX, startY, imageWidth > maxWidth ? maxWidth: imageWidth, imageHeight > maxHeight ? maxHeight: imageHeight, offsetX, offsetY, this.width, this.height);
+            
+            var data = canvas.toDataURL('image/jpeg');
+            
+            //Canvas2Image.saveAsJPEG(canvas);return;
+            //data = data.replace("data:image/jpeg;", "");
+            var myFolderApp = "CahierDeVie";
+            
+            db.getFileSystem().then(function (fileSys) {
+                        fileSys.root.getDirectory(myFolderApp,
+                            { create: true, exclusive: false },
+                            function (directoryRoot) {
+                                directoryRoot.getDirectory(EnfantService.getCurrent().prenom + "_" + EnfantService.getCurrent().id,
+                                        { create: true, exclusive: false },
+                                        function (directory) {
+                                            var name = new Date().getTime() + ".jpeg";
+                                            if(name == lastName){
+                                                name = name.substring(0, name.indexOf(".")) + "_" + ".jpeg";
+                                            }
+                                            lastName = name;
+                                            console.log(name);
+                                            directoryRoot.getFile(name,
+                                                    { create: true , exclusive: false},
+                                                    function (fileEntry) {
+                                                        fileEntry.createWriter(function (writer) {
+                                                          writer.onwrite = function (evt) {
+                                                                successMove(fileEntry, portrait ? "portrait" : "paysage");
+                                                          };
+                                                          var blobData = dataURItoBlob(data);
+                                                          try{
+                                                            writer.write(blobData);
+                                                          }
+                                                          catch(e){
+                                                            writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
+                                                          }
+                                                          //writer.abort();
+                                                      }, function (error) {
+                                                             alert("create writer " + error.code);
+                                                      });
+                                                    },
+                                            resOnError);
+                                        },
+                                resOnError);
+                            },
+                            resOnError);
+                        
+            });
+        };
+        image.src = imageData;
+        
+        
+        
+        //movePic(imageData);
     };
     var onFail = function (e) {
         console.log("On fail " + e);
@@ -539,13 +726,18 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     }
 
     //Callback function when the file has been moved successfully - inserting the complete path
-    function successMove(entry) {
+    function successMove(entry, direction) {
         //I do my insert with "entry.fullPath" as for the path
-        $scope.event.pictures.push(entry.toURL());
+        console.log(entry.toURL());
+        console.log("direction : " + direction);
+        $scope.event.pictures.push({
+            url: entry.toURL(),
+            dir: direction 
+        });
         $timeout(function () {
             $scope.$broadcast("refresh-scroll");
         });
-        $scope.$apply();
+        //$scope.$apply();
     }
     function resOnError(error) {
         alert(error.code);
@@ -583,7 +775,7 @@ function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierServic
 
     $scope.deleteImg = function (index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cette photo ?")) return false;
-        deletePic($scope.event.pictures[index]);
+        deletePic($scope.event.pictures[index].url);
         $scope.event.pictures.splice(index, 1);
         if($scope.event.pictures.length){
             $scope.currentPhoto = $scope.event.pictures[0];

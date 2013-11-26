@@ -648,7 +648,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                             cahier.nbPictures += cahier.events[i].pictures.length;
                                             pictures = pictures.concat(cahier.events[i].pictures);
                                         }
-                                        alert(cahier.prenom);
                                         writer.write(JSON.stringify(cahier));
                                         //writer.abort();
                                     }, function (error) {
@@ -743,12 +742,12 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         var options = new FileUploadOptions();
         options.chunkedMode = false;
         options.fileKey = "file";
-        options.fileName = picture.substr(picture.lastIndexOf('/') + 1);
+        options.fileName = picture.url.substr(picture.url.lastIndexOf('/') + 1);
         options.mimeType = "image/jpeg";
 
         var ft = new FileTransfer();
         urlPicture = "http://" + ip + '/send-picture-cahier/';
-        ft.upload(picture, encodeURI(urlPicture + cahier.id), function (r) {
+        ft.upload(picture.url, encodeURI(urlPicture + cahier.id), function (r) {
             sendPicture();
         }, function (error) {
             try {
@@ -772,7 +771,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         if(event.pictures && event.pictures.length){
              var i=0, l = event.pictures.length;
              for(;i<l;i++){
-                  deletePic(event.pictures[i]);
+                  deletePic(event.pictures[i].url);
              }
         }
     }

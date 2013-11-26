@@ -41,7 +41,7 @@
          <div class="center field last" ng-if="event.pictures.length > 0" ng-click="showPhotos()">
             <span class="field-label">Photos</span>
             <div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
-                <img class="evt-photo-item" ng-src="{{picData}}" />
+                <img class="evt-photo-item" ng-src="{{picData.url}}" />
             </div> 
         </div>
         <div class="center field titre first">
@@ -82,7 +82,7 @@
             </div>
         </div>
 </div>
-
+<input type="file" id="filesEvent" name="files[]" multiple />
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer>
       <ng-include src="'partials/navigationMain.html'"></ng-include>
 </nav>
