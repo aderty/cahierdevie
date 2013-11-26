@@ -38,7 +38,6 @@ myApp.initialize = function () {
     }, 150);
 }
 myApp.initDB = function() {
-    alert("initdB");
     $.indexedDB("cahierdevie", {
         "schema": {
             "1": function(versionTransaction) {
@@ -83,7 +82,7 @@ myApp.initDB = function() {
             document.body.removeChild(myApp.modal);
         }, 200);
         window.onerror = function(e, f, l) {
-            alert(e);
+            alert(JSON.stringify(e));
             //alert(e.stack + " \n file : " + f + " \n ligne :" + l);
         }
     }, function() {
