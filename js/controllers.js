@@ -540,7 +540,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     
     var lastName = "";
     var onSuccess = function (imageData) {
-        alert(imageData);
         console.log("On Success! ");
         //$scope.picData = "data:image/jpeg;base64," + imageData;
         /*$scope.imgs.push(imageData);
@@ -620,16 +619,17 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                             }
                                             lastName = name;
                                             console.log(name);
-                                            directoryRoot.getFile(name,
+                                            directory.getFile(name,
                                                     { create: true , exclusive: false},
                                                     function (fileEntry) {
                                                         fileEntry.createWriter(function (writer) {
-                                                          writer.onwrite = function (evt) {
+                                                            writer.onwrite = function (evt) {
+                                                                alert("success");
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                           };
                                                           var blobData = dataURItoBlob(data);
                                                           try{
-                                                              writer.write(new Blob([blobData], { type: 'image/jpeg' })); //writer.write(blobData);
+                                                              writer.write(blobData);
                                                           }
                                                           catch(e){
                                                             writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
