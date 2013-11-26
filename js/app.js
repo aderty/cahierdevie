@@ -41,7 +41,6 @@ myApp.initDB = function() {
     $.indexedDB("cahierdevie", {
         "schema": {
             "1": function (versionTransaction) {
-                alert("schema");
                 /*var catalog = versionTransaction.createObjectStore("enfants", {
                 "autoIncrement": true,
                 "keyPath": "id"
