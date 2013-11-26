@@ -38,7 +38,7 @@ myApp.initialize = function () {
     }, 150);
 }
 myApp.initDB = function() {
-    
+    alert("initdB");
     $.indexedDB("cahierdevie", {
         "schema": {
             "1": function(versionTransaction) {
