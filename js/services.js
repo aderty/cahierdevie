@@ -191,9 +191,9 @@ myApp.factory('db', function ($q) {
           return $.indexedDB("cahierdevie");
       },
       getFileSystem: function(){     
-          if (webkitStorageInfo) {
-            webkitStorageInfo.requestQuota(
-              webkitStorageInfo.PERSISTENT,
+          if (window.webkitStorageInfo) {
+              window.webkitStorageInfo.requestQuota(
+              window.webkitStorageInfo.PERSISTENT,
 
               QUOTA, // amount of bytes you need
 
