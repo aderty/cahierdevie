@@ -53,7 +53,31 @@
     <preference name="android-windowSoftInputMode" value="adjustResize" />
 
     <content src="index.html" />
-
+  
+  <feature name="Device">
+    <param name="android-package" value="org.apache.cordova.Device" />
+    <param name="ios-package" value="CDVDevice" />
+  </feature>
+  <feature name="File">
+    <param name="android-package" value="org.apache.cordova.FileUtils" />
+    <param name="ios-package" value="CDVFile" />
+  </feature>
+  <feature name="FileTransfer">
+    <param name="android-package" value="org.apache.cordova.FileTransfer" />
+    <param name="ios-package" value="CDVFileTransfer" />
+  </feature>
+  <feature name="Storage">
+    <param name="android-package" value="org.apache.cordova.Storage" />
+  </feature>
+  <feature name="Camera">
+    <param name="android-package" value="org.apache.cordova.CameraLauncher" />
+    <param name="ios-package" value="CDVCamera" />
+  </feature>
+  <feature name="Capture">
+    <param name="android-package" value="org.apache.cordova.Capture" />
+    <param name="ios-package" value="CDVCapture" />
+  </feature>
+  
     <plugins>
         <plugin name="Device" value="CDVDevice" />
         <plugin name="Logger" value="CDVLogger" />

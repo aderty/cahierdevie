@@ -40,7 +40,8 @@ myApp.initialize = function () {
 myApp.initDB = function() {
     $.indexedDB("cahierdevie", {
         "schema": {
-            "1": function(versionTransaction) {
+            "1": function (versionTransaction) {
+                alert("schema");
                 /*var catalog = versionTransaction.createObjectStore("enfants", {
                 "autoIncrement": true,
                 "keyPath": "id"
@@ -82,7 +83,7 @@ myApp.initDB = function() {
             document.body.removeChild(myApp.modal);
         }, 200);
         window.onerror = function(e, f, l) {
-            alert(JSON.stringify(e));
+            alert(JSON.stringify(arguments));
             //alert(e.stack + " \n file : " + f + " \n ligne :" + l);
         }
     }, function() {
