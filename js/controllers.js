@@ -531,7 +531,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return ab;
+        return ia;
         // write the ArrayBuffer to a blob, and you're done
         /*var bb = new BlobBuilder();
         bb.append(ab);
@@ -647,11 +647,11 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                         
             });
         };
-        image.src = imageData;
+        //image.src = imageData;
         
         
         
-        //movePic(imageData);
+        movePic(imageData);
     };
     var onFail = function (e) {
         console.log("On fail " + e);
