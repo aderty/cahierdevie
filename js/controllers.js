@@ -629,7 +629,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                           };
                                                           var blobData = dataURItoBlob(data);
                                                           try{
-                                                              writer.write(blobData);
+                                                              writer.write(new Blob([blobData], {type: 'application/octet-binary'}));
                                                           }
                                                           catch(e){
                                                               writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
