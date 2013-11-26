@@ -540,6 +540,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     
     var lastName = "";
     var onSuccess = function (imageData) {
+        alert(imageData);
         console.log("On Success! ");
         //$scope.picData = "data:image/jpeg;base64," + imageData;
         /*$scope.imgs.push(imageData);
@@ -628,7 +629,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                           };
                                                           var blobData = dataURItoBlob(data);
                                                           try{
-                                                            writer.write(blobData);
+                                                              writer.write(new Blob([blobData], { type: 'image/jpeg' })); //writer.write(blobData);
                                                           }
                                                           catch(e){
                                                             writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
