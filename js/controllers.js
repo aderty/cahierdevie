@@ -531,7 +531,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return ia;
+        return ab;
         // write the ArrayBuffer to a blob, and you're done
         /*var bb = new BlobBuilder();
         bb.append(ab);
@@ -632,7 +632,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                               writer.write(blobData);
                                                           }
                                                           catch(e){
-                                                            writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
+                                                              writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
                                                           }
                                                           //writer.abort();
                                                       }, function (error) {
