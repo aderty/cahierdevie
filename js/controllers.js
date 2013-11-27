@@ -400,7 +400,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 
             context.drawImage(this, offsetX, offsetY, imageWidth, imageHeight);
             var data = canvas.toDataURL('image/jpeg');
-            alert(data);
+            
             $scope.$apply(function(){
                 $scope.enfant.photo = data;
             });
@@ -454,9 +454,13 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             targetHeight: 1000,
             correctOrientation: true
         }
-        // Take picture using device camera and retrieve image as base64-encoded string
-        navigator.camera.getPicture(onSuccess, onFail, options);
-        //initFallBack();
+        if (inApp) {
+            // Take picture using device camera and retrieve image as base64-encoded string
+            navigator.camera.getPicture(onSuccess, onFail, options);
+        }
+        else {
+            initFallBack();
+        }
     }
     
     function initFallBack(){
@@ -602,8 +606,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             context.drawImage(this, startX, startY, imageWidth > maxWidth ? maxWidth: imageWidth, imageHeight > maxHeight ? maxHeight: imageHeight, offsetX, offsetY, this.width, this.height);
             
             var data = canvas.toDataURL('image/jpeg');
-
-            alert(data);
             
             //Canvas2Image.saveAsJPEG(canvas);return;
             //data = data.replace("data:image/jpeg;", "");
@@ -631,7 +633,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                           };
                                                             var blobData = dataURItoBlob(data);
-                                                            alert(blobData);
+                                                            alert(blobData.length);
                                                           try{
                                                               writer.write(new Blob([blobData], {type: 'application/octet-binary'}));
                                                           }

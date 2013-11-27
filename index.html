@@ -65,8 +65,8 @@
         <script src="js/directives.js"></script>
 
         <script type="text/javascript">
-            var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
-            if (app) {
+            var inApp = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+            if (inApp) {
                 // PhoneGap application
                 document.addEventListener('deviceready', start, false);
             } else {
