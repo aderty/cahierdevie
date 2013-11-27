@@ -650,11 +650,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                         
             });
         };
-        //image.src = imageData;
-        
-        
-        
-        movePic(imageData);
+        image.src = imageData;
+        //movePic(imageData);
     };
     var onFail = function (e) {
         console.log("On fail " + e);
