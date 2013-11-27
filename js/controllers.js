@@ -400,7 +400,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
 
             context.drawImage(this, offsetX, offsetY, imageWidth, imageHeight);
             var data = canvas.toDataURL('image/jpeg');
-            
+            alert(data);
             $scope.$apply(function(){
                 $scope.enfant.photo = data;
             });
@@ -581,7 +581,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             console.log("height : " + this.height);
 
             var context = canvas.getContext('2d');          
-            
+            context.clearRect(0, 0, maxWidth, maxHeight);
+
             this.width = imageWidth;
             this.height = imageHeight;
 
