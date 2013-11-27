@@ -632,11 +632,24 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                             writer.onwrite = function (evt) {
                                                                 alert("success");
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
-                                                          };
+                                                            };
+                                                            console.log("atob");
+                                                            var byteString = atob(data.split(',')[1]);
+                                                            console.log("byteString");
+                                                            // separate out the mime component
+                                                            var mimeString = data.split(',')[0].split(':')[1].split(';')[0]
+                                                            console.log(byteString.length);
+                                                            // write the bytes of the string to an ArrayBuffer
+                                                            var ab = new ArrayBuffer(byteString.length);
+                                                            console.log(ab);
+                                                            var ia = new Uint8Array(ab);
+                                                            for (var i = 0; i < byteString.length; i++) {
+                                                                ia[i] = byteString.charCodeAt(i);
+                                                            }
                                                             var blobData = dataURItoBlob(data);
-                                                            alert(blobData.length);
+                                                            alert(ab.length);
                                                           try{
-                                                              writer.write(blobData);
+                                                              writer.write(ab);
                                                           }
                                                             catch (e) {
                                                                 alert(JSON.stringify(e));
