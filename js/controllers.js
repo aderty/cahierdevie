@@ -454,7 +454,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             targetHeight: 1000,
             correctOrientation: true
         }
-        if (inApp) {
+        if (myApp.isPhone) {
             // Take picture using device camera and retrieve image as base64-encoded string
             navigator.camera.getPicture(onSuccess, onFail, options);
         }
@@ -520,19 +520,18 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
 
     return new Blob([uInt8Array], {type: contentType});
 };*/
-    
+    var byteString, mimeString, ab, ia, blobData;
     function dataURItoBlob(dataURI, callback) {
         // convert base64 to raw binary data held in a string
         // doesn't handle URLEncoded DataURIs
-        var byteString = atob(dataURI.split(',')[1]);
+        byteString = atob(dataURI.split(',')[1]);
 
         // separate out the mime component
-        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-        console.log(byteString.length);
+        mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
         // write the bytes of the string to an ArrayBuffer
-        var ab = new ArrayBuffer(byteString.length);
-        console.log(ab);
-        var ia = new Uint8Array(ab);
+        ab = new ArrayBuffer(byteString.length);
+        ia = new Uint8Array(ab);
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
@@ -634,7 +633,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                             };
                                                            
-                                                          var blobData = dataURItoBlob(data);
+                                                          blobData = dataURItoBlob(data);
                                                           try{
                                                               writer.write(blobData);
                                                           }
