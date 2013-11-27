@@ -536,7 +536,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
         }
-        return ab;
+        return ia;
         // write the ArrayBuffer to a blob, and you're done
         /*var bb = new BlobBuilder();
         bb.append(ab);
@@ -633,28 +633,13 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                                 alert("success");
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                             };
-                                                            alert("atob");
-                                                            var byteString = atob(data.split(',')[1]);
-                                                            alert("byteString");
-                                                            // separate out the mime component
-                                                            var mimeString = data.split(',')[0].split(':')[1].split(';')[0]
-                                                            alert(byteString.length);
-                                                            alert(byteString.charCodeAt);
-                                                            // write the bytes of the string to an ArrayBuffer
-                                                            var ab = new ArrayBuffer(byteString.length);
-                                                            alert(ab);
-                                                            var ia = new Uint8Array(ab);
-                                                            for (var i = 0; i < byteString.length; i++) {
-                                                                ia[i] = byteString.charCodeAt(i);
-                                                            }
-                                                            //var blobData = dataURItoBlob(data);
-                                                            alert(ab.length);
-                                                            alert(ia.length);
+                                                           
+                                                          var blobData = dataURItoBlob(data);
                                                           try{
-                                                              writer.write(ab);
+                                                              writer.write(blobData);
                                                           }
                                                             catch (e) {
-                                                                alert(JSON.stringify(e));
+                                                              alert(e);
                                                               writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
                                                           }
                                                           //writer.abort();
