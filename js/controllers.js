@@ -447,7 +447,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.showPhotoMenu = false;
         var options = {
             quality: 60,
-            destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
+            destinationType: Camera.DestinationType.DATA_URL, //Camera.DestinationType.DATA_URL,
             sourceType: type,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
             encodingType: 0,     // 0=JPG 1=PNG
             targetWidth: 1000,
@@ -528,9 +528,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
 
         // separate out the mime component
         var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-
+        console.log(byteString.length);
         // write the bytes of the string to an ArrayBuffer
         var ab = new ArrayBuffer(byteString.length);
+        console.log(ab);
         var ia = new Uint8Array(ab);
         for (var i = 0; i < byteString.length; i++) {
             ia[i] = byteString.charCodeAt(i);
@@ -654,7 +655,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                         
             });
         };
-        image.src = imageData;
+        image.src = "data:image/jpeg;base64," + imageData;
         //movePic(imageData);
     };
     var onFail = function (e) {
