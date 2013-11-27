@@ -80,6 +80,7 @@ myApp.initDB = function() {
             //downloadCatalog();
             $("html").addClass("ready");
             document.body.removeChild(myApp.modal);
+            angular.bootstrap(document, ['myApp']);
         }, 200);
         window.onerror = function(e, f, l) {
             alert(JSON.stringify(arguments));

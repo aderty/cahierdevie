@@ -601,6 +601,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             context.drawImage(this, startX, startY, imageWidth > maxWidth ? maxWidth: imageWidth, imageHeight > maxHeight ? maxHeight: imageHeight, offsetX, offsetY, this.width, this.height);
             
             var data = canvas.toDataURL('image/jpeg');
+
+            alert(data);
             
             //Canvas2Image.saveAsJPEG(canvas);return;
             //data = data.replace("data:image/jpeg;", "");
@@ -627,7 +629,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                                 alert("success");
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                           };
-                                                          var blobData = dataURItoBlob(data);
+                                                            var blobData = dataURItoBlob(data);
+                                                            alert(blobData);
                                                           try{
                                                               writer.write(new Blob([blobData], {type: 'application/octet-binary'}));
                                                           }
