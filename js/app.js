@@ -11,7 +11,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
     .config(function ($compileProvider){
         //$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
-        //$compileProvider.imgSrcSanitizationWhitelist(/^\s*(filesystem|filesystem:http):/);
+        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|filesystem:http):/);
     })
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'MainCtrl' });
@@ -22,6 +22,26 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewAbout', { templateUrl: 'partials/aboutView.html' });
         $routeProvider.otherwise({redirectTo: '/'});
     }]);
+
+myApp.isPhone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+
+if (myApp.isPhone) {
+    // PhoneGap application
+    var QUOTA = 0;
+} else {
+    // Web page
+    var QUOTA = 4 * 1024 * 1024;
+    if (window.webkitStorageInfo) {
+        window.webkitStorageInfo.requestQuota(window.webkitStorageInfo.PERSISTENT, QUOTA, // amount of bytes you need
+            function (availableBytes) {
+                // you can use the filesystem now
+            }
+        );
+    }
+      if (window.webkitRequestFileSystem) {
+            window.requestFileSystem = window.webkitRequestFileSystem;
+      }
+}
 
 function createModal() {
     var modal = document.createElement("div");

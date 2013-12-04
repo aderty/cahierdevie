@@ -182,7 +182,7 @@ myApp.factory('db', function ($q) {
     function resOnError(error) {
         alert(error.code);
     }
-    var QUOTA = 0;//4 * 1024 * 1024;
+    
     var fileSystem = null;
     var entryEnfants = null;
     var enfantsDir = {};
@@ -815,7 +815,7 @@ myApp.factory('EventService', function ($q, db) {
 
 
 
-myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config) {
+myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config, EnfantService) {
 
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
@@ -841,29 +841,39 @@ myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config)
     var defered = $q.defer();
     var cahier;
     var pictures = [];
-    function sendCahier(fileEntry) {
-        var hash;
-        alert("send photo");
-        var reader = new FileReader();
-        //asnycrhonous task has finished, fire the event:
-        reader.onloadend = function (evt) {
-            dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
-                if (err) return console.error(err);
-                alert("send ok !");
-                if (fn) fn(err, data);
-                // Move it into the Public directory.
-                /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
-                    if (err) return console.error(err)
+    function sendCahier(fileEntry, fn) {
         
-                    // Delete the file.
-                    dropbox.remove('Public/foo.txt', function (err, data) {
-                        if (err) console.error(err.stack)
-                        console.log("ok");
-                    })
-                })*/
-            });
-        };
-        reader.readAsArrayBuffer(fileEntry);
+        fileEntry.file(function (file) {
+            var hash;
+            var reader = new FileReader();
+            //asnycrhonous task has finished, fire the event:
+            reader.onloadend = function (evt) {
+                alert("onloadend");
+                var path = EnfantService.getCurrent().prenom + EnfantService.getCurrent().id + '/' + file.name;
+                //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
+                dropbox.writeFile(path, evt.target.result, function (err, data) {
+                    if (err) return console.error(err);
+                    alert("send ok !");
+                    if (fn) fn(err, data);
+                    // Move it into the Public directory.
+                    /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
+                        if (err) return console.error(err)
+            
+                        // Delete the file.
+                        dropbox.remove('Public/foo.txt', function (err, data) {
+                            if (err) console.error(err.stack)
+                            console.log("ok");
+                        })
+                    })*/
+                });
+            };
+            reader.onerror = function (e) {
+                alert(e);
+            }
+            reader.readAsArrayBuffer(file);
+            //reader.readAsBinaryString(fileEntry);
+        });
+        
     }
 
     function resOnError(error) {

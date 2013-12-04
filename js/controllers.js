@@ -487,7 +487,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                   })(e.target.result), 50);
                 };
               })(f);
-
+              //PhotoService.send(f);
               // Read in the image file as a data URL.
               reader.readAsDataURL(f);
             }
@@ -576,9 +576,14 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                 imageHeight = maxHeight;
               }
             }*/
-            window.resolveLocalFileSystemURI(imageData, function(fileEntry){resolveOnSuccess(fileEntry, portrait ? "portrait" : "paysage");}, resOnError);
-            
-            /*var canvas = document.createElement('canvas');
+            if (myApp.isPhone) {
+                window.resolveLocalFileSystemURI(imageData, function (fileEntry) {
+                    resolveOnSuccess(fileEntry, portrait ? "portrait" : "paysage");
+                }, resOnError);
+                return;
+            }
+
+            var canvas = document.createElement('canvas');
             canvas.width = maxWidth;
             canvas.height = maxHeight;
             
@@ -606,7 +611,8 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             
             context.drawImage(this, startX, startY, imageWidth > maxWidth ? maxWidth: imageWidth, imageHeight > maxHeight ? maxHeight: imageHeight, offsetX, offsetY, this.width, this.height);
             
-            var data = canvas.toDataURL('image/jpeg');
+            //var data = canvas.toDataURL('image/jpeg');
+            var data = imageData;
             
             //Canvas2Image.saveAsJPEG(canvas);return;
             //data = data.replace("data:image/jpeg;", "");
@@ -630,7 +636,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                     function (fileEntry) {
                                                         fileEntry.createWriter(function (writer) {
                                                             writer.onwrite = function (evt) {
-                                                                alert("success");
                                                                 successMove(fileEntry, portrait ? "portrait" : "paysage");
                                                             };
                                                            
@@ -639,7 +644,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                                               writer.write(blobData);
                                                           }
                                                             catch (e) {
-                                                              alert(e);
                                                               writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
                                                           }
                                                           //writer.abort();
@@ -653,8 +657,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                             },
                             resOnError);
                         
-            });*/
+            });
         };
+
         image.src = imageData;
         //movePic(imageData);
     };
