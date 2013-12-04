@@ -586,12 +586,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 $timeout(function () {
                     defered.resolve(true);
                 });
-                var i = 0, l = cahier.events.length, imgs = [];
+                var i = 0, l = cahier.events.length, imgs = [], path;
                 for (; i < l; i++) {
                     var j = 0, k = cahier.events[i].pictures.length;
                     for (; j < k; j++) {
                         if (!cahier.events[i].pictures[j].sync && cahier.events[i].pictures[j].path) {
-                            imgs.push(cahier.events[i].pictures[j].path);
+                            path = cahier.events[i].pictures[j].path;
+                            path = path.substring(path.lastIndexOf('/') + 1);
+                            imgs.push(path);
                         }
                     }
                 }
@@ -603,10 +605,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id,
                                         { create: true, exclusive: false },
                                         function (directory) {
-
                                             i = 0, l = imgs.length;
                                             for (; i < l; i++) {
-                                                alert(imgs[i]);
                                                 directory.getFile(imgs[i], { create: false }, function (fileEntry) {
                                                     DropBoxService.send(enfant, fileEntry);
                                                 }, function (error) {
