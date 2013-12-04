@@ -580,24 +580,33 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
-        save: function (cahier) {
+        save: function (enfant, cahier) {
             var defered = $q.defer();
             return db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
                 });
-                var i = 0, l = cahier.events.length;
+                var i = 0, l = cahier.events.length, imgs = [];
                 for (; i < l; i++) {
                     var j = 0, k = cahier.events[i].pictures.length;
                     for (; j < k; j++) {
-                        if (!cahier.events[i].pictures[j].sync) {
-                            window.resolveLocalFileSystemURI(cahier.events[i].pictures[j].url, function (fileEntry) {
-                                DropBoxService.send(fileEntry);
-                            }, resOnError);
+                        if (!cahier.events[i].pictures[j].sync && cahier.events[i].pictures[j].path) {
+                            imgs.push(cahier.events[i].pictures[j].path);
                         }
                     }
                 }
-                DropBoxService.send(cahier);
+                
+                db.getFileSystem().then(function (fileSys) {
+                    i = 0, l = imgs.length;
+                    for (; i < l; i++) {
+                        fileSys.root.getFile(imgs[i], { create: false }, function (fileEntry) {
+                            DropBoxService.send(enfant, fileEntry);
+                        }, function (error) {
+                            alert("create writer " + error.code);
+                        });
+                    }
+                });
+                DropBoxService.send(enfant, cahier);
             }).fail(function (e, l, f) {
                 alert(e.stack + " \n file : " + f + " \n ligne :" + l);
             });
@@ -827,7 +836,7 @@ myApp.factory('EventService', function ($q, db) {
 
 
 
-myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config, EnfantService) {
+myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config) {
 
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
@@ -844,12 +853,12 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     });
 
     var me = {
-        send: function (fileEntry) {
-            if (typeof fileEntry == "object") {
-                sendCahier(cahier);
+        send: function (enfant, fileEntry) {
+            if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                sendCahier(enfant, fileEntry);
                 return;
             }
-            sendPhoto(fileEntry);
+            sendPhoto(enfant, fileEntry);
         }
     }
 
@@ -857,8 +866,8 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     var defered = $q.defer();
     var cahier;
     var pictures = [];
-    function sendCahier(cahier, fn) {
-        var path = EnfantService.getCurrent().prenom + EnfantService.getCurrent().id + '/' + cahier.id;
+    function sendCahier(enfant, cahier, fn) {
+        var path = enfant.prenom + enfant.id + '/' + cahier.id + '.json';
         //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
         dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
             if (err) return console.error(err);
@@ -877,13 +886,13 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     }
 
-    function sendPhoto(fileEntry, fn) {
+    function sendPhoto(enfant, fileEntry, fn) {
         fileEntry.file(function (file) {
             var hash;
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
             reader.onloadend = function (evt) {
-                var path = EnfantService.getCurrent().prenom + EnfantService.getCurrent().id + '/' + file.name;
+                var path = enfant.prenom + enfant.id + '/' + file.name;
                 //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
                     if (err) return console.error(err);

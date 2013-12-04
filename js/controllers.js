@@ -413,7 +413,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     };
 }
 
-function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db, PhotoService) {
+function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
@@ -671,6 +671,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         if(!event.title || event.title == ""){
             return alert("Veuillez saisir un titre.");
         }
+        var enfant = EnfantService.getCurrent();
         var cahier = CahierService.getCurrent();
         if (event.creation) {
             delete event.creation;
@@ -681,7 +682,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                 pictures: event.pictures
             });
         }
-        CahierService.save(cahier).then(function () {
+        CahierService.save(enfant, cahier).then(function () {
             $scope.$apply();
         });
         navSvc.back();
@@ -742,6 +743,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         console.log("direction : " + direction);
         $scope.event.pictures.push({
             url: entry.toURL(),
+            path: entry.fullPath,
             dir: direction,
             sync: false
         });
