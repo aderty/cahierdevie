@@ -597,14 +597,28 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 }
                 
                 db.getFileSystem().then(function (fileSys) {
-                    i = 0, l = imgs.length;
-                    for (; i < l; i++) {
-                        fileSys.root.getFile(imgs[i], { create: false }, function (fileEntry) {
-                            DropBoxService.send(enfant, fileEntry);
-                        }, function (error) {
-                            alert("create writer " + error.code);
-                        });
-                    }
+                    fileSys.root.getDirectory(myFolderApp,
+                            { create: true, exclusive: false },
+                            function (directoryRoot) {
+                                directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id,
+                                        { create: true, exclusive: false },
+                                        function (directory) {
+
+                                            i = 0, l = imgs.length;
+                                            for (; i < l; i++) {
+                                                alert(imgs[i]);
+                                                directory.getFile(imgs[i], { create: false }, function (fileEntry) {
+                                                    DropBoxService.send(enfant, fileEntry);
+                                                }, function (error) {
+                                                    alert("getFile " + error.code);
+                                                });
+                                            }
+                                        }, function (error) {
+                                            alert("get folder app " + error.code);
+                                        });
+                            }, function (error) {
+                                alert("get folder " + error.code);
+                            });
                 });
                 DropBoxService.send(enfant, cahier);
             }).fail(function (e, l, f) {
