@@ -487,7 +487,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                   })(e.target.result), 50);
                 };
               })(f);
-              //PhotoService.send(f);
               // Read in the image file as a data URL.
               reader.readAsDataURL(f);
             }
@@ -743,12 +742,13 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         console.log("direction : " + direction);
         $scope.event.pictures.push({
             url: entry.toURL(),
-            dir: direction 
+            dir: direction,
+            sync: false
         });
         $timeout(function () {
             $scope.$broadcast("refresh-scroll");
         });
-        PhotoService.send(entry);
+        //PhotoService.send(entry);
         //$scope.$apply();
     }
     function resOnError(error) {

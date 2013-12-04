@@ -505,7 +505,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     }
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config) {
+myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config, DropBoxService) {
     var orderBy = $filter('orderBy');
     var cahierChangeCb = [];
     var ip = config.getUrlUpload();
@@ -586,6 +586,18 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 $timeout(function () {
                     defered.resolve(true);
                 });
+                var i = 0, l = cahier.events.length;
+                for (; i < l; i++) {
+                    var j = 0, k = cahier.events[i].pictures.length;
+                    for (; j < k; j++) {
+                        if (!cahier.events[i].pictures[j].sync) {
+                            window.resolveLocalFileSystemURI(cahier.events[i].pictures[j].url, function (fileEntry) {
+                                DropBoxService.send(fileEntry);
+                            }, resOnError);
+                        }
+                    }
+                }
+                DropBoxService.send(cahier);
             }).fail(function (e, l, f) {
                 alert(e.stack + " \n file : " + f + " \n ligne :" + l);
             });
@@ -815,7 +827,7 @@ myApp.factory('EventService', function ($q, db) {
 
 
 
-myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config, EnfantService) {
+myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config, EnfantService) {
 
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
@@ -833,7 +845,11 @@ myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config,
 
     var me = {
         send: function (fileEntry) {
-            sendCahier(fileEntry);
+            if (typeof fileEntry == "object") {
+                sendCahier(cahier);
+                return;
+            }
+            sendPhoto(fileEntry);
         }
     }
 
@@ -841,19 +857,36 @@ myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config,
     var defered = $q.defer();
     var cahier;
     var pictures = [];
-    function sendCahier(fileEntry, fn) {
-        
+    function sendCahier(cahier, fn) {
+        var path = EnfantService.getCurrent().prenom + EnfantService.getCurrent().id + '/' + cahier.id;
+        //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
+        dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
+            if (err) return console.error(err);
+            if (fn) fn(err, data);
+            // Move it into the Public directory.
+            /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
+                if (err) return console.error(err)
+    
+                // Delete the file.
+                dropbox.remove('Public/foo.txt', function (err, data) {
+                    if (err) console.error(err.stack)
+                    console.log("ok");
+                })
+            })*/
+        });
+
+    }
+
+    function sendPhoto(fileEntry, fn) {
         fileEntry.file(function (file) {
             var hash;
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
             reader.onloadend = function (evt) {
-                alert("onloadend");
                 var path = EnfantService.getCurrent().prenom + EnfantService.getCurrent().id + '/' + file.name;
                 //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
                     if (err) return console.error(err);
-                    alert("send ok !");
                     if (fn) fn(err, data);
                     // Move it into the Public directory.
                     /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
@@ -871,7 +904,6 @@ myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config,
                 alert(e);
             }
             reader.readAsArrayBuffer(file);
-            //reader.readAsBinaryString(fileEntry);
         });
         
     }
