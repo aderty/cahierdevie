@@ -815,3 +815,67 @@ myApp.factory('EventService', function ($q, db) {
 
 
 
+myApp.factory('PhotoService', function ($q, $http, $timeout, $rootScope, config) {
+
+    var DROPBOX_APP_KEY = "e42anle8lkz6hww";
+    var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
+    var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
+    var TOKEN = "TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";
+    var UID = "242955592";
+
+    var dropbox = new Dropbox.Client({
+        key: DROPBOX_APP_KEY,
+        secret: DROPBOX_APP_SECRET,
+        sandbox: false,
+        token: TOKEN,
+        uid: UID
+    });
+
+    var me = {
+        send: function (fileEntry) {
+            sendCahier(fileEntry);
+        }
+    }
+
+ 
+    var defered = $q.defer();
+    var cahier;
+    var pictures = [];
+    function sendCahier(fileEntry) {
+        var hash;
+        alert("send photo");
+        var reader = new FileReader();
+        //asnycrhonous task has finished, fire the event:
+        reader.onloadend = function (evt) {
+            dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
+                if (err) return console.error(err);
+                alert("send ok !");
+                if (fn) fn(err, data);
+                // Move it into the Public directory.
+                /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
+                    if (err) return console.error(err)
+        
+                    // Delete the file.
+                    dropbox.remove('Public/foo.txt', function (err, data) {
+                        if (err) console.error(err.stack)
+                        console.log("ok");
+                    })
+                })*/
+            });
+        };
+        reader.readAsArrayBuffer(fileEntry);
+    }
+
+    function resOnError(error) {
+        alert(error.code);
+    }
+
+    function win(r) {
+        alert(ok);
+        console.log("Code = " + r.responseCode);
+        console.log("Response = " + r.response);
+        console.log("Sent = " + r.bytesSent);
+    }
+
+    return me;
+});

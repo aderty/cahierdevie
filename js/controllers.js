@@ -413,7 +413,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     };
 }
 
-function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
+function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db, PhotoService) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
@@ -447,7 +447,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.showPhotoMenu = false;
         var options = {
             quality: 60,
-            destinationType: Camera.DestinationType.DATA_URL, //Camera.DestinationType.DATA_URL,
+            destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: type,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
             encodingType: 0,     // 0=JPG 1=PNG
             targetWidth: 1000,
@@ -565,19 +565,20 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                 maxWidth = 900;
                 maxHeight = 600;
                 portrait = false;
-              if (imageWidth > maxWidth) {
+              /*if (imageWidth > maxWidth) {
                 imageHeight *= maxWidth / imageWidth;
                 imageWidth = maxWidth;
-              }
+              }*/
             }
-            else {
+            /*else {
               if (imageHeight > maxHeight) {
                 imageWidth *= maxHeight / imageHeight;
                 imageHeight = maxHeight;
               }
-            }
+            }*/
+            window.resolveLocalFileSystemURI(imageData, function(fileEntry){resolveOnSuccess(fileEntry, portrait ? "portrait" : "paysage");}, resOnError);
             
-            var canvas = document.createElement('canvas');
+            /*var canvas = document.createElement('canvas');
             canvas.width = maxWidth;
             canvas.height = maxHeight;
             
@@ -652,9 +653,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                             },
                             resOnError);
                         
-            });
+            });*/
         };
-        image.src = "data:image/jpeg;base64," + imageData;
+        image.src = imageData;
         //movePic(imageData);
     };
     var onFail = function (e) {
@@ -705,7 +706,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     }
 
     //Callback function when the file system uri has been resolved
-    function resolveOnSuccess(entry) {
+    function resolveOnSuccess(entry, direction) {
         var d = new Date();
         var n = d.getTime();
         //new file name
@@ -721,7 +722,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                                 directoryRoot.getDirectory(EnfantService.getCurrent().prenom + "_" + EnfantService.getCurrent().id,
                                         { create: true, exclusive: false },
                                         function (directory) {
-                                            entry.moveTo(directory, newFileName, successMove, resOnError);
+                                            entry.moveTo(directory, newFileName, function(newEntry){successMove(newEntry, direction);}, resOnError);
                                         },
                                 resOnError);
                             },
@@ -742,6 +743,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $timeout(function () {
             $scope.$broadcast("refresh-scroll");
         });
+        PhotoService.send(entry);
         //$scope.$apply();
     }
     function resOnError(error) {
