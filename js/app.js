@@ -11,7 +11,9 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
     .config(function ($compileProvider){
         //$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
-        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|filesystem:http):/);
+        if(!myApp.isPhone){
+            $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|filesystem:http):/);
+        }
     })
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'MainCtrl' });
