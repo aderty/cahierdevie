@@ -887,11 +887,14 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function sendPhoto(enfant, fileEntry, fn) {
+        alert("fileEntry " + fileEntry.fullPath);
         fileEntry.file(function (file) {
             var hash;
+            alert("file ");
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
             reader.onloadend = function (evt) {
+                alert("onloadend ");
                 var path = enfant.prenom + enfant.id + '/' + file.name;
                 //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
