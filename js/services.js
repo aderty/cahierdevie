@@ -851,51 +851,56 @@ myApp.factory('EventService', function ($q, db) {
 
 
 myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config) {
-
+    if (localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"]) {
+        localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"] = "";
+    }
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
     var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
-    var TOKEN = "TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";
+    var TOKEN = "ZYN4w82yM7AAAAAAAAAAAQ7dQVqLqZcOEskMgCLp7TEOcaMmw9GZLjC1N0PACd7W";//"TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";
+    
     var UID = "242955592";
 
     var dropbox = new Dropbox.Client({
         key: DROPBOX_APP_KEY,
-        secret: DROPBOX_APP_SECRET,
-        sandbox: false,
-        token: TOKEN,
-        uid: UID
+        //secret: DROPBOX_APP_SECRET,
+        //sandbox: false//,
+        //token: TOKEN,
+        //uid: UID
     });
+    //dropbox.authDriver(new Dropbox.AuthDriver.Redirect());
+    dropbox.authDriver(new Dropbox.AuthDriver.Cordova());
 
     var me = {
-        send: function (enfant, fileEntry) {
+        authenticate: function(fn){
+            dropbox.authenticate(fn);
+        },
+        send: function (enfant, fileEntry, fn) {
             if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
-                sendCahier(enfant, fileEntry);
+                sendCahier(enfant, fileEntry, fn);
                 return;
             }
-            sendPhoto(enfant, fileEntry);
+            sendPhoto(enfant, fileEntry, fn);
         }
     }
 
+    me.authenticate(function (err, client) {
+        if (err) return console.error(err);
+    });
  
     var defered = $q.defer();
     var cahier;
     var pictures = [];
+
+    function getDirectoryEnfant(enfant) {
+        return enfant.prenom + '_' + enfant.id;
+    }
+
     function sendCahier(enfant, cahier, fn) {
-        var path = enfant.prenom + enfant.id + '/' + cahier.id + '.json';
-        //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
+        var path = getDirectoryEnfant(enfant) + '/' + cahier.id + '.json';
         dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
-            // Move it into the Public directory.
-            /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
-                if (err) return console.error(err)
-    
-                // Delete the file.
-                dropbox.remove('Public/foo.txt', function (err, data) {
-                    if (err) console.error(err.stack)
-                    console.log("ok");
-                })
-            })*/
         });
 
     }
@@ -905,42 +910,28 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             var hash;
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
-            reader.onloadend = function (evt) {
-                var path = enfant.prenom + enfant.id + '/' + file.name;
-                //dropbox.writeFile(fileEntry.fileName, evt.target.result, function (err, data) {
+            reader.onload = function (evt) {
+                var path = getDirectoryEnfant(enfant) + '/' + file.name;
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
                     if (err) return console.error(err);
                     if (fn) fn(err, data);
-                    // Move it into the Public directory.
-                    /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
-                        if (err) return console.error(err)
-            
-                        // Delete the file.
-                        dropbox.remove('Public/foo.txt', function (err, data) {
-                            if (err) console.error(err.stack)
-                            console.log("ok");
-                        })
-                    })*/
                 });
             };
-            reader.onerror = function (e) {
-                alert(e);
-            }
             reader.readAsArrayBuffer(file);
         });
         
     }
 
-    function resOnError(error) {
-        alert(error.code);
-    }
+    // Move it into the Public directory.
+    /*dropbox.move('foo.txt', 'Public/foo.txt', function (err, data) {
+        if (err) return console.error(err)
 
-    function win(r) {
-        alert(ok);
-        console.log("Code = " + r.responseCode);
-        console.log("Response = " + r.response);
-        console.log("Sent = " + r.bytesSent);
-    }
+        // Delete the file.
+        dropbox.remove('Public/foo.txt', function (err, data) {
+            if (err) console.error(err.stack)
+            console.log("ok");
+        })
+    })*/
 
     return me;
 });
