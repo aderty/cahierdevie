@@ -851,18 +851,17 @@ myApp.factory('EventService', function ($q, db) {
 
 
 myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config) {
-    if (localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"]) {
+    /*if (localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"]) {
         localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"] = "";
-    }
+    }*/
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
     var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
-    var TOKEN = "ZYN4w82yM7AAAAAAAAAAAQ7dQVqLqZcOEskMgCLp7TEOcaMmw9GZLjC1N0PACd7W";//"TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";
-    
+    var TOKEN = "ZYN4w82yM7AAAAAAAAAAAQ7dQVqLqZcOEskMgCLp7TEOcaMmw9GZLjC1N0PACd7W";//"TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";  
     var UID = "242955592";
 
     var dropbox = new Dropbox.Client({
-        key: DROPBOX_APP_KEY,
+        key: DROPBOX_APP_KEY//,
         //secret: DROPBOX_APP_SECRET,
         //sandbox: false//,
         //token: TOKEN,
@@ -897,6 +896,14 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function sendCahier(enfant, cahier, fn) {
+        var path = getDirectoryEnfant(enfant) + '/' + cahier.id + '.json';
+        dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
+            if (err) return console.error(err);
+            if (fn) fn(err, data);
+        });
+    }
+
+    function getCahier(enfant, date, fn) {
         var path = getDirectoryEnfant(enfant) + '/' + cahier.id + '.json';
         dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
             if (err) return console.error(err);
