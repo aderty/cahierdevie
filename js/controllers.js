@@ -89,6 +89,7 @@ function NavigationCtrl($scope, navSvc, $rootScope, DropBoxService) {
     $scope.authenticate = function () {
         DropBoxService.authenticate(function (err, client) {
             if (err) return console.error(err);
+            alert(JSON.stringify(client));
         });
     }
 }
