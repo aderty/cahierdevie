@@ -1194,6 +1194,18 @@ nav.navigation h4 > i{
     -moz-background-size: cover;
     background-size: cover;
 }
+.lock-icon {
+    background: url("../img/lock.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+.unlock-icon {
+    background: url("../img/unlock.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
 .neo160
 {
 	margin-top: 1rem;

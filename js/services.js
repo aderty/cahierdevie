@@ -882,10 +882,6 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             sendPhoto(enfant, fileEntry, fn);
         }
     }
-
-    me.authenticate(function (err, client) {
-        if (err) return console.error(err);
-    });
  
     var defered = $q.defer();
     var cahier;
