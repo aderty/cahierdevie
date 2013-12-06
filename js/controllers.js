@@ -77,7 +77,7 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
 }
 
-function NavigationCtrl($scope, navSvc, $rootScope, DropBoxService) {
+function NavigationCtrl($scope, navSvc, $rootScope, config, DropBoxService) {
     /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -86,11 +86,23 @@ function NavigationCtrl($scope, navSvc, $rootScope, DropBoxService) {
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }*/
+    $scope.isAuthenticated = DropBoxService.isAuthenticated();
     $scope.authenticate = function () {
-        DropBoxService.authenticate(function (err, client) {
-            if (err) return console.error(err);
-            alert(JSON.stringify(client));
-        });
+        if ($scope.isAuthenticated) {
+            DropBoxService.reset();
+            $scope.isAuthenticated = false;
+        }
+        else {
+            DropBoxService.authenticate(function (err, client) {
+                if (err) return console.error(err);
+                var credentials = client.credentials();
+                if (client.authStep == 5 && credentials) {
+                    config.setDropboxCredentials(credentials);
+                    $scope.isAuthenticated = true;
+                    $scope.$apply();
+                }
+            });
+        }
     }
 }
 

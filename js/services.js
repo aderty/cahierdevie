@@ -321,6 +321,9 @@ myApp.factory('config', function ($http, version) {
         },
         getUrlUpload: function () {
             return configGlobal.urlUpload;
+        },
+        setDropboxCredentials: function (credentials){//uid, token) {
+
         }
     };
     return conf;
@@ -875,11 +878,20 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             dropbox.authenticate(fn);
         },
         send: function (enfant, fileEntry, fn) {
+            if (enfant.credentials) {
+                dropbox.setCredentials(enfant.credentials);
+            }
             if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
                 sendCahier(enfant, fileEntry, fn);
                 return;
             }
             sendPhoto(enfant, fileEntry, fn);
+        },
+        isAuthenticated: function () {
+            return dropbox.isAuthenticated();
+        },
+        reset: function () {
+            dropbox.reset();
         }
     }
  

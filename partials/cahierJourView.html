@@ -77,6 +77,7 @@
            <datemodelpicker ng-model="currentDate" snap-close>Changer de journ&eacute;e</datemodelpicker><i class="topcoat-icon next-icon" style="margin-top: -1.5rem;"></i>
     </li>
     <li class="topcoat-list__item" ng-click="modifierEnfant()"><span>Modifier infos</span><i class="topcoat-icon brush-icon"></i></li>
+    <li class="topcoat-list__item" ng-click="authenticate()"><span>Se connecter</span><i class="topcoat-icon" ng-class="{'unlock-icon': !isAuthenticated, 'lock-icon': isAuthenticated}"></i></li>
   </ul>
   
 </nav>
