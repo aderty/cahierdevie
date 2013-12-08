@@ -881,15 +881,15 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     //var UID = "242955592";
 
     var dropbox = new Dropbox.Client({
-        key: DROPBOX_APP_KEY//,
-        //secret: DROPBOX_APP_SECRET,
-        //sandbox: false//,
+        key: DROPBOX_APP_KEY,
+        secret: DROPBOX_APP_SECRET,
+        sandbox: false//,
         //token: TOKEN,
         //uid: UID
     });
     var driver;
     if (myApp.isPhone) {
-        driver = new Dropbox.AuthDriver.Cordova();//new Dropbox.AuthDriver.Cordova({rememberUser:false});
+        driver = new Dropbox.AuthDriver.Cordova({rememberUser:false});
     }
     else {
         //dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:true}));
@@ -924,15 +924,11 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             else{
                 dropbox.authenticate(function (err, client) {
                     if (err) return console.error(err);
-                    var credentials = client.credentials();
-                    if (client.authStep == 5 && credentials) {
-                        enfant.setCredentials(credentials);
-                        if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
-                            sendCahier(enfant, fileEntry, fn);
-                            return;
-                        }
-                        sendPhoto(enfant, fileEntry, fn);
+                    if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                        sendCahier(enfant, fileEntry, fn);
+                        return;
                     }
+                    sendPhoto(enfant, fileEntry, fn);
                 });
             }
         },
