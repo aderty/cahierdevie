@@ -1,6 +1,6 @@
 'use strict';
 
-myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phonegapReady, config) {
+myApp.run(["$rootScope", "phonegapReady", "config", "EnfantService", "DropBoxService", function ($rootScope, phonegapReady, config, EnfantService, DropBoxService) {
     phonegapReady(function () {
         console.log("phonegapReady");
         $rootScope.ready = true;
@@ -8,6 +8,22 @@ myApp.run(["$rootScope", "phonegapReady", "config", function ($rootScope, phoneg
     setTimeout(function () {
         config.init();
     }, 2000);
+    if(!myApp.isPhone){
+        var dropCredentials = /(.*)access_token=(.*)&token_type=(.*)&uid=(.*)&state=(.*)/.exec(location.hash);
+        if (dropCredentials && dropCredentials.length && localStorage["authEnfant"]) {
+            var credentials = {
+                token: dropCredentials[2],
+                uid: dropCredentials[4],
+            }
+            console.log(credentials);
+            EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
+                enfant.setCredentials(credentials);
+                console.log(enfant);
+            });
+            localStorage.removeItem("authEnfant");
+        }
+    }
+
 
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -77,7 +93,7 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
 }
 
-function NavigationCtrl($scope, navSvc, $rootScope, config, DropBoxService) {
+function NavigationCtrl($scope, navSvc, $rootScope) {
     /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -86,24 +102,6 @@ function NavigationCtrl($scope, navSvc, $rootScope, config, DropBoxService) {
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }*/
-    $scope.isAuthenticated = DropBoxService.isAuthenticated();
-    $scope.authenticate = function () {
-        if ($scope.isAuthenticated) {
-            DropBoxService.reset();
-            $scope.isAuthenticated = false;
-        }
-        else {
-            DropBoxService.authenticate(function (err, client) {
-                if (err) return console.error(err);
-                var credentials = client.credentials();
-                if (client.authStep == 5 && credentials) {
-                    config.setDropboxCredentials(credentials);
-                    $scope.isAuthenticated = true;
-                    $scope.$apply();
-                }
-            });
-        }
-    }
 }
 
 function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notification){
@@ -330,7 +328,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     setlabelTransmi();
 }
 
-function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) {
+function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, DropBoxService) {
 
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Nouveau cahier";
@@ -338,7 +336,11 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
-            creation: true
+            creation: true,
+            setCredentials: function(credentials){
+                 this.credentials = credentials;
+                 EnfantService.save(this);
+            }
         }
     }
     else {
@@ -429,6 +431,31 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService) 
     var onFail = function (e) {
         console.log("On fail " + e);
     };
+    
+    $scope.isAuthenticated = DropBoxService.isAuthenticated();
+    
+    $scope.authenticate = function () {
+        if ($scope.isAuthenticated) {
+            DropBoxService.reset();
+            $scope.isAuthenticated = false;
+        }
+        else {
+            localStorage["authEnfant"] = $scope.enfant.id;
+            DropBoxService.authenticate(function (err, client) {
+                if (err) {
+                    console.error(err);
+                    DropBoxService.reset();
+                    return;
+                }
+                var credentials = client.credentials();
+                if (client.authStep == 5 && credentials) {
+                    $scope.enfant.setCredentials(credentials);
+                    $scope.isAuthenticated = true;
+                    //$scope.$apply();
+                }
+            });
+        }
+    }
 }
 
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
@@ -768,8 +795,6 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $timeout(function () {
             $scope.$broadcast("refresh-scroll");
         });
-        //PhotoService.send(entry);
-        //$scope.$apply();
     }
     function resOnError(error) {
         alert(error.code);

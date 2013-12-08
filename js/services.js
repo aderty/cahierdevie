@@ -333,17 +333,23 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     var current, enfants = [], init = false;
     var enfantChangeCb = [];
     
-    return {
+    var me = {
         list: function (idEnfant) {
             var defered = $q.defer();
             if (init) {
                 defered.resolve(enfants);
             }
             else {
-		db.getInstance().objectStore("enfants").each(function (data) {
+		        db.getInstance().objectStore("enfants").each(function (data) {
                     if (!data.value.photo) {
                         data.value.photo = 'res/user.png';
                     }
+                    data.value.setCredentials = function (credentials) {
+                        this.credentials = credentials;
+                        if (this.prenom) {
+                            me.save(this);
+                        }
+                    };
                     enfants.push(data.value);
                 }).done(function (data) {
                     init = true;
@@ -398,6 +404,12 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
         get: function (id) {
             var defered = $q.defer();
             db.getInstance().objectStore("enfants").get(id).done(function (data) {
+                if (data){
+                    data.setCredentials = function(credentials){
+                        this.credentials = credentials;
+                        me.save(this);
+                    };
+                }
                 $timeout(function () {
                     defered.resolve(data);
                 });
@@ -415,10 +427,12 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                 }
                 enfants.push(enfant);
             }
-	    return db.getInstance().objectStore("enfants").put(enfant).done(function () {
+	        return db.getInstance().objectStore("enfants").put(enfant).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
                 });
+                // TODO : Sync serveur
+                
             }).fail(function (e, l, f) {
             	alert(e);
                 //alert(e.stack + " \n file : " + f + " \n ligne :" + l);
@@ -506,6 +520,8 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
     function resOnError(error) {
         alert(error.code);
     }
+    
+    return me;
 });
 
 myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config, DropBoxService) {
@@ -859,9 +875,9 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }*/
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
-    var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
-    var TOKEN = "ZYN4w82yM7AAAAAAAAAAAQ7dQVqLqZcOEskMgCLp7TEOcaMmw9GZLjC1N0PACd7W";//"TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";  
-    var UID = "242955592";
+    //var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
+    //var TOKEN = "ZYN4w82yM7AAAAAAAAAAAQ7dQVqLqZcOEskMgCLp7TEOcaMmw9GZLjC1N0PACd7W";//"TBq6qEVcIQEAAAAAAAAAAaLvoHrXni7Q6ST4jjKOKII5fwLRSuE1cPOEjem3ce9Y";  
+    //var UID = "242955592";
 
     var dropbox = new Dropbox.Client({
         key: DROPBOX_APP_KEY//,
@@ -870,8 +886,18 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         //token: TOKEN,
         //uid: UID
     });
-    //dropbox.authDriver(new Dropbox.AuthDriver.Redirect());
-    dropbox.authDriver(new Dropbox.AuthDriver.Cordova());
+    
+    if (myApp.isPhone) {
+        dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:false}));
+    }
+    else {
+        //dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:true}));
+        dropbox.authDriver(new Dropbox.AuthDriver.Redirect({ rememberUser: false }));
+    }  
+    
+    function genCahierKey(id, date){
+        return id + "_" + date.getFullYear() + (date.getMonth() < 9 || date.getMonth() > 11  ? '0' : '') +  (date.getMonth() + 1) + date.getDate();
+    }
 
     var me = {
         authenticate: function(fn){
@@ -881,11 +907,34 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             if (enfant.credentials) {
                 dropbox.setCredentials(enfant.credentials);
             }
-            if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
-                sendCahier(enfant, fileEntry, fn);
-                return;
+            if(dropbox.isAuthenticated()){
+                if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                    sendCahier(enfant, fileEntry, fn);
+                    return;
+                }
+                sendPhoto(enfant, fileEntry, fn);
             }
-            sendPhoto(enfant, fileEntry, fn);
+            else{
+                dropbox.authenticate(function (err, client) {
+                    if (err) return console.error(err);
+                    var credentials = client.credentials();
+                    if (client.authStep == 5 && credentials) {
+                        enfant.setCredentials(credentials);
+                        if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                            sendCahier(enfant, fileEntry, fn);
+                            return;
+                        }
+                        sendPhoto(enfant, fileEntry, fn);
+                    }
+                });
+            }
+        },
+        getCahier: function(enfant, date, fn) {
+            return getCahier(enfant, date, function(err, data){
+                if (err) return console.error(err);
+                var cahier = JSON.parse(data);
+                if(fn) fn(err, cahier);
+            });
         },
         isAuthenticated: function () {
             return dropbox.isAuthenticated();
@@ -912,8 +961,8 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function getCahier(enfant, date, fn) {
-        var path = getDirectoryEnfant(enfant) + '/' + cahier.id + '.json';
-        dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
+        var path = getDirectoryEnfant(enfant) + '/' + genCahierKey(enfant.id, date) + '.json';
+        dropbox.readFile(path, function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
         });
@@ -948,5 +997,69 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         })
     })*/
 
+    return me;
+});
+
+myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config) {
+    var storageKey = "LoginService:MonCahierdevie";
+    var currentLogin = null, storageError;
+    var me = {
+        store: function(login){
+            var jsonString, name, value;
+              jsonString = JSON.stringify(login);
+              try {
+                localStorage.setItem(storageKey, jsonString);
+              } catch (e) {
+                storageError = e;
+                name = encodeURIComponent(storageKey);
+                value = encodeURIComponent(jsonString);
+                document.cookie = "" + name + "=" + value + "; path=/";
+              }
+              currentLogin = login;
+        },
+        load: function(force){
+            var cookieRegexp, jsonString, match, name, nameRegexp;
+            if(currentLogin && force == undefined){
+                return currentLogin;
+            }
+              try {
+                jsonString = localStorage.getItem(storageKey);
+              } catch (e) {
+                storageError = e;
+                jsonString = null;
+              }
+              if (jsonString === null) {
+                name = encodeURIComponent(storageKey);
+                nameRegexp = name.replace(/[.*+()]/g, '\\$&');
+                cookieRegexp = new RegExp("(^|(;\\s*))" + name + "=([^;]*)(;|$)");
+                if (match = cookieRegexp.exec(document.cookie)) {
+                  jsonString = decodeURIComponent(match[3]);
+                }
+              }
+              if (!jsonString) {
+                currentLogin = null;
+                return this;
+              }
+              try {
+                currentLogin = JSON.parse(jsonString);
+              } catch (e) {
+                storageError = e;
+                currentLogin = null;
+              }
+              return currentLogin;
+        },
+        forget: function(){
+            var expires, name;
+            currentLogin = null;
+              try {
+                localStorage.removeItem(storageKey);
+              } catch (e) {
+                storageError = e;
+                name = encodeURIComponent(storageKey);
+                expires = (new Date(0)).toGMTString();
+                document.cookie = "" + name + "={}; expires=" + expires + "; path=/";
+              }
+        }  
+    } 
     return me;
 });
