@@ -889,7 +889,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     });
     var driver;
     if (myApp.isPhone) {
-        driver = new Dropbox.AuthDriver.Cordova({rememberUser:false});
+        driver = new Dropbox.AuthDriver.Cordova();//new Dropbox.AuthDriver.Cordova({rememberUser:false});
     }
     else {
         //dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:true}));
@@ -947,7 +947,12 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             return dropbox.isAuthenticated();
         },
         reset: function () {
-            dropbox.reset();
+            if (dropbox.isAuthenticated()) {
+                dropbox.signOut();
+            }
+            else {
+                dropbox.reset();
+            }
         }
     }
  
