@@ -873,6 +873,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     /*if (localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"]) {
         localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"] = "";
     }*/
+
     var DROPBOX_APP_KEY = "e42anle8lkz6hww";
     var DROPBOX_APP_SECRET = "km0h5iepbirptvu";
     //var STATE = "oas_horr67r1_0.8itz2dnwm8e0cnmi";
@@ -886,15 +887,21 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         //token: TOKEN,
         //uid: UID
     });
-    
+    var driver;
     if (myApp.isPhone) {
-        dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:false}));
+        driver = new Dropbox.AuthDriver.Cordova({rememberUser:false});
     }
     else {
         //dropbox.authDriver(new Dropbox.AuthDriver.Cordova({rememberUser:true}));
-        dropbox.authDriver(new Dropbox.AuthDriver.Redirect({ rememberUser: false }));
+        driver = new Dropbox.AuthDriver.Redirect({ rememberUser: false });
     }  
-    
+    dropbox.authDriver(driver);
+
+    var key = "dropbox-auth:" + driver.scope + ":" + (dropbox.appHash());
+    if (localStorage.getItem(key)) {
+        localStorage.removeItem(key);
+    }
+
     function genCahierKey(id, date){
         return id + "_" + date.getFullYear() + (date.getMonth() < 9 || date.getMonth() > 11  ? '0' : '') +  (date.getMonth() + 1) + date.getDate();
     }
