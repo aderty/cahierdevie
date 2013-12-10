@@ -6,7 +6,7 @@
 
 // Simple value service.
 angular.module('myApp.services', []).
-  value('version', '0.1');
+  value('version', 'v1');
 
 // phonegap ready service - listens to deviceready
 myApp.factory('phonegapReady', function() {
@@ -290,7 +290,8 @@ myApp.factory('db', function ($q) {
 
 myApp.factory('config', function ($http, version) {
     var configGlobal = {
-        url: "upload.moncahierdevie.com", //"192.168.1.18:1480";
+        url: "upload.moncahierdevie.com",
+        //url: "192.168.1.18:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
@@ -321,6 +322,12 @@ myApp.factory('config', function ($http, version) {
         },
         getUrlUpload: function () {
             return configGlobal.urlUpload;
+        },
+        getUrl: function(){
+            return configGlobal.url;
+        },
+        getVersion: function(){
+            return configGlobal.version;
         },
         setDropboxCredentials: function (credentials){//uid, token) {
 
@@ -1012,6 +1019,51 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
     var storageKey = "LoginService:MonCahierdevie";
     var currentLogin = null, storageError;
     var me = {
+        create: function (user) {
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/new/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: user
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                me.store(data);
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        connect: function(user){
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/login/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: user
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                me.store(data);
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        disconnect: function(){
+            me.forget();
+        },
         store: function(login){
             var jsonString, name, value;
               jsonString = JSON.stringify(login);
@@ -1046,7 +1098,7 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
               }
               if (!jsonString) {
                 currentLogin = null;
-                return this;
+                return null;
               }
               try {
                 currentLogin = JSON.parse(jsonString);
@@ -1067,7 +1119,7 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 expires = (new Date(0)).toGMTString();
                 document.cookie = "" + name + "={}; expires=" + expires + "; path=/";
               }
-        }  
+        }
     } 
     return me;
 });

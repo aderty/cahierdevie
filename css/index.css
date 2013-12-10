@@ -1206,6 +1206,13 @@ nav.navigation h4 > i{
     -moz-background-size: cover;
     background-size: cover;
 }
+
+.user-icon {
+    background: url("../res/user.png") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
 .neo160
 {
 	margin-top: 1rem;

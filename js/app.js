@@ -8,15 +8,17 @@ function jsonp_callback(data) {
 
 // Declare app level module which depends on filters, and services
 var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ajoslin.mobile-navigate', 'ngRoute', 'ngTouch', 'ngTouch.hold', 'snap'])
-    .config(function ($compileProvider){
+    .config(function ($compileProvider, $httpProvider) {
         //$compileProvider.urlSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         if(!myApp.isPhone){
             $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel|filesystem|filesystem:http):/);
         }
+        $httpProvider.interceptors.push('myHttpInterceptor');
     })
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'MainCtrl' });
+        $routeProvider.when('/viewLogin', { templateUrl: 'partials/loginView.html', controller: 'LoginCtrl' });
         $routeProvider.when('/viewCahier', { templateUrl: 'partials/cahierJourView.html', controller: 'CahierJourCtrl' });
         $routeProvider.when('/viewEvent', { templateUrl: 'partials/newEventView.html', controller: 'EventCtrl' });
         $routeProvider.when('/viewPhotos', { templateUrl: 'partials/photoView.html', controller: 'PhotosEventCtrl' });
@@ -24,6 +26,27 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewAbout', { templateUrl: 'partials/aboutView.html' });
         $routeProvider.otherwise({redirectTo: '/'});
     }]);
+
+myApp.factory('myHttpInterceptor', function ($q, $rootScope, $timeout) {
+    return {
+        response: function (response) {
+            // do something on success
+            if (response.headers()['content-type'] === "application/json; charset=utf-8") {
+                // Validate response if not ok reject
+                if (response.data.error)
+                    $timeout(function () {
+                        $rootScope.$emit('message', response.data.error);
+                    });
+                    return $q.reject(response);
+            }
+            return response;
+        },
+        responseError: function (response) {
+            // do something on error
+            return $q.reject(response);
+        }
+    };
+});
 
 myApp.isPhone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 

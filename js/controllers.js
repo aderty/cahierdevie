@@ -24,6 +24,7 @@ myApp.run(["$rootScope", "phonegapReady", "config", "EnfantService", "DropBoxSer
         }
     }
 
+    $rootScope.showMessage = false;
 
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -93,7 +94,7 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     };
 }
 
-function NavigationCtrl($scope, navSvc, $rootScope) {
+function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
     /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -102,6 +103,40 @@ function NavigationCtrl($scope, navSvc, $rootScope) {
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }*/
+    $scope.isConnected = false;
+    $scope.user = LoginService.load();
+    if($scope.user){
+        $scope.isConnected = true;
+    }
+    else {
+        $timeout(function () {
+            navSvc.slidePage('/viewLogin');
+        }, 500);
+    }
+    $scope.connect = function (path, type) {
+        navSvc.slidePage('/viewLogin'); 
+    };
+    $scope.disconnect = function (path, type) {
+        LoginService.disconnect();
+        navSvc.slidePage('/viewLogin'); 
+    };
+    $rootScope.$on('message', function (e, msg) {
+        $rootScope.showMessage = true;
+        $rootScope.message = msg;
+        $timeout(function () {
+            $rootScope.showMessage = false;
+        }, 2000);
+    });
+}
+
+function MessageCtrl($scope, $rootScope, $timeout) {
+    $scope.$on('message', function (e, msg) {
+        $rootScope.showMessage = true;
+        $scope.message = msg;
+        $timeout(function () {
+            $rootScope.showMessage = false;
+        },2000);
+    });
 }
 
 function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notification){
@@ -132,6 +167,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
     };
+    
     $scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
@@ -211,6 +247,25 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
                  cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
             }
             CahierService.setCurrent(cahier);
+        });
+    }
+}
+
+function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
+    $scope.title = "Login";
+    $scope.mode = 0;
+    $scope.user = {};
+    $scope.create = function (user) {
+        delete user.confirm_pwd;
+        LoginService.create(user).then(function(current){
+            navSvc.back();
+        });
+    }
+    $scope.connect = function(user){
+        LoginService.connect(user).then(function(current){
+            navSvc.back();
+        }, function (current) {
+            $scope.user = {};
         });
     }
 }
