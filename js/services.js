@@ -290,8 +290,8 @@ myApp.factory('db', function ($q) {
 
 myApp.factory('config', function ($http, version) {
     var configGlobal = {
-        url: "upload.moncahierdevie.com",
-        //url: "192.168.1.18:1480",
+        //url: "upload.moncahierdevie.com",
+        url: "192.168.1.18:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
@@ -1119,6 +1119,26 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 expires = (new Date(0)).toGMTString();
                 document.cookie = "" + name + "={}; expires=" + expires + "; path=/";
               }
+        },
+        sync: function (user) {
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/sync/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: user
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
         }
     } 
     return me;

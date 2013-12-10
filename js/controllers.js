@@ -1,6 +1,6 @@
 'use strict';
 
-myApp.run(["$rootScope", "phonegapReady", "config", "EnfantService", "DropBoxService", function ($rootScope, phonegapReady, config, EnfantService, DropBoxService) {
+myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "LoginService", "EnfantService", "DropBoxService", function ($rootScope, phonegapReady, $timeout, config, navSvc, LoginService, EnfantService, DropBoxService) {
     phonegapReady(function () {
         console.log("phonegapReady");
         $rootScope.ready = true;
@@ -69,6 +69,45 @@ myApp.run(["$rootScope", "phonegapReady", "config", "EnfantService", "DropBoxSer
             img: 'img/humeur/malade.svg'
         }
     ];
+    $rootScope.slidePage = function (path, type) {
+        navSvc.slidePage(path, type);
+    };
+
+    $rootScope.$on('message', function (e, msg) {
+        $rootScope.showMessage = true;
+        $rootScope.titre = 'Information';
+        $rootScope.message = msg;
+        $timeout(function () {
+            $rootScope.showMessage = false;
+        }, 2000);
+    });
+    $rootScope.$on('erreur', function (e, msg) {
+        $rootScope.titre = 'Erreur';
+        $rootScope.showMessage = true;
+        $rootScope.message = msg;
+        $timeout(function () {
+            $rootScope.showMessage = false;
+        }, 2000);
+    });
+
+    $rootScope.isConnected = false;
+    $rootScope.user = LoginService.load();
+    if ($rootScope.user) {
+        $rootScope.isConnected = true;
+        LoginService.sync($rootScope.user).then(function (data) {
+
+        })
+    }
+    else {
+        if (!demandeCompte) {
+            $rootScope.$emit('message', "Voulez-vous créer un compte ? <button ng-click=\"slidePage('/viewLogin')\">Cliquez ici</button>");
+            demandeCompte = true;
+        }
+        /*$timeout(function () {
+            navSvc.slidePage('/viewLogin');
+        }, 500);*/
+    }
+
 }]);
 
 /* Controllers */
@@ -93,7 +132,7 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
         touchToDrag: false
     };
 }
-
+var demandeCompte = false;
 function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
     /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
@@ -103,16 +142,6 @@ function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
     }*/
-    $scope.isConnected = false;
-    $scope.user = LoginService.load();
-    if($scope.user){
-        $scope.isConnected = true;
-    }
-    else {
-        $timeout(function () {
-            navSvc.slidePage('/viewLogin');
-        }, 500);
-    }
     $scope.connect = function (path, type) {
         navSvc.slidePage('/viewLogin'); 
     };
@@ -120,23 +149,9 @@ function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
         LoginService.disconnect();
         navSvc.slidePage('/viewLogin'); 
     };
-    $rootScope.$on('message', function (e, msg) {
-        $rootScope.showMessage = true;
-        $rootScope.message = msg;
-        $timeout(function () {
-            $rootScope.showMessage = false;
-        }, 2000);
-    });
 }
 
 function MessageCtrl($scope, $rootScope, $timeout) {
-    $scope.$on('message', function (e, msg) {
-        $rootScope.showMessage = true;
-        $scope.message = msg;
-        $timeout(function () {
-            $rootScope.showMessage = false;
-        },2000);
-    });
 }
 
 function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notification){

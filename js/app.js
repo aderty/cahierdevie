@@ -33,11 +33,12 @@ myApp.factory('myHttpInterceptor', function ($q, $rootScope, $timeout) {
             // do something on success
             if (response.headers()['content-type'] === "application/json; charset=utf-8") {
                 // Validate response if not ok reject
-                if (response.data.error)
+                if (response.data.error){
                     $timeout(function () {
-                        $rootScope.$emit('message', response.data.error);
+                        $rootScope.$emit('erreur', response.data.error);
                     });
                     return $q.reject(response);
+                }
             }
             return response;
         },
