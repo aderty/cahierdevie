@@ -54,6 +54,22 @@ input, textarea {
 input.field-input {
     webkit-user-modify: read-write-plaintext-only;
 }
+.input-help 
+{
+	display: none;
+}
+.input-help > *
+{
+	display: block !important;
+	text-align: center;
+	width: 100%;
+}
+.error + .input-help
+{
+	background-color: rgb(255, 237, 237);
+	display: -webkit-box;
+	display: box;
+}
 
 textarea.field-input {
     padding-top: 1.1em;
@@ -63,6 +79,11 @@ input[type="checkbox"]
 {
 	width: 100%;
 	height: 100%;
+}
+
+.full-btn {
+	width: 100%;
+	display: block;
 }
 
 html, body {

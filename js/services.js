@@ -288,10 +288,10 @@ myApp.factory('db', function ($q) {
     return me;
 });
 
-myApp.factory('config', function ($http, version) {
+myApp.factory('config', function ($q, $http, version) {
     var configGlobal = {
-        //url: "upload.moncahierdevie.com",
-        url: "192.168.1.18:1480",
+        url: "upload.moncahierdevie.com",
+        //url: "127.0.0.1:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
@@ -299,6 +299,7 @@ myApp.factory('config', function ($http, version) {
     
     var conf = {
         init: function () {
+            var defered = $q.defer();
             $http({
                 method: 'POST',
                 url: url,
@@ -311,6 +312,8 @@ myApp.factory('config', function ($http, version) {
                   // this callback will be called asynchronously
                 // when the response is available
                 angular.extend(configGlobal, data);
+                defered.resolve(true);
+                
             }).
             error(function (data, status, headers, config) {
                   // called asynchronously if an error occurs
@@ -319,6 +322,7 @@ myApp.factory('config', function ($http, version) {
                     conf.init();
                 }, 5000);
             });
+            return defered.promise;
         },
         getUrlUpload: function () {
             return configGlobal.urlUpload;
@@ -336,7 +340,7 @@ myApp.factory('config', function ($http, version) {
     return conf;
 });
 
-myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
+myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginService) {
     var current, enfants = [], init = false;
     var enfantChangeCb = [];
     
@@ -427,6 +431,17 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
         },
         save: function (enfant) {
             var defered = $q.defer();
+            if(!enfant.setCredentials){
+                enfant.setCredentials = function(credentials){
+                     this.credentials = credentials;
+                     me.save(this);
+                }
+            }
+            var fromServer = false;
+            if(enfant.fromServer){
+                fromServer = true;
+                delete enfant.fromServer;
+            }
             var index = enfants.indexOf(enfant);
             if (index == -1) {
                 if(!enfant.photo){
@@ -438,7 +453,15 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
                 $timeout(function () {
                     defered.resolve(true);
                 });
-                // TODO : Sync serveur
+                if(!fromServer){
+                    // TODO : Sync serveur
+                    LoginService.addCahier(enfant).then(function(data){
+                        if(enfant._id || !data._id) return;
+                        enfant._id = data._id;
+                        enfant.fromServer = true;
+                        me.save(enfant);
+                    });
+                }
                 
             }).fail(function (e, l, f) {
             	alert(e);
@@ -471,6 +494,8 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService) {
 
                     var index = enfants.indexOf(enfant);
                     enfants.splice(index, 1);
+                    
+                    LoginService.removeCahier(enfant);
 
                     var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
 
@@ -607,6 +632,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             return defered.promise;
         },
         save: function (enfant, cahier) {
+            cahier.tick = new Date();
             var defered = $q.defer();
             return db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
@@ -968,7 +994,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function sendCahier(enfant, cahier, fn) {
-        var path = getDirectoryEnfant(enfant) + '/' + cahier.id + '.json';
+        var path = getDirectoryEnfant(enfant) + '/data/' + cahier.id + '.json';
         dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
@@ -976,7 +1002,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function getCahier(enfant, date, fn) {
-        var path = getDirectoryEnfant(enfant) + '/' + genCahierKey(enfant.id, date) + '.json';
+        var path = getDirectoryEnfant(enfant) + '/data/' + genCahierKey(enfant.id, date) + '.json';
         dropbox.readFile(path, function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
@@ -990,7 +1016,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
             reader.onload = function (evt) {
-                var path = getDirectoryEnfant(enfant) + '/' + file.name;
+                var path = getDirectoryEnfant(enfant) + '/photos/' + file.name;
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
                     if (err) return console.error(err);
                     if (fn) fn(err, data);
@@ -1127,6 +1153,52 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 method: 'POST',
                 url: url,
                 data: user
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        addCahier: function(cahier){
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/add/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    user: currentLogin,
+                    cahier: cahier
+                }
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        removeCahier: function(cahier){
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/remove/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    user: currentLogin,
+                    cahier: cahier
+                }
             }).
             success(function (data, status, headers, config) {
                 // this callback will be called asynchronously

@@ -6,25 +6,14 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
         $rootScope.ready = true;
     });
     setTimeout(function () {
-        config.init();
+        config.init().then(function(){
+            $rootScope.$emit('initialized');
+        });
     }, 2000);
-    if(!myApp.isPhone){
-        var dropCredentials = /(.*)access_token=(.*)&token_type=(.*)&uid=(.*)&state=(.*)/.exec(location.hash);
-        if (dropCredentials && dropCredentials.length && localStorage["authEnfant"]) {
-            var credentials = {
-                token: dropCredentials[2],
-                uid: dropCredentials[4],
-            }
-            console.log(credentials);
-            EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
-                enfant.setCredentials(credentials);
-                console.log(enfant);
-            });
-            localStorage.removeItem("authEnfant");
-        }
-    }
-
-    $rootScope.showMessage = false;
+    
+    $rootScope.slidePage = function (path, type) {
+        navSvc.slidePage(path, type);
+    };
 
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -69,9 +58,29 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
             img: 'img/humeur/malade.svg'
         }
     ];
-    $rootScope.slidePage = function (path, type) {
-        navSvc.slidePage(path, type);
-    };
+}]);
+
+if(!myApp.isPhone){
+    myApp.run(["EnfantService", function (EnfantService) {
+            var dropCredentials = /(.*)access_token=(.*)&token_type=(.*)&uid=(.*)&state=(.*)/.exec(location.hash);
+            if (dropCredentials && dropCredentials.length && localStorage["authEnfant"]) {
+                var credentials = {
+                    token: dropCredentials[2],
+                    uid: dropCredentials[4]
+                }
+                console.log(credentials);
+                EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
+                    enfant.setCredentials(credentials);
+                    console.log(enfant);
+                });
+                localStorage.removeItem("authEnfant");
+            }
+   }]);
+}
+
+myApp.run(["$rootScope", "$timeout", function ($rootScope, $timeout) {
+
+    $rootScope.showMessage = false;
 
     $rootScope.$on('message', function (e, msg) {
         $rootScope.showMessage = true;
@@ -90,13 +99,48 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
         }, 2000);
     });
 
+}]);
+
+
+myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "LoginService", "EnfantService", "DropBoxService", function ($rootScope, phonegapReady, $timeout, config, navSvc, LoginService, EnfantService, DropBoxService) {
     $rootScope.isConnected = false;
     $rootScope.user = LoginService.load();
     if ($rootScope.user) {
         $rootScope.isConnected = true;
-        LoginService.sync($rootScope.user).then(function (data) {
-
-        })
+        $rootScope.$on('initialized', function (e) {
+            EnfantService.list().then(function(dbEnfants){
+                var i = 0, l = dbEnfants.length, enfants = {};
+                for(;i<l;i++){
+                    // Si l'identifiant serveur existe -> Récupération du tick
+                    if(dbEnfants[i]._id){
+                        enfants[dbEnfants[i].id] = {
+                            tick: dbEnfants[i].tick
+                        };
+                    }
+                    else{
+                        // Sauvegarde pour effectuer la sauvegarde sur le serveur
+                        EnfantService.save(dbEnfants[i]);
+                    }
+                }
+                // Demande de synchro au serveur (enfants contient la liste des ticks)
+                LoginService.sync({
+                    user: $rootScope.user,
+                    enfants: enfants
+                }).then(function (data) {
+                    i = 0, l = data.length;
+                    var prenoms = [];
+                    for(;i<l;i++){
+                        data[i].fromServer = true;
+                        data[i].tick = new Date(data[i].tick);
+                        EnfantService.save(data[i]);
+                        prenoms.push(data[i].prenom);
+                    }
+                    if(data.length){
+                        $rootScope.$emit('message', "Les informations des cahiers de vie de "+ prenoms.join(", ") + " ont étés mis à jour.");
+                    }
+                })
+            });
+        });
     }
     else {
         if (!demandeCompte) {
@@ -266,7 +310,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     }
 }
 
-function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
+function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantService) {
     $scope.title = "Login";
     $scope.mode = 0;
     $scope.user = {};
@@ -279,6 +323,22 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
     $scope.connect = function(user){
         LoginService.connect(user).then(function(current){
             navSvc.back();
+            LoginService.sync({
+                    user: current,
+                    enfants: {}
+            }).then(function (data) {
+                    var i = 0, l = data.length;
+                    var prenoms = [];
+                    for(;i<l;i++){
+                        data[i].fromServer = true;
+                        data[i].tick = new Date(data[i].tick);
+                        EnfantService.save(data[i]);
+                        prenoms.push(data[i].prenom);
+                    }
+                    if(data.length){
+                        $rootScope.$emit('message', "Les informations des cahiers de vie de "+ prenoms.join(", ") + " ont étés mis à jour.");
+                    }
+            })
         }, function (current) {
             $scope.user = {};
         });
@@ -406,11 +466,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
-            creation: true,
-            setCredentials: function(credentials){
-                 this.credentials = credentials;
-                 EnfantService.save(this);
-            }
+            creation: true
         }
     }
     else {
@@ -429,6 +485,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         if (enfant.creation) {
             delete enfant.creation;
         }
+        enfant.tick = new Date();
         EnfantService.save(enfant).then(function () {
             navSvc.back();
             $scope.$apply();
