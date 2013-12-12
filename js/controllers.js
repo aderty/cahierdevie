@@ -585,6 +585,32 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
     }
 }
 
+function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
+
+    $scope.enfant = EnfantService.getCurrent();
+    $scope.title = "Mes amis";
+    
+    $scope.add = function (email) {
+        if(!email){
+            return alert("Veuillez saisir un email.");
+        }
+        LoginService.addUser($scope.enfant, email).then(function (user) {
+            $scope.enfant.users.push(user);
+            EnfantService.save($scope.enfant);
+            $scope.$apply();
+        });
+    }
+    $scope.remove = function (user, index) {
+        if (confirm("Etes-vous sur ?")) {
+            LoginService.removeUser($scope.enfant, user).then(function () {
+                $scope.enfant.users.splice(index, 1);
+                EnfantService.save($scope.enfant);
+                navSvc.back();
+            });
+        }
+    }
+}
+
 function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();

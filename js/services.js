@@ -290,8 +290,8 @@ myApp.factory('db', function ($q) {
 
 myApp.factory('config', function ($q, $http, version) {
     var configGlobal = {
-        url: "upload.moncahierdevie.com",
-        //url: "127.0.0.1:1480",
+        //url: "upload.moncahierdevie.com",
+        url: "127.0.0.1:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
@@ -1198,6 +1198,54 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 data: {
                     user: currentLogin,
                     cahier: cahier
+                }
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        addUser: function(cahier, email){
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/addUser/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    user: currentLogin,
+                    cahier: cahier._id,
+                    email: email
+                }
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        removeUser: function(cahier, user){
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/removeUser/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    user: currentLogin,
+                    cahier: cahier._id,
+                    target: user
                 }
             }).
             success(function (data, status, headers, config) {

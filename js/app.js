@@ -19,6 +19,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/', { templateUrl: 'partials/homeView.html', controller: 'MainCtrl' });
         $routeProvider.when('/viewLogin', { templateUrl: 'partials/loginView.html', controller: 'LoginCtrl' });
+        $routeProvider.when('/viewCahierUsers', { templateUrl: 'partials/cahierUsersView.html', controller: 'CahierUsersCtrl' });
         $routeProvider.when('/viewCahier', { templateUrl: 'partials/cahierJourView.html', controller: 'CahierJourCtrl' });
         $routeProvider.when('/viewEvent', { templateUrl: 'partials/newEventView.html', controller: 'EventCtrl' });
         $routeProvider.when('/viewPhotos', { templateUrl: 'partials/photoView.html', controller: 'PhotosEventCtrl' });
