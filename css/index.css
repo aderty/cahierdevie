@@ -239,7 +239,12 @@ select.field-input {
         min-height: 100%;
         position: relative;
 }
+#eventForm .titre .field-label {
+        -webkit-border-radius: 1.0rem;
+        border-radius: 1.0rem;
+}
 
+#settingsOverlayTitle .field,
 #eventForm .field {
         border-bottom: 1px solid #dddddd;
         background: transparent;
@@ -251,10 +256,12 @@ select.field-input {
         border-radius: 1rem;
 }
 
+#settingsOverlayTitle .field-input,
 #eventForm .field-input {
         padding: 1em;
 }
 
+#settingsOverlayTitle .btn-titre,
 #eventForm .btn-titre {
         height: auto !important;
         width: 100%;
@@ -264,7 +271,9 @@ select.field-input {
         background-position-x: 95%;
 }
 
-#eventForm .field-label {
+
+#eventForm .field-label,
+#settingsOverlayTitle .field-label{
         width: 100% !important;
         -webkit-border-top-left-radius: 1.0rem;
         border-top-left-radius: 1.0rem;
@@ -1109,6 +1118,20 @@ nav.navigation h4 > i{
     	-webkit-transform: scale(1); 
         opacity: 1;
     }
+}
+
+.topcoat-overlay-pop {
+    width: 80%;
+    height: auto;
+    overflow: hidden;
+    position: absolute;
+    z-index: 10;
+    margin: 10%;
+    padding: 20px 10px;
+    border-radius: 6px;
+    background-color: #e5e9e8;
+    border: 1px solid #a5a8a8;
+    text-align: center;
 }
 
 
