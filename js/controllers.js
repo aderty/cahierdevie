@@ -652,6 +652,23 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
     }
+    $scope.indexPhoto = 0;
+    $scope.prevPhoto = function () {
+        if (!$scope.event.pictures.length) return;
+        $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;
+
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
+    $scope.nextPhoto = function () {
+        if (!$scope.event.pictures.length) return;
+        if ($scope.indexPhoto == 0) {
+            $scope.indexPhoto = $scope.event.pictures.length - 1;
+        }
+        else {
+            $scope.indexPhoto = $scope.indexPhoto - 1;
+        }
+        $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+    }
     
     $scope.takePic = function (type) {
         if (type === undefined) {

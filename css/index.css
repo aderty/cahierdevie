@@ -177,6 +177,13 @@ li.loading span {
     border-bottom-left-radius: 1.0rem;
     border-bottom-right-radius: 1.0rem;
 }
+
+.field .field-label button {
+    float: right;
+    -webkit-border-radius: 1.0rem;
+	border-radius: 1.0rem;
+}
+
 .field.first .field-label {
     border-top-left-radius: 1.0rem;
 }
@@ -939,6 +946,7 @@ nav.navigation h4 > i{
 
 .events .topcoat-list__item.action{
     border:0;
+    margin-right: 0.5rem;
 }
 
 .events li h3,
@@ -992,14 +1000,20 @@ nav.navigation h4 > i{
 .evt-photos
 {
 	width: 80px;
-    height: 100px;
+    height: 350px;
     display: inline;
 }
-.evts-photos > img,
-.evt-photos > img
+.evts-photos > img
 {
 	/*width: 62px;*/
     height: 70px;
+    box-shadow: inset -2px 0px 15px 5px #CCC;
+    padding-left: 2px;
+}
+
+.evt-photos > img
+{
+    height: 350px;
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
 }
