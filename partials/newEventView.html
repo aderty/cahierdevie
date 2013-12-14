@@ -1,8 +1,8 @@
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
-            <i class="topcoat-icon listview-icon"></i>
+        <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
+            <span class="topcoat-icon back-icon"></span>
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
@@ -44,15 +44,13 @@
                 <img class="evt-photo-item" ng-src="{{picData.url}}" />
             </div> 
         </div>
-        <div class="center field titre first">
-            <span class="field-label">Titre</span>
-            <div>
-                <select id="selectTitle" class="field-input btn-titre">
-                    <option value="">Choisir un titre pr&eacute;d&eacute;fini</option>
-                    <option ng-repeat="title in predefTitle">{{title}}</option>
-                </select>
-                <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
-            </div>
+        <div class="center field titre first last">
+            <span class="field-label">
+                {{event.title}}
+                <button ng-click="showTitle()">
+                    <i class="topcoat-icon pencil-icon"></i>
+                </button>
+            </span>
         </div>
         <div class="center field">
             <span class="field-label">Description</span>
@@ -86,3 +84,21 @@
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer>
       <ng-include src="'partials/navigationMain.html'"></ng-include>
 </nav>
+
+<div class="topcoat-overlay-bg" ng-show="popTitle"></div>
+<aside id='settingsOverlayCreation' ng-show="popTitle" class="topcoat-overlay">
+    <div class="center field titre first last">
+        <span class="field-label">Titre</span>
+        <div>
+            <select id="selectTitle" class="field-input btn-titre">
+                <option value="">Choisir un titre pr&eacute;d&eacute;fini</option>
+                <option ng-repeat="title in predefTitle">{{title}}</option>
+            </select>
+            <input ng-model="event.title" type="text" value="" placeholder="Titre personnalis&eacute;" class="field-input">
+            <button class="field-input" ng-click="popTitle = false;">
+                <i class="topcoat-icon checkmark-icon"></i>
+                Ok
+            </button>
+        </div>
+    </div>
+</aside>

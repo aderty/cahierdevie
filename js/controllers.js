@@ -622,8 +622,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
+    $scope.popTitle = false;
 
     if (!$scope.event) {
+        $scope.popTitle = true;
         var heure = new Date().getHours();
         if(heure < 10){
             heure = '0' + heure;
@@ -643,6 +645,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.eventSaved = angular.copy($scope.event);
     }
     $scope.$broadcast("refresh-scroll");
+
+    $scope.showTitle = function(){
+        $scope.popTitle = true;
+    }
     
     $scope.takePic = function (type) {
         if (type === undefined) {
