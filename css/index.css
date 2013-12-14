@@ -937,6 +937,10 @@ nav.navigation h4 > i{
     border: 2px solid rgb(102, 102, 102);
 }*/
 
+.events .topcoat-list__item.action{
+    border:0;
+}
+
 .events li h3,
 .events li p {
     text-overflow: ellipsis;
@@ -1126,7 +1130,7 @@ nav.navigation h4 > i{
     overflow: hidden;
     position: absolute;
     z-index: 10;
-    margin: 10%;
+    margin: 8%;
     padding: 20px 10px;
     border-radius: 6px;
     background-color: #e5e9e8;

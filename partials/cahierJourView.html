@@ -14,7 +14,7 @@
             </a>
         </div>
     </div>
-    <div class="topcoat-button-bar full sub-header">
+    <!--<div class="topcoat-button-bar full sub-header">
         <div class="topcoat-button-bar__item">
             <button class="topcoat-button-bar__button full first" ng-click="newEvent()">
                 <i class="topcoat-icon plus-icon"></i>
@@ -26,7 +26,7 @@
                 {{labelTransmi}}
             </button>
         </div>
-    </div>
+    </div>-->
     <div class="topcoat-list__container list" >
         <div id="wrapper" scroll>
             <ul class="topcoat-list events" >
@@ -48,6 +48,11 @@
                                 </div>
                             </div>
                         </div>
+                </li>
+                <li class="topcoat-list__item action">
+                    <button class="topcoat-button--cta full" ng-click="newEvent()">
+                        <i class="topcoat-icon plus-icon"></i> Ajouter un &eacute;v&egrave;nement
+                    </button>
                 </li>
                 <li class="topcoat-list__item loading" ng-if="!loaded">
                     <img src="img/ajax-loader.gif" /><span>Chargement...</span>

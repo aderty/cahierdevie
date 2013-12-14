@@ -649,6 +649,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.showTitle = function(){
         $scope.popTitle = true;
     }
+    $scope.showDesc = function () {
+        $(document.getElementById("descriptionInput")).focus();
+    }
     
     $scope.takePic = function (type) {
         if (type === undefined) {
