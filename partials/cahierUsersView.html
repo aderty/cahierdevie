@@ -20,7 +20,8 @@
             <div class="center field">
                 <span class="field-label">Mes amis</span>
                 <div class="field-input">
-                    <ul>
+                    <ul class="amis">
+                        <li ng-if="!enfant.users.length">Aucun...</li>
                         <li ng-repeat="user in enfant.users">
                             {{user.pseudo}}
                             <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="remove(user, $index);$event.stopPropagation();" style="float: right;">
@@ -30,15 +31,12 @@
                     </ul>
                 </div>
             </div>
-            <div class="center field" ng-class="{error: userForm.email.$dirty && userForm.email.$invalid, success:userForm.email.$dirty && !userForm.email.$invalid}">
+            <div class="center field">
                 <span class="field-label">Email &agrave; ajouter</span>
                 <input ng-model="email" type="email" value="" placeholder="Email" class="field-input" required id="email" name="email">
             </div>
-            <div class="input-help">
-                 <h4>Vous devez renseigner l'email.</h4>
-            </div>
            <div class="center field last">
-                <button class="topcoat-button--cta full-btn" ng-click="add(email)" ng-disabled="userForm.$invalid" title="Ajouter aux amis">
+                <button class="topcoat-button--cta full-btn" ng-click="add(email, this)" title="Ajouter aux amis">
                     <i class="topcoat-icon plus-icon"></i> Ajouter aux amis
                 </button>
             </div>

@@ -290,8 +290,8 @@ myApp.factory('db', function ($q) {
 
 myApp.factory('config', function ($q, $http, version) {
     var configGlobal = {
-        //url: "upload.moncahierdevie.com",
-        url: "127.0.0.1:1480",
+        url: "upload.moncahierdevie.com",
+        //url: "127.0.0.1:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
@@ -437,6 +437,9 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                      me.save(this);
                 }
             }
+            if(!enfant.users){
+                enfant.users = [];
+            }
             var fromServer = false;
             if(enfant.fromServer){
                 fromServer = true;
@@ -444,10 +447,20 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
             }
             var index = enfants.indexOf(enfant);
             if (index == -1) {
-                if(!enfant.photo){
-                    enfant.photo = 'res/user.png';
+                var i = 0, l = enfants.length, found = false;
+                for(;i<l;i++){
+                    if(enfants[i]._id == enfant._id){
+                        enfants[i] = enfant;
+                        found = true;
+                        break;
+                    }
                 }
-                enfants.push(enfant);
+                if(!found){
+                    if(!enfant.photo){
+                        enfant.photo = 'res/user.png';
+                    }
+                    enfants.push(enfant);
+                }
             }
 	        return db.getInstance().objectStore("enfants").put(enfant).done(function () {
                 $timeout(function () {
@@ -456,8 +469,8 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                 if(!fromServer){
                     // TODO : Sync serveur
                     LoginService.addCahier(enfant).then(function(data){
-                        if(enfant._id || !data._id) return;
-                        enfant._id = data._id;
+                        enfant.tick = data.tick;
+                        if(!enfant._id && data._id) enfant._id = data._id;
                         enfant.fromServer = true;
                         me.save(enfant);
                     });
@@ -1245,7 +1258,7 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 data: {
                     user: currentLogin,
                     cahier: cahier._id,
-                    target: user
+                    target: user.id
                 }
             }).
             success(function (data, status, headers, config) {

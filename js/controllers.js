@@ -590,22 +590,29 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Mes amis";
     
-    $scope.add = function (email) {
+    $scope.add = function (email, form) {
         if(!email){
             return alert("Veuillez saisir un email.");
         }
-        LoginService.addUser($scope.enfant, email).then(function (user) {
-            $scope.enfant.users.push(user);
+        form.email = "";
+        LoginService.addUser($scope.enfant, email).then(function (data) {
+            if(data.user){
+                $scope.enfant.users.push(data.user);
+            }
+            $scope.enfant.tick = data.tick;
+            $scope.enfant.fromServer = true;
             EnfantService.save($scope.enfant);
-            $scope.$apply();
+            //$scope.$apply();
         });
     }
     $scope.remove = function (user, index) {
         if (confirm("Etes-vous sur ?")) {
-            LoginService.removeUser($scope.enfant, user).then(function () {
+            LoginService.removeUser($scope.enfant, user).then(function (data) {
                 $scope.enfant.users.splice(index, 1);
+                $scope.enfant.tick = data.tick;
+                $scope.enfant.fromServer = true;
                 EnfantService.save($scope.enfant);
-                navSvc.back();
+                //$scope.$apply();
             });
         }
     }

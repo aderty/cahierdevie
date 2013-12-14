@@ -459,6 +459,27 @@ select.field-input {
 .humeur button img {
     height: 2.8rem;
 }
+
+ul.amis {
+	list-style: none;
+	padding: 0;
+	padding-top:0.2rem;
+	width: 100%;
+}
+
+ul.amis li {
+	float: left;
+	width: 100%;
+	text-align: left;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	border-bottom: solid 1px;
+}
+ul.amis li a.delete
+{
+	margin-top: -0.5rem;
+}
+
 ul.humeurs {
     list-style: none;
     padding-left: 50%;
