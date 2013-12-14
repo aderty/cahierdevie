@@ -1018,6 +1018,11 @@ nav.navigation h4 > i{
     padding-left: 2px;
 }
 
+.evt-photo-item.paysage{
+    width: 80%;
+    height: auto;
+}
+
 .evts-photos .counter {
     position: absolute;
     right: 0.1rem;

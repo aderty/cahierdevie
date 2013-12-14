@@ -50,7 +50,7 @@
 
                             <article ng-repeat="picData in event.pictures" class="evt-photos">
                                 <!--<div class="info"><h3>Cloud Dragon</h3> by <a href="http://voyager3.tumblr.com">Brendan Zabarauskas</a></div>-->
-                                <img class="evt-photo-item" ng-src="{{picData.url}}" />
+                                <img class="evt-photo-item {{picData.dir}}" ng-src="{{picData.url}}" />
                             </article>
 
                         </div> <!-- .inner -->
