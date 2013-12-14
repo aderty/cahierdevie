@@ -59,10 +59,10 @@
 
                 </div>
                 <div id="controls">
-                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures"></label>
+                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures" ng-click="goTo($index)"></label>
                 </div>
                 <div id="active">
-                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures"></label>
+                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures" ng-click="goTo($index)"></label>
                 </div>
                 <!--<div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
             <img class="evt-photo-item" ng-src="{{picData.url}}" />

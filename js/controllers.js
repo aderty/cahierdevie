@@ -669,6 +669,9 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         }
         $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
     }
+    $scope.goTo = function (index) {
+        $scope.indexPhoto = index;
+    }
     
     $scope.takePic = function (type) {
         if (type === undefined) {

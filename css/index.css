@@ -1000,7 +1000,7 @@ nav.navigation h4 > i{
 .evt-photos
 {
 	width: 80px;
-    height: 350px;
+    height: auto;
     display: inline;
 }
 .evts-photos > img
