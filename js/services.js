@@ -957,9 +957,11 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             dropbox.authenticate(fn);
         },
         send: function (enfant, fileEntry, fn) {
-            if (enfant.credentials) {
-                dropbox.setCredentials(enfant.credentials);
+            if (!enfant.credentials){
+                if(fn) fn(null,{});
+                return;
             }
+            dropbox.setCredentials(enfant.credentials);
             if(dropbox.isAuthenticated()){
                 if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
                     sendCahier(enfant, fileEntry, fn);

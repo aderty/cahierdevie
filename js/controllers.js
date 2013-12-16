@@ -653,11 +653,16 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $(document.getElementById("descriptionInput")).focus();
     }
     $scope.indexPhoto = 0;
+    var validSwipe = true;
     $scope.prevPhoto = function () {
         if (!$scope.event.pictures.length) return;
         $scope.indexPhoto = ($scope.indexPhoto + 1) % $scope.event.pictures.length;
 
         $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+        validSwipe = false;
+        setTimeout(function(){
+            validSwipe = true;
+        },200);
     }
     $scope.nextPhoto = function () {
         if (!$scope.event.pictures.length) return;
@@ -668,6 +673,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             $scope.indexPhoto = $scope.indexPhoto - 1;
         }
         $scope.currentPhoto = $scope.event.pictures[$scope.indexPhoto];
+        validSwipe = false;
+        setTimeout(function(){
+            validSwipe = true;
+        },200);
     }
     $scope.goTo = function (index) {
         $scope.indexPhoto = index;
@@ -929,7 +938,20 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         navSvc.back();
     }
     $scope.showPhotos = function(){
-        navSvc.slidePage("/viewPhotos");
+        if(!validSwipe || !$scope.event.pictures) return;
+        Code.PhotoSwipe.Current.setOptions({
+            backButtonHideEnabled: false,
+	        getImageSource: function(e){
+			    return e.url;
+		    },
+		    getImageCaption: function(e){
+		        return "";
+		    }
+	    });
+	    Code.PhotoSwipe.Current.setImages($scope.event.pictures);
+        // Start PhotoSwipe
+		Code.PhotoSwipe.Current.show(0);
+        //navSvc.slidePage("/viewPhotos");
     }
     document.getElementById("selectTitle").addEventListener("change", function (e) {
         if (e.target.value != "") {
