@@ -431,7 +431,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.removeEvent = function (event, index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
-        CahierService.removeEvent(EnfantService.getCurrent(), $scope.currentCahier, index).then(function () {
+        CahierService.removeEvent(EnfantService.getCurrent(), $scope.currentCahier, event).then(function () {
             $scope.$broadcast("refresh-scroll");
         });
     }
@@ -908,6 +908,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                 title: event.title,
                 desc: event.desc,
                 pictures: event.pictures,
+                etat: 1,
                 tick: new Date()
             });
         }

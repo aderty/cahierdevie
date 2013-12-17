@@ -654,10 +654,15 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
-        removeEvent: function(enfant, cahier, index){
-            var events = cahier.events.splice(index, 1);
-            if(events && events.length){
-                deleteEvent(events[0]);
+        removeEvent: function (enfant, cahier, event) {
+            //var events = cahier.events.splice(index, 1);
+            var index = cahier.events.indexOf(event);
+            cahier.events[index].etat = 0;
+            cahier.events[index].tick = new Date();
+            //if(events && events.length){
+            if(cahier.events[index]){
+                //deleteEvent(events[0]);
+                deleteEvent(cahier.events[index]);
             }
             return me.save(enfant, cahier);
         },

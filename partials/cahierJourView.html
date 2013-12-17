@@ -57,15 +57,15 @@
                 <li class="topcoat-list__item loading" ng-if="!loaded">
                     <img src="img/ajax-loader.gif" /><span>Chargement...</span>
                 </li>
-                <li ng-repeat="event in currentCahier.events | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item" ng-class="{'has-photo': event.pictures.length > 0}">
+                <li ng-repeat="event in currentCahier.events | filter: {etat:1} | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item" ng-class="{'has-photo': event.pictures.length > 0}">
                     <div class="time">{{ event.time }}</div>
                     <div class="list-inner">
                         <h3>{{ event.title }}</h3>
                     </div>
                     <div class="evts-photos" ng-animate="'slide'">
-                            <img class="evt-photo-item" ng-if="event.pictures.length > 0" ng-src="{{event.pictures[0].url}}" />
-                            <span ng-if="event.pictures.length > 1" class="topcoat-notification counter">{{event.pictures.length}}</span>
-                        </div> 
+                        <img class="evt-photo-item" ng-if="event.pictures.length > 0" ng-src="{{event.pictures[0].url}}" />
+                        <span ng-if="event.pictures.length > 1" class="topcoat-notification counter">{{event.pictures.length}}</span>
+                    </div>
                     <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="removeEvent(event, $index);$event.stopPropagation();" style="float: right;">
                         <i class="topcoat-icon delete-icon"></i>
                     </a>
