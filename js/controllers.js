@@ -69,7 +69,7 @@ if(!myApp.isPhone){
                     uid: dropCredentials[4]
                 }
                 console.log(credentials);
-                $rootScope.$on('synced', function (e) {
+                EnfantService.onLoad(function (enfants) {
                     EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
                         enfant.setCredentials(credentials);
                         console.log(enfant);
@@ -304,9 +304,9 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     
     function loadCahier(){
         if(!EnfantService.getCurrent()) return;
-        CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
+        CahierService.get(EnfantService.getCurrent(), $rootScope.currentDate).then(function (cahier) {
             if (!cahier) {
-                 cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
+                 cahier = CahierService.new(EnfantService.getCurrent(), $rootScope.currentDate);
             }
             CahierService.setCurrent(cahier);
         });
@@ -355,9 +355,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     function loadCahier(){
         if (!EnfantService.getCurrent()) return;
         $scope.loaded = false;
-        CahierService.get(EnfantService.getCurrent().id, $rootScope.currentDate).then(function (cahier) {
+        CahierService.get(EnfantService.getCurrent(), $rootScope.currentDate).then(function (cahier) {
             if (!cahier) {
-                 cahier = CahierService.new(EnfantService.getCurrent().id, $rootScope.currentDate);
+                 cahier = CahierService.new(EnfantService.getCurrent(), $rootScope.currentDate);
             }
             $scope.loaded = true;
             CahierService.setCurrent(cahier);
@@ -409,7 +409,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     $scope.setHumeur = function (smiley) {
         $scope.currentCahier.humeur = smiley;
         $scope.showSmiley = false;
-        CahierService.save($scope.currentCahier);
+        CahierService.save(EnfantService.getCurrent(), $scope.currentCahier);
     }
     
     EnfantService.onChange(loadCahier);
@@ -431,7 +431,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.removeEvent = function (event, index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
-        CahierService.removeEvent($scope.currentCahier, index).then(function () {
+        CahierService.removeEvent(EnfantService.getCurrent(), $scope.currentCahier, index).then(function () {
             $scope.$broadcast("refresh-scroll");
         });
     }
@@ -860,49 +860,29 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             //var data = canvas.toDataURL('image/jpeg');
             var data = imageData;
             
-            //Canvas2Image.saveAsJPEG(canvas);return;
-            //data = data.replace("data:image/jpeg;", "");
-            var myFolderApp = "CahierDeVie";
-            
-            db.getFileSystem().then(function (fileSys) {
-                        fileSys.root.getDirectory(myFolderApp,
-                            { create: true, exclusive: false },
-                            function (directoryRoot) {
-                                directoryRoot.getDirectory(EnfantService.getCurrent().prenom + "_" + EnfantService.getCurrent().id,
-                                        { create: true, exclusive: false },
-                                        function (directory) {
-                                            var name = new Date().getTime() + ".jpeg";
-                                            if(name == lastName){
-                                                name = name.substring(0, name.indexOf(".")) + "_" + ".jpeg";
-                                            }
-                                            lastName = name;
-                                            console.log(name);
-                                            directory.getFile(name,
-                                                    { create: true , exclusive: false},
-                                                    function (fileEntry) {
-                                                        fileEntry.createWriter(function (writer) {
-                                                            writer.onwrite = function (evt) {
-                                                                successMove(fileEntry, portrait ? "portrait" : "paysage");
-                                                            };
+            db.getPicturesDir(EnfantService.getCurrent()).then(function(directory) {
+                   var name = new Date().getTime() + ".jpeg";
+                   if(name == lastName){
+                        name = name.substring(0, name.indexOf(".")) + "_" + ".jpeg";
+                   }
+                   lastName = name;
+                   console.log(name);
+                   directory.getFile(name, { create: true , exclusive: false}, function (fileEntry) {
+                        fileEntry.createWriter(function (writer) {
+                             writer.onwrite = function (evt) {
+                                  successMove(fileEntry, portrait ? "portrait" : "paysage");
+                             };
                                                            
-                                                          blobData = dataURItoBlob(data);
-                                                          try{
-                                                              writer.write(blobData);
-                                                          }
-                                                            catch (e) {
-                                                              writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
-                                                          }
-                                                          //writer.abort();
-                                                      }, function (error) {
-                                                             alert("create writer " + error.code);
-                                                      });
-                                                    },
-                                            resOnError);
-                                        },
-                                resOnError);
-                            },
-                            resOnError);
-                        
+                             blobData = dataURItoBlob(data);
+                             try{
+                                 writer.write(blobData);
+                             }
+                             catch (e) {
+                                 writer.write(new Blob([blobData], { type: 'image/jpeg' }));//new Blob([dataURItoBlob(data)], {type: 'application/octet-binary'}));
+                             }
+                             //writer.abort();
+                        }, resOnError);
+                 }, resOnError);
             });
         };
 
@@ -926,11 +906,15 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
                 time: event.time,
                 title: event.title,
                 desc: event.desc,
-                pictures: event.pictures
+                pictures: event.pictures,
+                tick: new Date()
             });
         }
+        else{
+            $scope.event.tick = new Date;
+        }
         CahierService.save(enfant, cahier).then(function () {
-            $scope.$apply();
+            //$scope.$apply();
         });
         navSvc.back();
     }
@@ -976,24 +960,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         var n = d.getTime();
         //new file name
         var newFileName = n + entry.name.substring(entry.name.indexOf("."));
-        var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
-
-        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
-            //The folder is created if doesn't exist
-            fileSys.root.getDirectory(myFolderApp,
-                            { create: true, exclusive: false },
-                            function (directoryRoot) {
-                                directoryRoot.getDirectory(EnfantService.getCurrent().prenom + "_" + EnfantService.getCurrent().id,
-                                        { create: true, exclusive: false },
-                                        function (directory) {
-                                            entry.moveTo(directory, newFileName, function(newEntry){successMove(newEntry, direction);}, resOnError);
-                                        },
-                                resOnError);
-                            },
-                            resOnError);
-        },
-        resOnError);
+        
+        db.getPicturesDir(EnfantService.getCurrent()).then(function(directory) {
+               entry.moveTo(directory, newFileName, function(newEntry){successMove(newEntry, direction);}, resOnError);
+        });
     }
 
     //Callback function when the file has been moved successfully - inserting the complete path

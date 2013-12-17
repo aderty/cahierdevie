@@ -1013,7 +1013,7 @@ nav.navigation h4 > i{
 
 .evt-photos > img
 {
-    height: 350px;
+    max-height: 350px;
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
     max-width: 80%;

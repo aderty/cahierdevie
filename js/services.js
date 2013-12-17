@@ -244,7 +244,7 @@ myApp.factory('db', function ($q) {
       getEnfantDir: function(enfant){
             var defered = $q.defer();
             if (enfantsDir && enfantsDir[enfant.id]) {
-                defered.resolve(enfantsDir[enfant.id].base);
+                defered.resolve(enfantsDir[enfant.id]);
             }
                 var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
 
@@ -268,6 +268,13 @@ myApp.factory('db', function ($q) {
                           resOnError);
                     });
                     return defered.promise;
+      },
+      getEnfantBaseDir: function(enfant){
+            var defered = $q.defer();
+            me.getEnfantDir(enfant).then(function (directoryEnfant) {
+                  defered.resolve(directoryEnfant.base);
+            });
+            return defered.promise;
       },
       getDataDir: function(enfant){
             var defered = $q.defer();
@@ -343,6 +350,7 @@ myApp.factory('config', function ($q, $http, version) {
 myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginService) {
     var current, enfants = [], init = false;
     var enfantChangeCb = [];
+    var enfantLoadCb = $.Callbacks("memory once"), loaded = false;
     
     var me = {
         list: function (idEnfant) {
@@ -366,6 +374,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                     init = true;
                     $timeout(function () {
                         defered.resolve(enfants);
+                        enfantLoadCb.fire(enfants);
                     });
                 }).fail(function (e) {
                	    alert(e);
@@ -414,19 +423,30 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
         },
         get: function (id) {
             var defered = $q.defer();
-            db.getInstance().objectStore("enfants").get(id).done(function (data) {
-                if (data){
-                    data.setCredentials = function(credentials){
-                        this.credentials = credentials;
-                        me.save(this);
-                    };
+            if(enfants.length){
+                var i=0, l = enfants.length;
+                for(;i<l;i++){
+                    if(enfants[i].id == id){
+                        defered.resolve(enfants[i]);
+                        break;
+                    }
                 }
-                $timeout(function () {
-                    defered.resolve(data);
+            }
+            else{
+                db.getInstance().objectStore("enfants").get(id).done(function (data) {
+                    if (data){
+                        data.setCredentials = function(credentials){
+                            this.credentials = credentials;
+                            me.save(this);
+                        };
+                    }
+                    $timeout(function () {
+                        defered.resolve(data);
+                    });
+                }).fail(function () {
+                    defered.reject(null);
                 });
-            }).fail(function () {
-                defered.reject(null);
-            });
+            }
             return defered.promise;
         },
         save: function (enfant) {
@@ -444,6 +464,9 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
             if(enfant.fromServer){
                 fromServer = true;
                 delete enfant.fromServer;
+            }
+            else{
+                enfant.needSync = true;
             }
             var index = enfants.indexOf(enfant);
             if (index == -1) {
@@ -468,12 +491,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                 });
                 if(!fromServer){
                     // TODO : Sync serveur
-                    LoginService.addCahier(enfant).then(function(data){
-                        enfant.tick = data.tick;
-                        if(!enfant._id && data._id) enfant._id = data._id;
-                        enfant.fromServer = true;
-                        me.save(enfant);
-                    });
+                    me.sync(enfant);
                 }
                 
             }).fail(function (e, l, f) {
@@ -502,15 +520,19 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
         },
         remove: function(enfant) {
             var defered = $q.defer();
-            CahierService.removeAll(enfant.id).then(function(){
+            CahierService.removeAll(enfant).then(function(){
                 db.getInstance().objectStore("enfants").delete(enfant.id).done(function () {
 
                     var index = enfants.indexOf(enfant);
                     enfants.splice(index, 1);
                     
                     LoginService.removeCahier(enfant);
-
-                    var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
+                    
+                    db.getEnfantBaseDir(enfant).then(function(directory){
+                        directory.removeRecursively(function () {
+                        }, resOnError);
+                    });
+                    /*var myFolderApp = "CahierDeVie";// + EnfantService.getCurrent().id;
 
                     window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
                     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fileSys) {
@@ -529,7 +551,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                                         },
                                         resOnError);
                     },
-                    resOnError);
+                    resOnError);*/
 
                     defered.resolve(true);
 
@@ -538,6 +560,15 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                 });
             });
             return defered.promise;
+        },
+        sync: function(enfant){
+            LoginService.addCahier(enfant).then(function(data){
+                 enfant.tick = data.tick;
+                 if(!enfant._id && data._id) enfant._id = data._id;
+                 enfant.fromServer = true;
+                 delete enfant.needSync;
+                 me.save(enfant);
+            });
         },
         getCurrent: function () {
             return current;
@@ -559,9 +590,23 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                     enfantChangeCb.splice(i, 1);
                 }
             }
+        },
+        onLoad: function (callback) {
+            enfantLoadCb.add(callback);
+        },
+        removeOnLoad: function(callback){
+            enfantLoadCb.remove(callback);
         }
     };
-
+    
+    me.onLoad(function(enfants){
+        var i=0, l = enfants.length;
+        for(;i<l; i++){
+            if(enfants[i].needSync){
+                  me.sync(enfants[i]);
+            }
+         }
+    });
     function resOnError(error) {
         alert(error.code);
     }
@@ -584,23 +629,23 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
     }
     
     var me = {
-        "new": function (idEnfant, date) {
+        "new": function (enfant, date) {
             return {
-                id: genKey(idEnfant, date),
-                idEnfant: idEnfant,
+                id: genKey(enfant.id, date),
+                idEnfant: enfant.id,
                 date: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
                 humeur: $rootScope.smileys[0],
                 events: []
             }
         },
-        list: function (idEnfant) {
+        list: function (enfant) {
             var defered = $q.defer();
             var cahiers = [];
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
-                if (idEnfant == elem.value.idEnfant) {
+                if (enfant.id == elem.value.idEnfant) {
                     cahiers.push(elem.value);
                 }
-            }, idEnfant).done(function () {
+            }, enfant.id).done(function () {
                 $timeout(function () {
                     defered.resolve(cahiers);
                 });
@@ -609,18 +654,18 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
-        removeEvent: function(cahier, index){
+        removeEvent: function(enfant, cahier, index){
             var events = cahier.events.splice(index, 1);
             if(events && events.length){
                 deleteEvent(events[0]);
             }
-            return me.save(cahier);
+            return me.save(enfant, cahier);
         },
-        removeAll: function(idEnfant){
+        removeAll: function(enfant){
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").index("idEnfant").each(function (elem) {
                 // Suppression des images des évènements
-                if (elem.value.idEnfant == idEnfant) {
+                if (elem.value.idEnfant == enfant.id) {
                     elem.delete();
                 }
             }, idEnfant).done(function () {
@@ -630,14 +675,84 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
-        get: function (idEnfant, date) {
+        get: function (enfant, date) {
             var defered = $q.defer();
             var cahiers = [];
-            var key = genKey(idEnfant, date);
+            var key = genKey(enfant.id, date);
             
             db.getInstance().objectStore("cahier").get(key).done(function (data) {
                 $timeout(function () {
                     defered.resolve(data);
+                });
+                DropBoxService.getCahier(enfant, date).then(function(cahier){
+                    if(!cahier && !data) return;
+                    if(!data){
+                        // Non présent en local
+                        data = cahier;
+                        cahier.fromServer = true;
+                        me.setCurrent(cahier);
+                        return me.save(enfant, cahier);
+                    }
+                    if(!cahier && data){
+                        // Non présent sur le serveur
+                        return me.sync(enfant, data);
+                    }
+                    // Cas des cahiers présents en local + serveur -> Synchronisation des évènements
+                    var i=0, j = 0, found, changed = false, needServerSync = false, m = data.events.length, l = cahier.events.length, remoteEvt ,localEvt;
+                    // Parcours des évènements du serveur et recherche de leur présence sur ceux en local.
+                    for(;i<l;i++){
+                        remoteEvt = cahier.events[i];
+                        remoteEvt.tick = moment(remoteEvt.tick).toDate();
+                        j = 0;
+                        found = false;
+                        for(;j<m;j++){
+                            localEvt = data.events[j];
+                            if(localEvt.id == remoteEvt.id){
+                                found = true;
+                                // Evènement trouvé -> test de la dernière date de MAJ
+                                if(localEvt.tick < remoteEvt.tick){
+                                    localEvt = remoteEvt;
+                                    changed = true;
+                                }
+                                break;
+                            }
+                        }
+                        // Si l'évènement n'est pas trouvé sur les évènement en local -> Ajout
+                        if(!found){
+                            data.events.push(remoteEvt);
+                            changed = true;
+                        }
+                    }
+                    i=0;
+                    j = 0;
+                    // Parcours des évènements locaux et recherche de leur présence sur ceux du serveur.
+                    for(;i<l;i++){
+                        localEvt = data.events[i];
+                        j = 0;
+                        found = false;
+                        for(;j<m;j++){
+                            remoteEvt = data.events[j];
+                            if(remoteEvt.id == remoteEvt.id){
+                                found = true;
+                                break;
+                            }
+                        }
+                        // Au moins 1 event n'est pas dispo sur le serveur -> Demande de synchro.
+                        if(!found){
+                            needServerSync = true;
+                        }
+                    }
+                    // S'il y a au un changement ou le serveur doit être synchronisé
+                    if(changed || needServerSync){
+                        // S'il n'est pas nécessaire de mettre à jour le serveur -> ajout de la prop fromServer
+                        if(!needServerSync){
+                            data.fromServer = true;
+                        }
+                        // Mise à jour du cahier
+                        me.save(enfant, data);
+                        // MAJ de l'interface
+                        me.setCurrent(data);
+                    }
                 });
             }).fail(function () {
                 defered.reject(null);
@@ -647,49 +762,68 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         save: function (enfant, cahier) {
             cahier.tick = new Date();
             var defered = $q.defer();
-            return db.getInstance().objectStore("cahier").put(cahier).done(function () {
+            
+            var fromServer = false;
+            if(cahier.fromServer){
+                fromServer = true;
+                delete cahier.fromServer;
+            }
+            else{
+                cahier.needSync = true;
+            }
+            console.log("save");
+            db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
                 });
-                var i = 0, l = cahier.events.length, imgs = [], path;
+                if(!fromServer){
+                    me.sync(enfant, cahier);
+                }
+                
+            }).fail(function (e, l, f) {
+                alert(e.stack + " \n file : " + f + " \n ligne :" + l);
+            });
+            return defered.promise;
+        },
+        sync: function(enfant, cahier){
+            var i = 0, l = cahier.events.length, imgs = [], path;
                 for (; i < l; i++) {
                     var j = 0, k = cahier.events[i].pictures.length;
                     for (; j < k; j++) {
                         if (!cahier.events[i].pictures[j].sync && cahier.events[i].pictures[j].path) {
                             path = cahier.events[i].pictures[j].path;
                             path = path.substring(path.lastIndexOf('/') + 1);
-                            imgs.push(path);
+                            imgs.push({
+                                path: path,
+                                event: i,
+                                picture: j
+                            });
                         }
                     }
                 }
-                
-                db.getFileSystem().then(function (fileSys) {
-                    fileSys.root.getDirectory(myFolderApp,
-                            { create: true, exclusive: false },
-                            function (directoryRoot) {
-                                directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id,
-                                        { create: true, exclusive: false },
-                                        function (directory) {
-                                            i = 0, l = imgs.length;
-                                            for (; i < l; i++) {
-                                                directory.getFile(imgs[i], { create: false }, function (fileEntry) {
-                                                    DropBoxService.send(enfant, cahier, fileEntry);
-                                                }, function (error) {
-                                                    alert("getFile " + error.code);
-                                                });
-                                            }
-                                        }, function (error) {
-                                            alert("get folder app " + error.code);
+                if(imgs.length){
+                    db.getPicturesDir(enfant).then(function(directory) {
+                          i = 0, l = imgs.length;
+                          for (; i < l; i++) {
+                              directory.getFile(imgs[i].path, { create: false }, (function (item) {
+                                   return function (fileEntry) {
+                                        DropBoxService.sendPhoto(enfant, cahier, fileEntry).then(function(){
+                                            cahier.events[item.event].pictures[item.picture].sync = true;
+                                            cahier.fromServer = true;
+                                            me.save(enfant, cahier);
                                         });
-                            }, function (error) {
-                                alert("get folder " + error.code);
-                            });
+                                   }
+                              })(imgs[i]), function (error) {
+                                     alert("getFile " + error.code);
+                              });
+                          }
+                   });
+                }
+                DropBoxService.setCahier(enfant, cahier).then(function(){
+                    cahier.fromServer = true;
+                    delete cahier.needSync;
+                    me.save(enfant, cahier);
                 });
-                DropBoxService.send(enfant, cahier);
-            }).fail(function (e, l, f) {
-                alert(e.stack + " \n file : " + f + " \n ligne :" + l);
-            });
-            return defered.promise;
         },
         getCurrent: function () {
             return current;
@@ -871,13 +1005,17 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         if(event.pictures && event.pictures.length){
              var i=0, l = event.pictures.length;
              for(;i<l;i++){
-                  deletePic(event.pictures[i].url);
+                 deletePic(event.pictures[i].path);
+                 //deletePic(event.pictures[i].url);
              }
         }
     }
     
     function deletePic(file) {
-        window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
+        db.getFileSystem().then(function(fileSystem){
+            fileSystem.root.getFile(file, null, deleteOnSuccess, resOnError);
+        });
+        //window.resolveLocalFileSystemURI(file, deleteOnSuccess, resOnError);
     }
 
     function deleteOnSuccess(entry) {
@@ -959,37 +1097,96 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         setCredentials: function(credentials){
             dropbox.setCredentials(credentials);
         },
-        send: function (enfant, cahier, fileEntry, fn) {
+        setCahier: function (enfant, cahier, fn) {
+            var defered = $q.defer();
             if (!enfant.credentials){
-                if(fn) fn(null,{});
-                return;
-            }
-            dropbox.setCredentials(enfant.credentials);
-            if(dropbox.isAuthenticated()){
-                if ((typeof fileEntry == "function" || fileEntry == undefined) && fn == undefined) {
-                    sendCahier(enfant, cahier, fn);
-                    return;
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                     sendCahier(enfant, cahier, function(err, data){
+                            if (err) {
+                                console.error(err);
+                                defered.reject(err);
+                                return;
+                            }
+                            defered.resolve(data);
+                        });
                 }
-                sendPhoto(enfant, cahier, fileEntry, fn);
+                else{
+                    dropbox.authenticate(function (err, client) {
+                        if (err) {
+                            console.error(err);
+                            defered.reject(err);
+                        }
+                        sendCahier(enfant, fileEntry, function(err, data){
+                            if (err) {
+                                console.error(err);
+                                defered.reject(err);
+                                return;
+                            }
+                            defered.resolve(data);
+                        });
+                    });
+                }
             }
-            else{
-                dropbox.authenticate(function (err, client) {
-                    if (err) return console.error(err);
-                    //if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
-                    if ((typeof fileEntry == "function" || fileEntry == undefined) && fn == undefined) {
-                        sendCahier(enfant, fileEntry, fn);
-                        return;
-                    }
-                    sendPhoto(enfant, cahier, fileEntry, fn);
-                });
+            return defered.promise;
+        },
+        sendPhoto: function (enfant, cahier, fileEntry, fn) {
+            var defered = $q.defer();
+            if (!enfant.credentials){
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                    sendPhoto(enfant, cahier, fileEntry, function(err, data){
+                         if (err) {
+                                console.error(err);
+                                defered.reject(err);
+                                return;
+                         }
+                         defered.resolve(data);
+                    });
+                }
+                else{
+                    dropbox.authenticate(function (err, client) {
+                        if (err) {
+                            console.error(err);
+                            defered.reject(err);
+                        }
+                        sendPhoto(enfant, cahier, fileEntry, function(err, data){
+                             if (err) {
+                                    console.error(err);
+                                    defered.reject(err);
+                                    return;
+                             }
+                             defered.resolve(data);
+                        });
+                    });
+                }
             }
+            return defered.promise;
         },
         getCahier: function(enfant, date, fn) {
-            return getCahier(enfant, date, function(err, data){
-                if (err) return console.error(err);
-                var cahier = JSON.parse(data);
-                if(fn) fn(err, cahier);
-            });
+            var defered = $q.defer();
+            if (!enfant.credentials){
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                getCahier(enfant, date, function(err, data){
+                    if (err) {
+                        console.error(err);
+                        defered.reject(err);
+                        return;
+                    }
+                    var cahier = null;
+                    if (data) {
+                        cahier = JSON.parse(data);
+                    }
+                    defered.resolve(cahier);
+                });
+            }
+            return defered.promise;
         },
         isAuthenticated: function () {
             return dropbox.isAuthenticated();
@@ -1023,8 +1220,15 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     function getCahier(enfant, date, fn) {
         var path = getDirectoryEnfant(enfant) + '/data/' + moment(date).format('YYYY_MM') + '/' + genCahierKey(enfant.id, date) + '.json';
         dropbox.readFile(path, function (err, data) {
-            if (err) return console.error(err);
-            if (fn) fn(err, data);
+            if (err) {
+                if (err.status != 404) {
+                    console.error(err);
+                }
+                else {
+                    err = null;
+                }
+            }
+            if (fn) fn(null, data);
         });
 
     }
