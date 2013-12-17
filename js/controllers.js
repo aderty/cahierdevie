@@ -903,6 +903,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         if (event.creation) {
             delete event.creation;
             cahier.events.push({
+                id: new Date().getTime(),
                 time: event.time,
                 title: event.title,
                 desc: event.desc,

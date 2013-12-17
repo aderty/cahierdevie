@@ -711,7 +711,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 found = true;
                                 // Evènement trouvé -> test de la dernière date de MAJ
                                 if(localEvt.tick < remoteEvt.tick){
-                                    localEvt = remoteEvt;
+                                    data.events[j] = remoteEvt;
                                     changed = true;
                                 }
                                 break;
