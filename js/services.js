@@ -673,7 +673,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                             i = 0, l = imgs.length;
                                             for (; i < l; i++) {
                                                 directory.getFile(imgs[i], { create: false }, function (fileEntry) {
-                                                    DropBoxService.send(enfant, fileEntry);
+                                                    DropBoxService.send(enfant, cahier, fileEntry);
                                                 }, function (error) {
                                                     alert("getFile " + error.code);
                                                 });
@@ -956,27 +956,31 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         authenticate: function(fn){
             dropbox.authenticate(fn);
         },
-        send: function (enfant, fileEntry, fn) {
+        setCredentials: function(credentials){
+            dropbox.setCredentials(credentials);
+        },
+        send: function (enfant, cahier, fileEntry, fn) {
             if (!enfant.credentials){
                 if(fn) fn(null,{});
                 return;
             }
             dropbox.setCredentials(enfant.credentials);
             if(dropbox.isAuthenticated()){
-                if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
-                    sendCahier(enfant, fileEntry, fn);
+                if ((typeof fileEntry == "function" || fileEntry == undefined) && fn == undefined) {
+                    sendCahier(enfant, cahier, fn);
                     return;
                 }
-                sendPhoto(enfant, fileEntry, fn);
+                sendPhoto(enfant, cahier, fileEntry, fn);
             }
             else{
                 dropbox.authenticate(function (err, client) {
                     if (err) return console.error(err);
-                    if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                    //if (typeof fileEntry == "object" && fileEntry.isFile == undefined) {
+                    if ((typeof fileEntry == "function" || fileEntry == undefined) && fn == undefined) {
                         sendCahier(enfant, fileEntry, fn);
                         return;
                     }
-                    sendPhoto(enfant, fileEntry, fn);
+                    sendPhoto(enfant, cahier, fileEntry, fn);
                 });
             }
         },
@@ -1009,7 +1013,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function sendCahier(enfant, cahier, fn) {
-        var path = getDirectoryEnfant(enfant) + '/data/' + cahier.id + '.json';
+        var path = getDirectoryEnfant(enfant) + '/data/' + moment(cahier.date).format('YYYY_MM') + '/' + cahier.id + '.json';
         dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
@@ -1017,7 +1021,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
     }
 
     function getCahier(enfant, date, fn) {
-        var path = getDirectoryEnfant(enfant) + '/data/' + genCahierKey(enfant.id, date) + '.json';
+        var path = getDirectoryEnfant(enfant) + '/data/' + moment(date).format('YYYY_MM') + '/' + genCahierKey(enfant.id, date) + '.json';
         dropbox.readFile(path, function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
@@ -1025,13 +1029,13 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     }
 
-    function sendPhoto(enfant, fileEntry, fn) {
+    function sendPhoto(enfant, cahier, fileEntry, fn) {
         fileEntry.file(function (file) {
             var hash;
             var reader = new FileReader();
             //asnycrhonous task has finished, fire the event:
             reader.onload = function (evt) {
-                var path = getDirectoryEnfant(enfant) + '/photos/' + file.name;
+                var path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + file.name;
                 dropbox.writeFile(path, evt.target.result, function (err, data) {
                     if (err) return console.error(err);
                     if (fn) fn(err, data);

@@ -1016,12 +1016,13 @@ nav.navigation h4 > i{
     height: 350px;
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
+    max-width: 80%;
 }
 
-.evt-photo-item.paysage{
+/*.evt-photo-item.paysage{
     width: 80%;
     height: auto;
-}
+}*/
 
 .evts-photos .counter {
     position: absolute;

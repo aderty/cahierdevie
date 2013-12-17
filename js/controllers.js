@@ -61,7 +61,7 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
 }]);
 
 if(!myApp.isPhone){
-    myApp.run(["EnfantService", function (EnfantService) {
+    myApp.run(["$rootScope", "EnfantService", "DropBoxService", function ($rootScope, EnfantService, DropBoxService) {
             var dropCredentials = /(.*)access_token=(.*)&token_type=(.*)&uid=(.*)&state=(.*)/.exec(location.hash);
             if (dropCredentials && dropCredentials.length && localStorage["authEnfant"]) {
                 var credentials = {
@@ -69,11 +69,13 @@ if(!myApp.isPhone){
                     uid: dropCredentials[4]
                 }
                 console.log(credentials);
-                EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
-                    enfant.setCredentials(credentials);
-                    console.log(enfant);
+                $rootScope.$on('synced', function (e) {
+                    EnfantService.get(parseInt(localStorage["authEnfant"])).then(function (enfant) {
+                        enfant.setCredentials(credentials);
+                        console.log(enfant);
+                    });
+                    localStorage.removeItem("authEnfant");
                 });
-                localStorage.removeItem("authEnfant");
             }
    }]);
 }
@@ -138,6 +140,7 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
                     if(data.length){
                         $rootScope.$emit('message', "Les informations des cahiers de vie de "+ prenoms.join(", ") + " ont étés mis à jour.");
                     }
+                    $rootScope.$emit('synced');
                 })
             });
         });
@@ -580,6 +583,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
                     $scope.isAuthenticated = true;
                     //$scope.$apply();
                 }
+                DropBoxService.reset();
             });
         }
     }
