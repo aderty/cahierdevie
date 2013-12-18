@@ -562,30 +562,25 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         console.log("On fail " + e);
     };
     
-    $scope.isAuthenticated = DropBoxService.isAuthenticated();
-    
     $scope.authenticate = function () {
-        if ($scope.isAuthenticated) {
-            DropBoxService.reset();
-            $scope.isAuthenticated = false;
-        }
-        else {
-            localStorage["authEnfant"] = $scope.enfant.id;
-            DropBoxService.authenticate(function (err, client) {
-                if (err) {
-                    console.error(err);
-                    DropBoxService.reset();
-                    return;
-                }
-                var credentials = client.credentials();
-                if (client.authStep == 5 && credentials) {
-                    $scope.enfant.setCredentials(credentials);
-                    $scope.isAuthenticated = true;
-                    //$scope.$apply();
-                }
+        DropBoxService.init();
+        localStorage["authEnfant"] = $scope.enfant.id;
+        DropBoxService.authenticate(function (err, client) {
+            if (err) {
+                console.error(err);
+                alert("Authentification dropbox KO...");
+                alert(err);
                 DropBoxService.reset();
-            });
-        }
+                return;
+            }
+            alert("Authentification dropbox OK!");
+            var credentials = client.credentials();
+            if (client.authStep == 5 && credentials) {
+                $scope.enfant.setCredentials(credentials);
+                //$scope.$apply();
+            }
+            DropBoxService.reset();
+        });
     }
 }
 

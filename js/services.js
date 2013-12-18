@@ -690,12 +690,17 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                     defered.resolve(data);
                 });
                 DropBoxService.getCahier(enfant, date).then(function(cahier){
-                    if(!cahier && !data) return;
+                    if (!cahier && !data) return;
+                    var imgs = [];
                     if(!data){
                         // Non présent en local
                         data = cahier;
                         cahier.fromServer = true;
                         me.setCurrent(cahier);
+                        /*var i = 0, l = cahier.events.length;
+                        for (; i < l; i++) {
+                            imgs.push.apply(img, cahier.events[i].pictures);
+                        }*/
                         return me.save(enfant, cahier);
                     }
                     if(!cahier && data){
@@ -717,6 +722,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 // Evènement trouvé -> test de la dernière date de MAJ
                                 if(localEvt.tick < remoteEvt.tick){
                                     data.events[j] = remoteEvt;
+                                    //imgs.push.apply(img, remoteEvt.pictures);
                                     changed = true;
                                 }
                                 break;
@@ -930,7 +936,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
     var toSync = {};
     if (localStorage["cahiersToSync"]) {
         toSync = JSON.parse(localStorage["cahiersToSync"]);
-        for (id in toSync) {
+        for (var id in toSync) {
             me.getById(id).then(function (cahier) {
                 me.sync(toSync[id], cahier);
             })
@@ -1090,7 +1096,7 @@ myApp.factory('EventService', function ($q, db) {
 
 
 
-myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config) {
+myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, config, db) {
     /*if (localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"]) {
         localStorage["dropbox-auth:default:ARsKfdZNtCcMrUGvvOKOzQWjll0"] = "";
     }*/
@@ -1228,12 +1234,24 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         isAuthenticated: function () {
             return dropbox.isAuthenticated();
         },
+        init: function(){
+            me.reset();
+            dropbox.authStep = 2;
+            dropbox.setCredentials({
+	        key: DROPBOX_APP_KEY,
+	        secret: DROPBOX_APP_SECRET,
+	        sandbox: false
+	    });
+        },
         reset: function () {
-            if (dropbox.isAuthenticated()) {
+            /*if (dropbox.isAuthenticated()) {
                 dropbox.signOut();
             }
-            else {
+            else {*/
                 dropbox.reset();
+            //}
+            if (localStorage.getItem(key)) {
+                 localStorage.removeItem(key);
             }
         }
     }
@@ -1283,6 +1301,14 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 });
             };
             reader.readAsArrayBuffer(file);
+        });
+    }
+
+    function getPhoto(enfant, cahier, path,fn){
+        path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + path;
+        dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
+            if (err) return console.error(err);
+            if (fn) fn(err, data);
         });
         
     }
