@@ -764,6 +764,17 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
+        getById: function (id) {
+            var defered = $q.defer();
+            db.getInstance().objectStore("cahier").get(id).done(function (data) {
+                $timeout(function () {
+                    defered.resolve(data);
+                });
+            }).fail(function () {
+                defered.reject(null);
+            });
+            return defered.promise;
+        },
         save: function (enfant, cahier) {
             cahier.tick = new Date();
             var defered = $q.defer();
@@ -776,6 +787,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             else{
                 cahier.needSync = true;
             }
+            toSync[cahier.id] = {
+                _id: enfant._id,
+                id: enfant.id,
+                credentials: enfant.credentials,
+                prenom: enfant.prenom
+            };
+            localStorage["cahiersToSync"] = JSON.stringify(toSync);
+
             console.log("save");
             db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
@@ -827,6 +846,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 DropBoxService.setCahier(enfant, cahier).then(function(){
                     cahier.fromServer = true;
                     delete cahier.needSync;
+                    delete toSync[cahier.id];
+                    localStorage["cahiersToSync"] = JSON.stringify(toSync);
                     me.save(enfant, cahier);
                 });
         },
@@ -905,6 +926,17 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             return defered.promise;
         }
     };
+
+    var toSync = {};
+    if (localStorage["cahiersToSync"]) {
+        toSync = JSON.parse(localStorage["cahiersToSync"]);
+        for (id in toSync) {
+            me.getById(id).then(function (cahier) {
+                me.sync(toSync[id], cahier);
+            })
+        }
+    }
+
     var defered = $q.defer();
     var cahier;
     var pictures = [];
