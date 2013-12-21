@@ -253,7 +253,7 @@ myApp.factory('db', function ($q) {
                         fileSys.root.getDirectory(myFolderApp, { create: true, exclusive: false }, function (directoryRoot) {
                                             directoryRoot.getDirectory(enfant.prenom + "_" + enfant.id, { create: true, exclusive: false }, function (directoryEnfant) {
                                                     enfantsDir[enfant.id] = {base: directoryEnfant};
-                                                    directoryEnfant.getDirectory("pictures", { create: true, exclusive: false }, function (directory) {
+                                                    directoryEnfant.getDirectory("photos", { create: true, exclusive: false }, function (directory) {
                                                          enfantsDir[enfant.id].pictures = directory;
                                                          directoryEnfant.getDirectory("data", { create: true, exclusive: false }, function (directoryData) {
                                                               enfantsDir[enfant.id].data = directoryData;
@@ -999,8 +999,31 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                     if(!data) finish();
                     //len = data.byteLength;
                     //alert(len);
-                    db.getPicturesDir(enfant).then(function(directory) {
-                       directory.getFile(item.name, { create: true }, function (fileEntry) {
+                    db.getPicturesDir(enfant).then(function (directory) {
+                        var filePath = directory.fullPath + '/' + item.name;
+                        var fileTransfer = new FileTransfer();
+                        var uri = encodeURI(data);
+                        fileTransfer.download(
+                            uri,
+                            directory.fullPath + '/',
+                            function (entry) {
+                                console.log("download complete: " + entry.fullPath);
+                                delete item.needDownload;
+                                item.url = entry.toURL();
+                                item.path = entry.fullPath,
+                                item.sync = true;
+                                alert("ok");
+                                finish();
+                            },
+                            function (error) {
+                                console.log("download error source " + error.source);
+                                console.log("download error target " + error.target);
+                                console.log("upload error code" + error.code);
+                                finish();
+                            },
+                            true
+                        );
+                       /*directory.getFile(item.name, { create: true }, function (fileEntry) {
                             fileEntry.createWriter(function (writer) {
                                  writer.onwrite = function (evt) {
                                      delete item.needDownload;
@@ -1016,10 +1039,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                  };      
                                  //var dataView = new Int8Array(len);
                                  try{
-                                 	/*var y = 0;
-					for (; y < len; y++) {
-					        dataView[y] = data[y];
-					}*/
+                                 	//var y = 0;
+					//for (; y < len; y++) {
+					   //     dataView[y] = data[y];
+					//}
                                      writer.write(data);
                                  }
                                  catch (e) {
@@ -1030,7 +1053,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                             });
                        }, function (error) {
                               finish();
-                       });
+                       });*/
                     }, function (error) {
                        finish();
                     });
@@ -1444,8 +1467,12 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     function getPhoto(enfant, cahier, name,fn){
         var path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + name;
-        dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
-        //dropbox.readFile(path, {blob: true}, function (err, data) {
+        dropbox.makeUrl(path, { download: true }, function (err, data) {
+            if (err) return console.error(err)
+            if (fn) fn(err, data.url);
+        });
+        //dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
+       /*dropbox.readFile(path, {blob: true}, function (err, data) {
             if (err) {
                 if (err.status != 404) {
                     console.error(err);
@@ -1455,7 +1482,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 }
             }
             if (fn) fn(err, data);
-        });
+        });*/
         
     }
 
