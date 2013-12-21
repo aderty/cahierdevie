@@ -1000,29 +1000,37 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                     //len = data.byteLength;
                     //alert(len);
                     db.getPicturesDir(enfant).then(function (directory) {
-                        var filePath = directory.fullPath + '/' + item.name;
-                        var fileTransfer = new FileTransfer();
-                        var uri = encodeURI(data);
-                        fileTransfer.download(
-                            uri,
-                            directory.fullPath + '/',
-                            function (entry) {
-                                console.log("download complete: " + entry.fullPath);
-                                delete item.needDownload;
-                                item.url = entry.toURL();
-                                item.path = entry.fullPath,
-                                item.sync = true;
-                                alert("ok");
-                                finish();
-                            },
-                            function (error) {
-                                console.log("download error source " + error.source);
-                                console.log("download error target " + error.target);
-                                console.log("upload error code" + error.code);
-                                finish();
-                            },
-                            true
-                        );
+                        directory.getFile(item.name, { create: true }, function (fileEntry) {
+                            //var filePath = directory.fullPath + '/' + item.name;
+                            var filePath = fileEntry.fullPath;
+                            if (device.platform === "Android" && filePath.indexOf("file://") === 0) {
+                                filePath = filePath.substring(7);
+                            }
+                            var fileTransfer = new FileTransfer();
+                            var uri = encodeURI(data);
+                            fileTransfer.download(
+                                uri,
+                                filePath,
+                                function (entry) {
+                                    console.log("download complete: " + entry.fullPath);
+                                    delete item.needDownload;
+                                    item.url = entry.toURL();
+                                    item.path = entry.fullPath,
+                                    item.sync = true;
+                                    alert("ok");
+                                    finish();
+                                },
+                                function (error) {
+                                    console.log("download error source " + error.source);
+                                    console.log("download error target " + error.target);
+                                    console.log("upload error code" + error.code);
+                                    finish();
+                                },
+                                true
+                            );
+                        }, function (error) {
+                            finish();
+                        });
                        /*directory.getFile(item.name, { create: true }, function (fileEntry) {
                             fileEntry.createWriter(function (writer) {
                                  writer.onwrite = function (evt) {
