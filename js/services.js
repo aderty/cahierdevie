@@ -1000,9 +1000,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                     //len = data.byteLength;
                     //alert(len);
                     db.getPicturesDir(enfant).then(function (directory) {
-                        directory.getFile(item.name, { create: true }, function (fileEntry) {
-                            //var filePath = directory.fullPath + '/' + item.name;
-                            var filePath = fileEntry.fullPath;
+                        //directory.getFile(item.name, { create: true }, function (fileEntry) {
+                            var filePath = directory.fullPath + '/' + item.name;
+                            //var filePath = fileEntry.fullPath;
                             if (device.platform === "Android" && filePath.indexOf("file://") === 0) {
                                 filePath = filePath.substring(7);
                             }
@@ -1028,9 +1028,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 },
                                 true
                             );
-                        }, function (error) {
+                        /*}, function (error) {
                             finish();
-                        });
+                        });*/
                        /*directory.getFile(item.name, { create: true }, function (fileEntry) {
                             fileEntry.createWriter(function (writer) {
                                  writer.onwrite = function (evt) {
