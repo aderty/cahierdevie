@@ -691,8 +691,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 });
                 
                 function finishDownload(imgs){
-                    if (!imgs) return;
-                    angular.forEach(cahier.events, function(event, key){
+                    if (!imgs || !data) return;
+                    angular.forEach(data.events, function (event, key) {
                          angular.forEach(event.pictures, function(pic, key){
                               angular.forEach(imgs, function(downPic, key){
                                    if(pic.name == downPic.name || downPic.needDownload){
@@ -716,7 +716,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         });
                         downloadPhotos(enfant, cahier, imgs).then(function(result){
                             finishDownload(result);
-                            return me.save(enfant, cahier);
+                            //return me.save(enfant, cahier);
                         });
                         return;
                     }
@@ -728,7 +728,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 }
                             });
                         });
-                        downloadPhotos(enfant, cahier, imgs).then(function(result){
+                        downloadPhotos(enfant, data, imgs).then(function (result) {
                             finishDownload(result);
                             if(result){
                                 // Mise à jour du cahier
@@ -797,7 +797,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         if(!needServerSync){
                             data.fromServer = true;
                         }
-                        downloadPhotos(enfant, cahier, imgs).then(function(result){
+                        downloadPhotos(enfant, data, imgs).then(function(result){
                             finishDownload(result);
                             // Mise à jour du cahier
                             me.save(enfant, data);
@@ -856,7 +856,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             });
             return defered.promise;
         },
-        sync: function(enfant, cahier){
+        sync: function (enfant, cahier) {
+            if (!enfant || !cahier) return;
             var i = 0, l = cahier.events.length, imgs = [], path;
                 for (; i < l; i++) {
                     var j = 0, k = cahier.events[i].pictures.length;
@@ -1443,8 +1444,8 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     function getPhoto(enfant, cahier, name,fn){
         var path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + name;
-        //dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
-        dropbox.readFile(path, {blob: true}, function (err, data) {
+        dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
+        //dropbox.readFile(path, {blob: true}, function (err, data) {
             if (err) {
                 if (err.status != 404) {
                     console.error(err);
