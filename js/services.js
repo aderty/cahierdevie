@@ -696,7 +696,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                          angular.forEach(event.pictures, function(pic, key){
                               angular.forEach(imgs, function(downPic, key){
                                    if(pic.name == downPic.name || downPic.needDownload){
-                                        pic.needDownload = true;
+                                        delete pic.needDownload;
                                    }
                               });
                          });
@@ -713,7 +713,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         cahier.tick = moment(cahier.tick).toDate();
                         me.setCurrent(cahier);
                         angular.forEach(cahier.events, function(event, key){
-                           imgs.push.apply(imgs, event.pictures);
+                            imgs.push.apply(imgs, event.pictures);
+                            event.tick = moment(event.tick).toDate();
                         });
                         downloadPhotos(enfant, cahier, imgs).then(function(result){
                             finishDownload(result);
@@ -751,8 +752,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                             if(localEvt.id == remoteEvt.id){
                                 found = true;
                                 // Evènement trouvé -> test de la dernière date de MAJ
-                                if(localEvt.tick < remoteEvt.tick){
-                                    localEvt = remoteEvt;
+                                if (localEvt.tick < remoteEvt.tick) {
+                                    changed = true;
                                     angular.forEach(remoteEvt.pictures, function(remPic, key){
                                        picFound = false;
                                        angular.forEach(localEvt.pictures, function(locPic, key){
@@ -764,6 +765,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                             imgs.push(remPic);
                                        }
                                     });
+                                    angular.extend(localEvt, remoteEvt);
                                 }
                             }
                         });
