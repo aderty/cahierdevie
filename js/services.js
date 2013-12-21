@@ -753,6 +753,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 found = true;
                                 // Evènement trouvé -> test de la dernière date de MAJ
                                 if (localEvt.tick < remoteEvt.tick) {
+                                    var locPic = angular.copy(localEvt.pictures);
                                     changed = true;
                                     angular.forEach(remoteEvt.pictures, function(remPic, key){
                                        picFound = false;
@@ -761,11 +762,13 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                                 picFound = true;
                                             }
                                        });
-                                       if(!picFound){
-                                            imgs.push(remPic);
+                                       if (!picFound) {
+                                           remPic.needDownload = true;
+                                           locPic.push(remPic);
                                        }
                                     });
                                     angular.extend(localEvt, remoteEvt);
+                                    localEvt.pictures = locPic;
                                 }
                             }
                         });
