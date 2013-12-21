@@ -969,6 +969,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         console.log(entry.toURL());
         console.log("direction : " + direction);
         $scope.event.pictures.push({
+            name: entry.name,
             url: entry.toURL(),
             path: entry.fullPath,
             dir: direction,

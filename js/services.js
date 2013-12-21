@@ -689,6 +689,20 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 $timeout(function () {
                     defered.resolve(data);
                 });
+                
+                function finishDownload(imgs){
+                    if (!imgs) return;
+                    angular.forEach(cahier.events, function(event, key){
+                         angular.forEach(event.pictures, function(pic, key){
+                              angular.forEach(imgs, function(downPic, key){
+                                   if(pic.name == downPic.name || downPic.needDownload){
+                                        pic.needDownload = true;
+                                   }
+                              });
+                         });
+                    });
+                }
+                
                 DropBoxService.getCahier(enfant, date).then(function(cahier){
                     if (!cahier && !data) return;
                     var imgs = [];
@@ -697,72 +711,99 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         data = cahier;
                         cahier.fromServer = true;
                         me.setCurrent(cahier);
-                        /*var i = 0, l = cahier.events.length;
-                        for (; i < l; i++) {
-                            imgs.push.apply(img, cahier.events[i].pictures);
-                        }*/
-                        return me.save(enfant, cahier);
+                        angular.forEach(cahier.events, function(event, key){
+                           imgs.push.apply(imgs, event.pictures);
+                        });
+                        downloadPhotos(enfant, cahier, imgs).then(function(result){
+                            finishDownload(result);
+                            return me.save(enfant, cahier);
+                        });
+                        return;
                     }
                     if(!cahier && data){
+                        angular.forEach(data.events, function(event, key){
+                            angular.forEach(event.pictures, function(pic, key){
+                                if(pic.needDownload){
+                                    imgs.push(pic);
+                                }
+                            });
+                        });
+                        downloadPhotos(enfant, cahier, imgs).then(function(result){
+                            finishDownload(result);
+                            if(result){
+                                // Mise à jour du cahier
+                                me.save(enfant, data);
+                                // MAJ de l'interface
+                                me.setCurrent(data);
+                            }
+                        });
                         // Non présent sur le serveur
                         return me.sync(enfant, data);
                     }
                     // Cas des cahiers présents en local + serveur -> Synchronisation des évènements
-                    var i=0, j = 0, found, changed = false, needServerSync = false, m = data.events.length, l = cahier.events.length, remoteEvt ,localEvt;
+                    var found,picFound, changed = false, needServerSync = false, remoteEvt ,localEvt;
                     // Parcours des évènements du serveur et recherche de leur présence sur ceux en local.
-                    for(;i<l;i++){
-                        remoteEvt = cahier.events[i];
+                    angular.forEach(cahier.events, function(remoteEvt, key){
                         remoteEvt.tick = moment(remoteEvt.tick).toDate();
-                        j = 0;
                         found = false;
-                        for(;j<m;j++){
-                            localEvt = data.events[j];
+                        angular.forEach(data.events, function(localEvt, key){
                             if(localEvt.id == remoteEvt.id){
                                 found = true;
                                 // Evènement trouvé -> test de la dernière date de MAJ
                                 if(localEvt.tick < remoteEvt.tick){
-                                    data.events[j] = remoteEvt;
-                                    //imgs.push.apply(img, remoteEvt.pictures);
-                                    changed = true;
+                                    localEvt = remoteEvt;
+                                    angular.forEach(remoteEvt.pictures, function(remPic, key){
+                                       picFound = false;
+                                       angular.forEach(localEvt.pictures, function(locPic, key){
+                                            if(remPic.name == locPic.name){
+                                                picFound = true;
+                                            }
+                                       });
+                                       if(!picFound){
+                                            imgs.push(remPic);
+                                       }
+                                    });
                                 }
-                                break;
                             }
-                        }
+                        });
                         // Si l'évènement n'est pas trouvé sur les évènement en local -> Ajout
                         if(!found){
                             data.events.push(remoteEvt);
+                            imgs.push.apply(imgs, remoteEvt.pictures);
                             changed = true;
                         }
-                    }
-                    i=0;
-                    j = 0;
+                    });
                     // Parcours des évènements locaux et recherche de leur présence sur ceux du serveur.
-                    for(;i<l;i++){
-                        localEvt = data.events[i];
-                        j = 0;
+                    angular.forEach(data.events, function(localEvt, key){
                         found = false;
-                        for(;j<m;j++){
-                            remoteEvt = data.events[j];
-                            if(remoteEvt.id == remoteEvt.id){
+                        angular.forEach(localEvt.pictures, function(locPic, key){
+                             if(locPic.needDownload){
+                                  imgs.push(locPic);
+                             }
+                        });           
+                        angular.forEach(cahier.events, function(remoteEvt, key){
+                            if(localEvt.id == remoteEvt.id){
                                 found = true;
-                                break;
                             }
-                        }
+                        });
                         // Au moins 1 event n'est pas dispo sur le serveur -> Demande de synchro.
                         if(!found){
                             needServerSync = true;
                         }
-                    }
+                    });
                     // S'il y a au un changement ou le serveur doit être synchronisé
                     if(changed || needServerSync){
                         // S'il n'est pas nécessaire de mettre à jour le serveur -> ajout de la prop fromServer
                         if(!needServerSync){
                             data.fromServer = true;
                         }
-                        // Mise à jour du cahier
-                        me.save(enfant, data);
-                        // MAJ de l'interface
-                        me.setCurrent(data);
+                        downloadPhotos(enfant, cahier, imgs).then(function(result){
+                            finishDownload(result);
+                            // Mise à jour du cahier
+                            me.save(enfant, data);
+                            // MAJ de l'interface
+                            me.setCurrent(data);
+                        });
                     }
                 });
             }).fail(function () {
@@ -941,6 +982,73 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 me.sync(toSync[id], cahier);
             })
         }
+    }
+    
+    function downloadPhotos(enfant, cahier, imgs){
+        var defered = $q.defer();
+        var i=0, l = imgs.length, run = imgs.length, result = [], len;
+        for(;i<l;i++){
+            imgs[i].needDownload = true;
+            if(!imgs[i].name){
+            	finish();
+            	continue;
+            }
+            DropBoxService.getPhoto(enfant, cahier, imgs[i].name).then((function (item) {
+                return function(data) {
+                    if(!data) finish();
+                    //len = data.byteLength;
+                    //alert(len);
+                    db.getPicturesDir(enfant).then(function(directory) {
+                       directory.getFile(item.name, { create: true }, function (fileEntry) {
+                            fileEntry.createWriter(function (writer) {
+                                 writer.onwrite = function (evt) {
+                                     delete item.needDownload;
+                                     item.url = fileEntry.toURL();
+                                     item.path = fileEntry.fullPath,
+                                     item.sync = true;
+                                      alert("ok");
+                                      //result.push(item);
+                                      finish();
+                                 };
+                                 writer.onerror = function (err) {
+                                      finish();
+                                 };      
+                                 //var dataView = new Int8Array(len);
+                                 try{
+                                 	/*var y = 0;
+					for (; y < len; y++) {
+					        dataView[y] = data[y];
+					}*/
+                                     writer.write(data);
+                                 }
+                                 catch (e) {
+                                     writer.write(new Blob([data], { type: 'image/jpeg' }));
+                                 }
+                            }, function (error) {
+                              finish();
+                            });
+                       }, function (error) {
+                              finish();
+                       });
+                    }, function (error) {
+                       finish();
+                    });
+                 }
+                })(imgs[i])
+            ,function (err) {
+                finish(err);
+            });
+        }
+        function finish(err){
+            run--;
+            if(run == 0){
+                defered.resolve(imgs);
+            }
+        }
+        if(!imgs.length){
+            defered.resolve(null);
+        }
+        return defered.promise;
     }
 
     var defered = $q.defer();
@@ -1140,82 +1248,24 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         setCredentials: function(credentials){
             dropbox.setCredentials(credentials);
         },
-        setCahier: function (enfant, cahier, fn) {
-            var defered = $q.defer();
-            if (!enfant.credentials){
-                defered.reject({error: 1});
-            }else{
-                dropbox.setCredentials(enfant.credentials);
-                if(dropbox.isAuthenticated()){
-                     sendCahier(enfant, cahier, function(err, data){
-                            if (err) {
-                                console.error(err);
-                                defered.reject(err);
-                                return;
-                            }
-                            defered.resolve(data);
-                        });
-                }
-                else{
-                    dropbox.authenticate(function (err, client) {
-                        if (err) {
-                            console.error(err);
-                            defered.reject(err);
-                        }
-                        sendCahier(enfant, fileEntry, function(err, data){
-                            if (err) {
-                                console.error(err);
-                                defered.reject(err);
-                                return;
-                            }
-                            defered.resolve(data);
-                        });
-                    });
-                }
-            }
-            return defered.promise;
-        },
-        sendPhoto: function (enfant, cahier, fileEntry, fn) {
-            var defered = $q.defer();
-            if (!enfant.credentials){
-                defered.reject({error: 1});
-            }else{
-                dropbox.setCredentials(enfant.credentials);
-                if(dropbox.isAuthenticated()){
-                    sendPhoto(enfant, cahier, fileEntry, function(err, data){
-                         if (err) {
-                                console.error(err);
-                                defered.reject(err);
-                                return;
-                         }
-                         defered.resolve(data);
-                    });
-                }
-                else{
-                    dropbox.authenticate(function (err, client) {
-                        if (err) {
-                            console.error(err);
-                            defered.reject(err);
-                        }
-                        sendPhoto(enfant, cahier, fileEntry, function(err, data){
-                             if (err) {
-                                    console.error(err);
-                                    defered.reject(err);
-                                    return;
-                             }
-                             defered.resolve(data);
-                        });
-                    });
-                }
-            }
-            return defered.promise;
-        },
         getCahier: function(enfant, date, fn) {
             var defered = $q.defer();
             if (!enfant.credentials){
                 defered.reject({error: 1});
             }else{
                 dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                     toExec();
+                }
+                else{
+                    dropbox.authenticate(toExec);
+                }
+            }
+            function toExec(err){
+                if (err) {
+                     console.error(err);
+                     defered.reject(err);
+                }
                 getCahier(enfant, date, function(err, data){
                     if (err) {
                         console.error(err);
@@ -1227,6 +1277,93 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                         cahier = JSON.parse(data);
                     }
                     defered.resolve(cahier);
+                });
+            }
+            return defered.promise;
+        },
+        setCahier: function (enfant, cahier, fn) {
+            var defered = $q.defer();
+            if (!enfant.credentials){
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                     toExec();
+                }
+                else{
+                    dropbox.authenticate(toExec);
+                }
+            }
+            function toExec(err){
+                if (err) {
+                     console.error(err);
+                     defered.reject(err);
+                }
+                sendCahier(enfant, cahier, function(err, data){
+                     if (err) {
+                          console.error(err);
+                          defered.reject(err);
+                          return;
+                     }
+                     defered.resolve(data);
+                });
+            }
+            return defered.promise;
+        },
+        getPhoto: function (enfant, cahier, img, fn) {
+            var defered = $q.defer();
+            if (!enfant.credentials){
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                    toExec()
+                }
+                else{
+                    dropbox.authenticate(toExec);
+                }
+            }
+            function toExec(err){
+                if (err) {
+                     console.error(err);
+                     defered.reject(err);
+                }
+                getPhoto(enfant, cahier, img, function(err, data){
+                    if (err) {
+                          console.error(err);
+                          defered.reject(err);
+                          return;
+                    }
+                    defered.resolve(data);
+                });
+            }
+            return defered.promise;
+        },
+        sendPhoto: function (enfant, cahier, fileEntry, fn) {
+            var defered = $q.defer();
+            if (!enfant.credentials){
+                defered.reject({error: 1});
+            }else{
+                dropbox.setCredentials(enfant.credentials);
+                if(dropbox.isAuthenticated()){
+                    toExec();
+                }
+                else{
+                    dropbox.authenticate(toExec);
+                }
+            }
+            function toExec(err){
+                if (err) {
+                     console.error(err);
+                     defered.reject(err);
+                }
+                sendPhoto(enfant, cahier, fileEntry, function(err, data){
+                    if (err) {
+                          console.error(err);
+                          defered.reject(err);
+                          return;
+                    }
+                    defered.resolve(data);
                 });
             }
             return defered.promise;
@@ -1304,10 +1441,18 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         });
     }
 
-    function getPhoto(enfant, cahier, path,fn){
-        path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + path;
-        dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
-            if (err) return console.error(err);
+    function getPhoto(enfant, cahier, name,fn){
+        var path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + name;
+        //dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
+        dropbox.readFile(path, {blob: true}, function (err, data) {
+            if (err) {
+                if (err.status != 404) {
+                    console.error(err);
+                }
+                else {
+                    err = null;
+                }
+            }
             if (fn) fn(err, data);
         });
         
