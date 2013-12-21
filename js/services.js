@@ -716,7 +716,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         });
                         downloadPhotos(enfant, cahier, imgs).then(function(result){
                             finishDownload(result);
-                            //return me.save(enfant, cahier);
+                            return me.save(enfant, cahier);
                         });
                         return;
                     }
