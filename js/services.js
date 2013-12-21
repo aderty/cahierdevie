@@ -997,12 +997,9 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             DropBoxService.getPhoto(enfant, cahier, imgs[i].name).then((function (item) {
                 return function(data) {
                     if(!data) finish();
-                    //len = data.byteLength;
-                    //alert(len);
                     db.getPicturesDir(enfant).then(function (directory) {
-                        //directory.getFile(item.name, { create: true }, function (fileEntry) {
+                        if (myApp.isPhone) {
                             var filePath = directory.fullPath + '/' + item.name;
-                            //var filePath = fileEntry.fullPath;
                             if (device.platform === "Android" && filePath.indexOf("file://") === 0) {
                                 filePath = filePath.substring(7);
                             }
@@ -1017,7 +1014,6 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                     item.url = entry.toURL();
                                     item.path = entry.fullPath,
                                     item.sync = true;
-                                    alert("ok");
                                     finish();
                                 },
                                 function (error) {
@@ -1028,40 +1024,33 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                                 },
                                 true
                             );
-                        /*}, function (error) {
-                            finish();
-                        });*/
-                       /*directory.getFile(item.name, { create: true }, function (fileEntry) {
-                            fileEntry.createWriter(function (writer) {
-                                 writer.onwrite = function (evt) {
-                                     delete item.needDownload;
-                                     item.url = fileEntry.toURL();
-                                     item.path = fileEntry.fullPath,
-                                     item.sync = true;
-                                      alert("ok");
-                                      //result.push(item);
-                                      finish();
-                                 };
-                                 writer.onerror = function (err) {
-                                      finish();
-                                 };      
-                                 //var dataView = new Int8Array(len);
-                                 try{
-                                 	//var y = 0;
-					//for (; y < len; y++) {
-					   //     dataView[y] = data[y];
-					//}
-                                     writer.write(data);
-                                 }
-                                 catch (e) {
-                                     writer.write(new Blob([data], { type: 'image/jpeg' }));
-                                 }
+                        }
+                        else {
+                            directory.getFile(item.name, { create: true }, function (fileEntry) {
+                                fileEntry.createWriter(function (writer) {
+                                    writer.onwrite = function (evt) {
+                                        delete item.needDownload;
+                                        item.url = fileEntry.toURL();
+                                        item.path = fileEntry.fullPath,
+                                        item.sync = true;
+                                        finish();
+                                    };
+                                    writer.onerror = function (err) {
+                                        finish();
+                                    };
+                                    try {
+                                        writer.write(data);
+                                    }
+                                    catch (e) {
+                                        writer.write(new Blob([data], { type: 'image/jpeg' }));
+                                    }
+                                }, function (error) {
+                                    finish();
+                                });
                             }, function (error) {
-                              finish();
+                                finish();
                             });
-                       }, function (error) {
-                              finish();
-                       });*/
+                        }
                     }, function (error) {
                        finish();
                     });
@@ -1475,23 +1464,35 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     function getPhoto(enfant, cahier, name,fn){
         var path = getDirectoryEnfant(enfant) + '/photos/' + moment(cahier.date).format('YYYY_MM') + '/' + name;
-        dropbox.makeUrl(path, { download: true }, function (err, data) {
-            if (err) return console.error(err)
-            if (fn) fn(err, data.url);
-        });
-        //dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
-       /*dropbox.readFile(path, {blob: true}, function (err, data) {
-            if (err) {
-                if (err.status != 404) {
-                    console.error(err);
+        if (myApp.isPhone) {
+            dropbox.makeUrl(path, { download: true }, function (err, data) {
+                if (err) {
+                    if (err.status != 404) {
+                        console.error(err);
+                    }
+                    else {
+                        err = null;
+                    }
+                    if (fn) fn(err, null);
+                    return;
                 }
-                else {
-                    err = null;
+                if (fn) fn(err, data.url);
+            });
+        }
+        else {
+            //dropbox.readFile(path, {arrayBuffer: true}, function (err, data) {
+            dropbox.readFile(path, { blob: true }, function (err, data) {
+                if (err) {
+                    if (err.status != 404) {
+                        console.error(err);
+                    }
+                    else {
+                        err = null;
+                    }
                 }
-            }
-            if (fn) fn(err, data);
-        });*/
-        
+                if (fn) fn(err, data);
+            });
+        }       
     }
 
     // Move it into the Public directory.
