@@ -839,15 +839,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             }
             else{
                 cahier.needSync = true;
+                toSync[cahier.id] = {
+                    _id: enfant._id,
+                    id: enfant.id,
+                    credentials: enfant.credentials,
+                    prenom: enfant.prenom
+                };
+                localStorage["cahiersToSync"] = JSON.stringify(toSync);
             }
-            toSync[cahier.id] = {
-                _id: enfant._id,
-                id: enfant.id,
-                credentials: enfant.credentials,
-                prenom: enfant.prenom
-            };
-            localStorage["cahiersToSync"] = JSON.stringify(toSync);
-
             console.log("save");
             db.getInstance().objectStore("cahier").put(cahier).done(function () {
                 $timeout(function () {
@@ -1299,11 +1298,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                         defered.reject(err);
                         return;
                     }
-                    var cahier = null;
-                    if (data) {
-                        cahier = JSON.parse(data);
-                    }
-                    defered.resolve(cahier);
+                    defered.resolve(data);
                 });
             }
             return defered.promise;
@@ -1430,7 +1425,12 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     function sendCahier(enfant, cahier, fn) {
         var path = getDirectoryEnfant(enfant) + '/data/' + moment(cahier.date).format('YYYY_MM') + '/' + cahier.id + '.json';
-        dropbox.writeFile(path, JSON.stringify(cahier), function (err, data) {
+        var copy = angular.copy(cahier);
+        angular.forEach(copy.events, function (event) {
+            if (event.title) event.title = encodeURI(event.title);
+            if (event.desc) event.desc = encodeURI(event.desc);
+        });
+        dropbox.writeFile(path, JSON.stringify(copy), function (err, data) {
             if (err) return console.error(err);
             if (fn) fn(err, data);
         });
@@ -1447,7 +1447,20 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                     err = null;
                 }
             }
-            if (fn) fn(null, data);
+            var cahier = null;
+            if (data) {
+                try{
+                    cahier = JSON.parse(data);
+                    angular.forEach(cahier.events, function (event) {
+                        if (event.title) event.title = decodeURI(event.title);
+                        if (event.desc) event.desc = decodeURI(event.desc);
+                    });
+                }
+                catch (e) {
+
+                }
+            }
+            if (fn) fn(null, cahier);
         });
 
     }
