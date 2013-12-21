@@ -710,6 +710,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         // Non présent en local
                         data = cahier;
                         cahier.fromServer = true;
+                        cahier.tick = moment(cahier.tick).toDate();
                         me.setCurrent(cahier);
                         angular.forEach(cahier.events, function(event, key){
                            imgs.push.apply(imgs, event.pictures);
