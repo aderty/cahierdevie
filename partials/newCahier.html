@@ -79,17 +79,20 @@
             <span class="field-label">Infos compl&eacute;mentaires</span>
             <textarea ng-model="enfant.infos" class="field-input" rows="6" cols="36" focusscroll placeholder="Infos"></textarea>
         </div>
-        <div class="center field">
+        <div class="center field" ng-if="enfant.owner">
             <span class="field-label">Mes partages</span>
             <button class="topcoat-icon-button--quiet field-input" ng-click="slidePage('/viewCahierUsers')"><span>D&eacute;tails</span></button>
         </div>
-        <div class="center field">
+        <div class="center field" ng-if="enfant.owner">
             <button class="topcoat-icon-button--quiet" ng-if="!isAuthenticated" ng-click="authenticate()"><span>Se connecter</span><i class="topcoat-icon unlock-icon"></i></button>
             <button class="topcoat-icon-button--quiet" ng-if="isAuthenticated" ng-click="authenticate()"><span>Se déconnecter</span><i class="topcoat-icon lock-icon"></i></button>
         </div>
        <div class="center field last">
-            <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer">
+            <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
                 <i class="topcoat-icon delete-icon"></i> Supprimer
+            </button>
+            <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner">
+                <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner du cahier
             </button>
         </div>
        </div> 

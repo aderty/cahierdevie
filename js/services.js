@@ -298,10 +298,12 @@ myApp.factory('db', function ($q) {
 myApp.factory('config', function ($q, $http, version) {
     var configGlobal = {
         url: "upload.moncahierdevie.com",
-        //url: "127.0.0.1:1480",
         urlUpload: "upload.moncahierdevie.com",
         version: version
     };
+    if(myApp.isLocal){
+        configGlobal.url = "127.0.0.1:1480";
+    }
     var url = "http://" + configGlobal.url + '/getConfig';
     
     var conf = {
@@ -464,6 +466,14 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
             if(enfant.fromServer){
                 fromServer = true;
                 delete enfant.fromServer;
+                if(LoginService.isConnected()){
+                    var currentUser = LoginService.load();
+                    angular.forEach(enfant.users, function(user){
+                        if(user.id == currentUser._id){
+                            enfant.owner = user.owner === true;
+                        }
+                    });
+                }
             }
             else{
                 enfant.needSync = true;
@@ -564,6 +574,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
         sync: function(enfant){
             LoginService.addCahier(enfant).then(function(data){
                  enfant.tick = data.tick;
+                 if(data.users) enfant.users = data.users;
                  if(!enfant._id && data._id) enfant._id = data._id;
                  enfant.fromServer = true;
                  delete enfant.needSync;
@@ -673,7 +684,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 if (elem.value.idEnfant == enfant.id) {
                     elem.delete();
                 }
-            }, idEnfant).done(function () {
+            }, enfant.id).done(function () {
                 defered.resolve(true);
             }).fail(function () {
                 defered.reject(arguments);
@@ -1269,9 +1280,15 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
 
     var me = {
         authenticate: function(fn){
+            if(myApp.isLocal){
+                return fn(null);
+            }
             dropbox.authenticate(fn);
         },
         setCredentials: function(credentials){
+            if(myApp.isLocal){
+                return;
+            }
             dropbox.setCredentials(credentials);
         },
         getCahier: function(enfant, date, fn) {
@@ -1288,6 +1305,9 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 }
             }
             function toExec(err){
+                if(myApp.isLocal){
+                    return defered.resolve(null);
+                }
                 if (err) {
                      console.error(err);
                      defered.reject(err);
@@ -1317,6 +1337,9 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 }
             }
             function toExec(err){
+                if(myApp.isLocal){
+                    return defered.resolve(null);
+                }
                 if (err) {
                      console.error(err);
                      defered.reject(err);
@@ -1346,6 +1369,9 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 }
             }
             function toExec(err){
+                if(myApp.isLocal){
+                    return defered.resolve(null);
+                }
                 if (err) {
                      console.error(err);
                      defered.reject(err);
@@ -1375,6 +1401,9 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 }
             }
             function toExec(err){
+                if(myApp.isLocal){
+                    return defered.resolve(null);
+                }
                 if (err) {
                      console.error(err);
                      defered.reject(err);
@@ -1396,11 +1425,11 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
         init: function(){
             me.reset();
             dropbox.authStep = 2;
-            dropbox.setCredentials({
-	        key: DROPBOX_APP_KEY,
-	        secret: DROPBOX_APP_SECRET,
-	        sandbox: false
-	    });
+                dropbox.setCredentials({
+	            key: DROPBOX_APP_KEY,
+	            secret: DROPBOX_APP_SECRET,
+	            sandbox: false
+	        });
         },
         reset: function () {
             /*if (dropbox.isAuthenticated()) {
@@ -1576,6 +1605,9 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
         },
         disconnect: function(){
             me.forget();
+        },
+        isConnected: function(){
+            return me.load() != undefined;
         },
         store: function(login){
             var jsonString, name, value;

@@ -26,7 +26,10 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewNewCahier', { templateUrl: 'partials/newCahier.html', controller: 'CahierCtrl' });
         $routeProvider.when('/viewAbout', { templateUrl: 'partials/aboutView.html' });
         $routeProvider.otherwise({redirectTo: '/'});
-    }]);
+    } ]);
+
+myApp.isPhone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
+myApp.isLocal = false;
 
 myApp.factory('myHttpInterceptor', function ($q, $rootScope, $timeout) {
     return {
@@ -49,8 +52,6 @@ myApp.factory('myHttpInterceptor', function ($q, $rootScope, $timeout) {
         }
     };
 });
-
-myApp.isPhone = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;
 
 if (myApp.isPhone) {
     // PhoneGap application

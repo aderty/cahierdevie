@@ -21,10 +21,10 @@
                     <span class="field-label">Mes amis</span>
                     <div class="field-input">
                         <ul class="amis">
-                            <li ng-if="!enfant.users.length">Aucun...</li>
-                            <li ng-repeat="user in enfant.users">
-                                {{user.pseudo}}
-                                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="remove(user, $index);$event.stopPropagation();" style="float: right;">
+                            <li ng-if="enfant.users.length == 1">Aucun...</li>
+                            <li ng-repeat="ami in enfant.users  | not_me">
+                                {{ami.pseudo}}
+                                <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="remove(ami, $index);$event.stopPropagation();" style="float: right;">
                                     <i class="topcoat-icon delete-icon"></i>
                                 </a>
                             </li>

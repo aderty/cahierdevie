@@ -46,7 +46,7 @@ angular.module('myApp.directives', [])
             }
         };
     } ])
-    .directive('datepicker', ['$compile', function($compile) {
+    .directive('datepicker', ['$compile', '$filter', function($compile, $filter) {
         return {
             restrict: 'A',
             scope: {
@@ -76,7 +76,7 @@ angular.module('myApp.directives', [])
                     });
                 });
                 if (scope.model) {
-                    elm.scroller('setValue', scope.model.toLocaleDateString('fr-FR'), true);
+                    elm.scroller('setValue', $filter('date')(scope.model, 'd/MM/yyyy'), true);
                 }
                 else {
                     first = false;
@@ -191,7 +191,7 @@ angular.module('myApp.directives', [])
                     scope.$on('destroy', function() {
                         myScroll.destroy();
                     });
-                }, 500);
+                }, 350);
             }
         };
     } ])

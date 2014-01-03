@@ -69,10 +69,19 @@
         </div>-->
             </div>
         <div class="center field titre first last">
-            <span class="field-label">
+            <span class="field-label" ng-if="!inputTitle">
                 {{event.title}}
                 <button ng-click="showTitle()">
                     <i class="topcoat-icon pencil-icon"></i>
+                </button>
+            </span>
+            <input id="inputTitle" type="text" ng-if="inputTitle" ng-model="event.title" class="field-input" />
+            <span class="field-label action-title" ng-if="inputTitle">
+                <button ng-click="hideTitle()">
+                        <i class="topcoat-icon checkmark-icon"></i>
+                </button>
+                <button class="btn-cancel" ng-click="resetTitle()">
+                        <i class="topcoat-icon error-icon"></i>
                 </button>
             </span>
         </div>

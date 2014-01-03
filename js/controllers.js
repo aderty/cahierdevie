@@ -147,12 +147,12 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
     }
     else {
         if (!demandeCompte) {
-            $rootScope.$emit('message', "Voulez-vous créer un compte ? <button ng-click=\"slidePage('/viewLogin')\">Cliquez ici</button>");
+            //$rootScope.$emit('message', "Voulez-vous créer un compte ? <button ng-click=\"slidePage('/viewLogin')\">Cliquez ici</button>");
+            $timeout(function () {
+                navSvc.slidePage('/viewLogin');
+            }, 500);
             demandeCompte = true;
         }
-        /*$timeout(function () {
-            navSvc.slidePage('/viewLogin');
-        }, 500);*/
     }
 
 }]);
@@ -604,9 +604,10 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
             //$scope.$apply();
         });
     }
-    $scope.remove = function (user, index) {
+    $scope.remove = function (user) {
         if (confirm("Etes-vous sur ?")) {
             LoginService.removeUser($scope.enfant, user).then(function (data) {
+                var index = $scope.enfant.users.indexOf(user);
                 $scope.enfant.users.splice(index, 1);
                 $scope.enfant.tick = data.tick;
                 $scope.enfant.fromServer = true;
@@ -622,6 +623,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
     $scope.popTitle = false;
+    $scope.inputTitle = false;
 
     if (!$scope.event) {
         $scope.popTitle = true;
@@ -644,9 +646,19 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         $scope.eventSaved = angular.copy($scope.event);
     }
     $scope.$broadcast("refresh-scroll");
-
+    var lastTitle;
     $scope.showTitle = function(){
-        $scope.popTitle = true;
+        //$scope.popTitle = true;
+        $scope.inputTitle = true;
+        lastTitle = $scope.event.title;
+        $(document.getElementById("inputTitle")).click().focus();
+    }
+    $scope.hideTitle = function(){
+        $scope.inputTitle = false;
+    }
+    $scope.resetTitle = function(){
+        $scope.inputTitle = false;
+        $scope.event.title = lastTitle;
     }
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
