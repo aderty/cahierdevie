@@ -935,7 +935,7 @@ nav.navigation h4 > i{
     width: 1.2rem;
     height: 1.2rem;
     border-radius: 0.2rem;
-    border-bottom-right-radius: 0.8rem;
+    /*border-bottom-right-radius: 0.8rem;*/
 }
 .enfants .fille .edit{
     background-color: rgb(247, 203, 255);
