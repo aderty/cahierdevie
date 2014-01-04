@@ -927,6 +927,19 @@ nav.navigation h4 > i{
         -webkit-animation: userPulse 1s 1 linear;
 }
 
+.enfants .edit {
+    position: absolute;
+    left: 3rem;
+    margin-top: 2.25rem;
+    background-color: rgb(180, 217, 252);
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 0.2rem;
+    border-bottom-right-radius: 0.8rem;
+}
+.enfants .fille .edit{
+    background-color: rgb(247, 203, 255);
+}
 
 .enfants .next-icon {
     margin-top: -2.6rem;
