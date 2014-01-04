@@ -317,15 +317,23 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
     $scope.title = "Login";
     $scope.mode = 0;
     $scope.user = {};
+    $scope.setMode = function (mode) {
+        $scope.mode = mode;
+    }
     $scope.create = function (user) {
         delete user.confirm_pwd;
+        $scope.mode = 4;
         LoginService.create(user).then(function(current){
             navSvc.back();
+        }, function (current) {
+            $scope.mode = 1;
+            $scope.user = {};
         });
     }
-    $scope.connect = function(user){
+    $scope.connect = function (user) {
+        $scope.mode = 3;
         LoginService.connect(user).then(function(current){
-            navSvc.back();
+            $scope.$apply();
             LoginService.sync({
                     user: current,
                     enfants: {}
@@ -341,8 +349,10 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
                     if(data.length){
                         $rootScope.$emit('message', "Les informations des cahiers de vie de "+ prenoms.join(", ") + " ont étés mis à jour.");
                     }
+                    navSvc.back();
             })
         }, function (current) {
+            $scope.mode = 2;
             $scope.user = {};
         });
     }

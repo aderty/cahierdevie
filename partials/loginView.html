@@ -14,14 +14,14 @@
         </a>
     </div>
 </div>
-<div id="content" scroll >
-    <div class="panel">
-                <button class="topcoat-icon-button full-btn" ng-click="mode = 1" title="Se connecter">
-                    <i class="topcoat-icon plus-icon"></i> Cr&eacute;er un compte
-                </button>
-                <button class="topcoat-button--cta  full-btn" ng-click="mode = 2" title="Se connecter">
-                    <i class="topcoat-icon user-icon"></i> Compte &eacute;xistant
-                </button>
+<div id="content" scroll class="login" >
+    <div class="panel" ng-if="mode == 0">
+        <button class="topcoat-icon-button full-btn" ng-click="setMode(1)" title="Se connecter">
+            <i class="topcoat-icon plus-icon"></i> Cr&eacute;er un compte
+        </button>
+        <button class="topcoat-button--cta  full-btn" ng-click="setMode(2)" title="Se connecter">
+            <i class="topcoat-icon user-icon"></i> Compte &eacute;xistant
+        </button>
     </div>
     <form id="newLoginForm" name="newLoginForm" ng-if="mode == 1" class="panel">
         <div class="panel-inner">
@@ -83,6 +83,20 @@
         </div>
        </div> 
     </form>
+    <div class="panel" ng-if="mode == 3">
+        <div class="panel-inner">
+            <div class="center field first last sync">
+                <img src="img/ajax-loader.gif" /> <span class="field-input">Synchronisation du compte...</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel" ng-if="mode == 4">
+        <div class="panel-inner">
+            <div class="center field first last sync">
+                <img src="img/ajax-loader.gif" /> <span class="field-input">Cr&eacute;ation du compte...</span>
+            </div>
+        </div>
+    </div>
 </div>
 </section>
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >

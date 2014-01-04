@@ -486,6 +486,10 @@ select.field-input {
     background-color: rgb(198, 135, 248);
 }
 
+.login  .sync{
+    padding-top: 1.5rem;
+    padding-left: 1rem;
+}
 .humeur {
     width: 4rem;
     position:absolute;
