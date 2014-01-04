@@ -682,6 +682,10 @@ h1 .li-thumb
 	padding:0;
 }
 
+#cahierForm .btn-amis{
+    line-height: 4rem;
+}
+
 .list .delete {
     position: absolute;
     right: 1rem;
@@ -929,8 +933,8 @@ nav.navigation h4 > i{
 
 .enfants .edit {
     position: absolute;
-    left: 3rem;
-    margin-top: 2.25rem;
+    left: 3.05rem;
+    margin-top: 2.3rem;
     background-color: rgb(180, 217, 252);
     width: 1.2rem;
     height: 1.2rem;
@@ -1353,6 +1357,14 @@ nav.navigation h4 > i{
     -moz-background-size: cover;
     background-size: cover;
 }
+
+.group-icon {
+    background: url("../img/group.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
 .neo160
 {
 	margin-top: 1rem;
