@@ -192,10 +192,10 @@ function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
     $scope.connect = function (path, type) {
         navSvc.slidePage('/viewLogin'); 
     };
-    $scope.disconnect = function (path, type) {
+    /*$scope.disconnect = function (path, type) {
         LoginService.disconnect();
         navSvc.slidePage('/viewLogin'); 
-    };
+    };*/
 }
 
 function MessageCtrl($scope, $rootScope, $timeout) {
@@ -314,9 +314,17 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
 }
 
 function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantService) {
-    $scope.title = "Login";
-    $scope.mode = 0;
-    $scope.user = {};
+    $scope.title = "Mon compte";
+    $scope.mode = 6;
+    $scope.user = LoginService.load();
+    if (!$scope.user) {
+        $scope.title = "Login";
+        $scope.mode = 0;
+        $scope.user = {};
+    }
+    else {
+        $scope.user.pwd = "";
+    }
     $scope.setMode = function (mode) {
         $scope.mode = mode;
     }
@@ -325,15 +333,27 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
         $scope.mode = 4;
         LoginService.create(user).then(function(current){
             navSvc.back();
+            $rootScope.isConnected = true;
         }, function (current) {
             $scope.mode = 1;
             $scope.user = {};
         });
     }
+    $scope.update = function (user) {
+        delete user.confirm_pwd;
+        $scope.mode = 7;
+        LoginService.update(user).then(function (current) {
+            navSvc.back();
+        }, function (current) {
+            $scope.mode = 6;
+            $scope.user = LoginService.load();
+            $scope.user.pwd = "";
+        });
+    }
     $scope.connect = function (user) {
         $scope.mode = 3;
         LoginService.connect(user).then(function(current){
-            $scope.$apply();
+            $rootScope.isConnected = true;
             LoginService.sync({
                     user: current,
                     enfants: {}
@@ -356,6 +376,11 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
             $scope.user = {};
         });
     }
+    $scope.disconnect = function (path, type) {
+        LoginService.disconnect();
+        $rootScope.isConnected = false;
+        $scope.mode = 0;
+    };
 }
 
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
@@ -628,7 +653,7 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
     }
 }
 
-function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, db) {
+function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, db) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
@@ -645,9 +670,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         if(minutes < 10){
             minutes = '0' + minutes;
         }
+        var currentUser = LoginService.load();
         $scope.event = {
             creation: true,
-            time: heure  + ":" + minutes,
+            time: heure + ":" + minutes,
             pictures: []
         };
         EventService.setCurrent($scope.event);
@@ -915,6 +941,7 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         if(!event.title || event.title == ""){
             return alert("Veuillez saisir un titre.");
         }
+        var currentUser = LoginService.load();
         var enfant = EnfantService.getCurrent();
         var cahier = CahierService.getCurrent();
         if (event.creation) {
@@ -922,6 +949,14 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
             cahier.events.push({
                 id: new Date().getTime(),
                 time: event.time,
+                creator: {
+                    id: currentUser._id,
+                    pseudo: currentUser.pseudo
+                },
+                last_update: {
+                    id: currentUser._id,
+                    pseudo: currentUser.pseudo
+                },
                 title: event.title,
                 desc: event.desc,
                 pictures: event.pictures,
@@ -931,6 +966,10 @@ function EventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, Eve
         }
         else{
             $scope.event.tick = new Date;
+            $scope.event.last_update = {
+                id: currentUser._id,
+                pseudo: currentUser.pseudo
+            }
         }
         CahierService.save(enfant, cahier).then(function () {
             //$scope.$apply();

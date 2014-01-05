@@ -222,6 +222,7 @@ angular.module('myApp.directives', [])
                     if (value) {
                         document.getElementById('saisiearea').value = value;
                     }
+                    $(document.getElementById('saisiearea')).click().focus();
                 });
             }
         };
