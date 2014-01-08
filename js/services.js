@@ -874,46 +874,63 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         },
         sync: function (enfant, cahier) {
             if (!enfant || !cahier) return;
-            var i = 0, l = cahier.events.length, imgs = [], path;
-                for (; i < l; i++) {
-                    var j = 0, k = cahier.events[i].pictures.length;
-                    for (; j < k; j++) {
-                        if (!cahier.events[i].pictures[j].sync && cahier.events[i].pictures[j].path) {
-                            path = cahier.events[i].pictures[j].path;
-                            path = path.substring(path.lastIndexOf('/') + 1);
-                            imgs.push({
-                                path: path,
-                                event: i,
-                                picture: j
-                            });
-                        }
+            var i = 0, l = cahier.events.length, imgs = [], path, run = 0;
+            for (; i < l; i++) {
+                var j = 0, k = cahier.events[i].pictures.length;
+                for (; j < k; j++) {
+                    if (!cahier.events[i].pictures[j].sync && cahier.events[i].pictures[j].path) {
+                        path = cahier.events[i].pictures[j].path;
+                        path = path.substring(path.lastIndexOf('/') + 1);
+                        imgs.push({
+                            path: path,
+                            event: i,
+                            picture: j
+                        });
                     }
                 }
-                if(imgs.length){
-                    db.getPicturesDir(enfant).then(function(directory) {
-                          i = 0, l = imgs.length;
-                          for (; i < l; i++) {
-                              directory.getFile(imgs[i].path, { create: false }, (function (item) {
-                                   return function (fileEntry) {
-                                        DropBoxService.sendPhoto(enfant, cahier, fileEntry).then(function(){
-                                            cahier.events[item.event].pictures[item.picture].sync = true;
-                                            cahier.fromServer = true;
-                                            me.save(enfant, cahier);
-                                        });
-                                   }
-                              })(imgs[i]), function (error) {
-                                     alert("getFile " + error.code);
-                              });
-                          }
-                   });
-                }
-                DropBoxService.setCahier(enfant, cahier).then(function(){
-                    cahier.fromServer = true;
-                    delete cahier.needSync;
-                    delete toSync[cahier.id];
-                    localStorage["cahiersToSync"] = JSON.stringify(toSync);
-                    me.save(enfant, cahier);
+            }
+            if (imgs.length) {
+                run = imgs.length;
+                db.getPicturesDir(enfant).then(function (directory) {
+                    i = 0, l = imgs.length;
+                    for (; i < l; i++) {
+                        directory.getFile(imgs[i].path, { create: false }, (function (item) {
+                            return function (fileEntry) {
+                                DropBoxService.sendPhoto(enfant, cahier, fileEntry).then(function () {
+                                    cahier.events[item.event].pictures[item.picture].sync = true;
+                                    //cahier.fromServer = true;
+                                    //me.save(enfant, cahier);
+                                    finish();
+                                }, function (error) {
+                                    console.error("SERVICE/CahierService/sync/sendPhoto " + error);
+                                    finish();
+                                });
+                            }
+                        })(imgs[i]), function (error) {
+                            console.error("SERVICE/CahierService/sync/getFile " + error.code);
+                            finish();
+                        });
+                    }
+                }, function (error) {
+                    console.error("SERVICE/CahierService/sync/getPicturesDir " + error);
+                    finish();
                 });
+            }
+            else {
+                finish();
+            }
+            function finish(err) {
+                run--;
+                if (run <= 0) {
+                    DropBoxService.setCahier(enfant, cahier).then(function () {
+                        cahier.fromServer = true;
+                        delete cahier.needSync;
+                        delete toSync[cahier.id];
+                        localStorage["cahiersToSync"] = JSON.stringify(toSync);
+                        me.save(enfant, cahier);
+                    });
+                }
+            }
         },
         getCurrent: function () {
             return current;

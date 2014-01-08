@@ -23,10 +23,12 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
     $rootScope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+        $rootScope.$broadcast('loadCahier');
     }
     $rootScope.nextDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+        $rootScope.$broadcast('loadCahier');
     }
     $rootScope.predefTitle = [
         'Arrivée',
@@ -224,7 +226,6 @@ function EnfantOverlayCtrl($scope, $rootScope, navSvc, EnfantService, notificati
 }
 
 function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
-    CahierService.setCurrent(null);
     $scope.loaded = false;
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
@@ -233,10 +234,12 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     $scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+        $rootScope.$broadcast('loadCahier');
     }
     $scope.nextDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+        $rootScope.$broadcast('loadCahier');
     }
 
     $scope.update = function (enfant) {
@@ -265,8 +268,11 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     
     
     $scope.showCahier = function (enfant) {
-        EnfantService.setCurrent(enfant);
-        navSvc.slidePage('/viewCahier');  
+        if (enfant != EnfantService.getCurrent()) {
+            CahierService.setCurrent(null);
+            EnfantService.setCurrent(enfant);
+        }
+        navSvc.slidePage('/viewCahier');
     };
     
     $scope.newCahier = function () {
@@ -283,7 +289,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
           EnfantService.removeOnChange(loadCahier);
     });*/
     
-    $rootScope.$watch('currentDate', loadCahier);
+    //$rootScope.$watch('currentDate', loadCahier);
     
     $scope.$on("reload", function(){
         $timeout(function () {
@@ -384,9 +390,10 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
 }
 
 function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, $timeout, $filter) {
-    $scope.loaded = false;
+    $scope.loaded = true;
     $scope.sending = false;
     $scope.showSmiley = false;
+
     function loadCahier(){
         if (!EnfantService.getCurrent()) return;
         $scope.loaded = false;
@@ -412,9 +419,12 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
 
     $scope.currentCahier = CahierService.getCurrent();
     $scope.currentEnfant = EnfantService.getCurrent();
-    //if (!$scope.currentCahier) {
+    if (!$scope.currentCahier) {
         loadCahier();
-    //}
+    }
+    $scope.$on('loadCahier', function () {
+        loadCahier();
+    });
     $scope.send = function () {
         if (!confirm("Etes-vous sûre de vouloir envoyer le cahier de vie ?")) return false;
         if (!EnfantService.getCurrent().email) {
