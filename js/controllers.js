@@ -18,18 +18,23 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
     var date = new Date(); 
     $rootScope.currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     $rootScope.isCurrentDate = function(){
+        date = new Date(); 
         return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate())) == 0;
     }
     $rootScope.backDate = function(){
-        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
-        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
-        $rootScope.$broadcast('loadCahier');
+        var newD = new Date();
+        newD.setDate($rootScope.currentDate.getDate()-1);
+        $rootScope.currentDate = new Date(newD.getTime());
     }
     $rootScope.nextDate = function(){
-        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
-        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
-        $rootScope.$broadcast('loadCahier');
+        var newD = new Date();
+        newD.setDate($rootScope.currentDate.getDate()+1);
+        $rootScope.currentDate = new Date(newD.getTime());
     }
+    $rootScope.$watch('currentDate', function(){
+        console.log($rootScope.currentDate);
+        $rootScope.$broadcast('loadCahier');
+    });
     $rootScope.predefTitle = [
         'Arrivée',
         'Départ',
@@ -231,7 +236,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         navSvc.slidePage(path, type);
     };
     
-    $scope.backDate = function(){
+    /*$scope.backDate = function(){
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
         $rootScope.$broadcast('loadCahier');
@@ -240,7 +245,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
         $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
         $rootScope.$broadcast('loadCahier');
-    }
+    }*/
 
     $scope.update = function (enfant) {
         EnfantService.setCurrent(enfant);
