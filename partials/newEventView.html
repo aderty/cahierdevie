@@ -41,32 +41,15 @@
             <div class="center field last" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
                 <!-- ng-click="showPhotos()" -->
                 <span class="field-label">Photos</span>         
-                <input type="radio" ng-checked="indexPhoto == $index" name="slider" id="slide{{$index+1}}" ng-repeat="picData in event.pictures">
-                <div id="slides">
-
+                <div id="slides" class="pic{{event.pictures.length}}">
                     <div id="overflow">
-
-                        <div class="inner">
-
-                            <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos()">
+                        <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos()">
                                 <!--<div class="info"><h3>Cloud Dragon</h3> by <a href="http://voyager3.tumblr.com">Brendan Zabarauskas</a></div>-->
                                 <img class="evt-photo-item {{picData.dir}}" ng-src="{{picData.url}}" />
-                            </article>
-
-                        </div> <!-- .inner -->
+                         </article>
 
                     </div> <!-- #overflow -->
-
                 </div>
-                <div id="controls">
-                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures" ng-click="goTo($index)"></label>
-                </div>
-                <div id="active">
-                    <label for="slide{{$index+1}}" ng-repeat="picData in event.pictures" ng-click="goTo($index)"></label>
-                </div>
-                <!--<div ng-repeat="picData in event.pictures" class="evt-photos" ng-animate="'slide'">
-            <img class="evt-photo-item" ng-src="{{picData.url}}" />
-        </div>-->
             </div>
         <div class="center field titre first last">
             <span class="field-label" ng-if="!inputTitle">
