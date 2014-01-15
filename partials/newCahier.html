@@ -82,27 +82,27 @@
         </div>
         <br />
         <div class="panel-inner">
-                <div class="center field first" ng-if="enfant.owner">
-                    <span class="field-label full">Administration</span>
-                </div>
-                <div class="center field first" ng-if="enfant.owner">
-                    <span class="field-label">Mes amis</span>
-                    <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
-                </div>
-                <div class="center field" ng-if="enfant.owner">
-                    <span class="field-label">Stockage</span>
-                    <button class="topcoat-icon-button btn-dropbox" ng-if="!isAuthenticated" ng-click="authenticate()">&nbsp;</button>
-                    <button class="topcoat-icon-button btn-dropbox" ng-if="isAuthenticated" ng-click="authenticate()">&nbsp;</button>
-                </div>
-                <div class="center field last">
-                    <span class="field-label">Attention !</span>
-                    <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
-                        <i class="topcoat-icon delete-icon"></i> Supprimer
-                    </button>
-                    <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner">
-                        <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner du cahier
-                    </button>
-                </div>
+            <div class="center field first" ng-if="enfant.owner || enfant.creation">
+                <span class="field-label full">Administration</span>
+            </div>
+            <div class="center field first" ng-if="enfant.owner || enfant.creation">
+                <span class="field-label">Mes amis</span>
+                <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
+            </div>
+            <div class="center field" ng-if="enfant.owner  || enfant.creation">
+                <span class="field-label">Stockage</span>
+                <button class="topcoat-icon-button btn-dropbox" ng-if="!isAuthenticated" ng-click="authenticate()">&nbsp;</button>
+                <button class="topcoat-icon-button btn-dropbox" ng-if="isAuthenticated" ng-click="authenticate()">&nbsp;</button>
+            </div>
+            <div class="center field last" ng-if="!enfant.creation">
+                <span class="field-label">Attention !</span>
+                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
+                    <i class="topcoat-icon delete-icon"></i> Supprimer
+                </button>
+                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner && !enfant.creation">
+                    <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner
+                </button>
+            </div>
             </div>
     </form>
 </div>

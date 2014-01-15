@@ -921,6 +921,7 @@ nav.navigation h4 > i{
     padding-bottom: 4rem;
 }*/
 .list {
+    height: 90%;
     height: calc(100% - 3rem - 1px);
     /*width: 100%;
     position: absolute;*/

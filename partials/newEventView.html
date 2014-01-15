@@ -38,20 +38,8 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-            <div class="center field last" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
-                <!-- ng-click="showPhotos()" -->
-                <span class="field-label">Photos</span>         
-                <div id="slides" class="pic{{event.pictures.length}}">
-                    <div id="overflow">
-                        <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos()">
-                                <!--<div class="info"><h3>Cloud Dragon</h3> by <a href="http://voyager3.tumblr.com">Brendan Zabarauskas</a></div>-->
-                                <img class="evt-photo-item {{picData.dir}}" ng-src="{{picData.url}}" />
-                         </article>
-
-                    </div> <!-- #overflow -->
-                </div>
-            </div>
-        <div class="center field titre first last">
+            
+        <div class="center field titre first">
             <span class="field-label" ng-if="!inputTitle">
                 {{event.title}}
                 <button ng-click="showTitle()">
@@ -68,6 +56,18 @@
                 </button>
             </span>
         </div>
+        <div class="center field" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
+                <!-- ng-click="showPhotos()" -->
+                <span class="field-label">Photos</span>
+                <div id="slides" class="pic{{event.pictures.length}}">
+                    <div id="overflow">
+                        <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos()">
+                            <!--<div class="info"><h3>Cloud Dragon</h3> by <a href="http://voyager3.tumblr.com">Brendan Zabarauskas</a></div>-->
+                            <img class="evt-photo-item {{picData.dir}}" ng-src="{{picData.url}}" />
+                        </article>
+                    </div> <!-- #overflow -->
+                </div>
+        </div>
         <div class="center field">
             <span class="field-label">Description
                 <button ng-click="showDesc()">
@@ -76,10 +76,10 @@
             </span>
             <textarea id="descriptionInput" ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
-        <div class="center field">
-            <span class="field-label">Heure</span>
-            <input type="text" timepicker ng-model="event.time" class="field-input" />
-        </div>
+            <div class="center field last">
+                <span class="field-label">Heure</span>
+                <input type="text" timepicker ng-model="event.time" class="field-input" />
+            </div>
         </div>
     </form>
 </div>
