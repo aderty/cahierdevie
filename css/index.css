@@ -52,7 +52,7 @@ input, textarea {
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 input.field-input {
-    webkit-user-modify: read-write-plaintext-only;
+    /*-webkit-user-modify: read-write-plaintext-only;*/
 }
 .input-help 
 {
@@ -172,6 +172,17 @@ li.loading span {
 	display: box;
 	min-height: 2.5em;
 	background: #fff;
+	
+	box-shadow: 1px 1px 4px #666;
+	background: #fff;
+	background: rgb(252,255,244);
+	background: -moz-linear-gradient(top, rgba(252,255,244,1) 0%, rgba(219,218,201,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,255,244,1)), color-stop(100%,rgba(219,218,201,1)));
+	background: -webkit-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: -o-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: -ms-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#dbdac9',GradientType=0 );
 }
 .field.first {
     border-top-left-radius: 1.0rem;
@@ -241,6 +252,18 @@ li.loading span {
 	font-size: 114%;
 	font-weight: inherit;
 }
+.dw-persp{
+	box-shadow: 1px 1px 4px #666;
+	background: #fff;
+	background: rgb(252,255,244);
+	background: -moz-linear-gradient(top, rgba(252,255,244,1) 0%, rgba(219,218,201,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,255,244,1)), color-stop(100%,rgba(219,218,201,1)));
+	background: -webkit-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: -o-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: -ms-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	background: linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#dbdac9',GradientType=0 );
+}
 select.field-input {
     -webkit-appearance: value;
 }
@@ -269,11 +292,9 @@ select.field-input {
 #settingsOverlayTitle .field,
 #eventForm .field {
         border-bottom: 1px solid #dddddd;
-        background: transparent;
         min-height: 2.5em;
         display: block;
         min-height: 2.5em;
-        background: #fff;
         margin-bottom: 5px;
         border-radius: 1rem;
 }
@@ -317,23 +338,42 @@ select.field-input {
         -moz-box-sizing: border-box;    /* For Firefox                          */
         -webkit-box-sizing: border-box; /* For Safari                           */
 }
+
+#eventForm .titre
+{
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+}
 #eventForm .titre .field-input
 {
 	min-height: 1.95em;
 	padding: 1.1em;
 	margin:0;
+	-webkit-box-flex: 1;
 }
 
 #eventForm .action-title.field-label
 {
-	position: absolute;
+	/*position: absolute;*/
 	width: initial !important;
-	right: 0;
-	top:0;
+	/*right: 0;
+	top:0;*/
 }
 #eventForm .action-title.field-label button
 {
 	float:left;
+}
+#eventForm .icoEvent
+{
+	width: 7rem;
+	height: 7rem;
+	margin-right: 1rem;
+	margin-left: 1rem;
+	box-shadow: 1px 1px 4px #666;
+}
+#eventForm .field-input.type
+{
+	padding:0;
 }
 
 #zonearea .modal {
@@ -638,6 +678,7 @@ button.delete {
     background-color: Transparent;
     list-style-type: none;
     min-height: 100%;
+    box-shadow: 10px 10px 5px #888888;
 }
 .list li {
     background-color: #fff;
@@ -997,6 +1038,8 @@ nav.navigation h4 > i{
 .events .list-inner {
     min-height: 3.5rem;
     padding: 0.5rem;
+    background-color: #FFF;
+    box-shadow: 10px 10px 5px #888888;
     /*padding-left: 5rem;*/
 }
 .events li {
@@ -1007,6 +1050,7 @@ nav.navigation h4 > i{
 	/*border: 2px solid rgb(102, 102, 102);*/
 	/*background: -webkit-radial-gradient( 21% 1%, ellipse farthest-corner, rgba(160, 155, 155, 1) -65%, rgb(245, 245, 245) 60% );*/
     background-color: transparent;
+    margin-right: 0.5rem;
 }
 .events li:first-child{
     min-height: 2.2rem;
@@ -1034,9 +1078,8 @@ nav.navigation h4 > i{
 }
 .events li div.time {
     /*width: 100%;*/
-    background-color: #C2BCBC;
+    background-color: rgb(147, 189, 199);
     margin-top: -1.26rem;
-    margin-right: 0.5rem;
     padding-left: 1rem;
     color: #000;
     border-bottom-right-radius: 1rem;
@@ -1047,6 +1090,10 @@ nav.navigation h4 > i{
     font-size: 12pt;
     float: right;
     padding-right: 1rem;
+}
+.events .icoEvent{
+	width: 3rem;
+	height: 3rem;
 }
 
 .fille .li-thumb 
@@ -1070,7 +1117,7 @@ nav.navigation h4 > i{
     height: 70px;
     position: absolute;
     right: 4.5rem;
-    margin-top: -4.4rem;
+    margin-top: -5.4rem;
     overflow: hidden;
 }
 .evt-photos

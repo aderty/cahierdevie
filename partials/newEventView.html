@@ -38,7 +38,6 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-            
         <div class="center field titre first">
             <span class="field-label" ng-if="!inputTitle">
                 {{event.title}}
@@ -54,6 +53,15 @@
                 <button class="btn-cancel" ng-click="resetTitle()">
                         <i class="topcoat-icon error-icon"></i>
                 </button>
+            </span>
+        </div>
+        <div class="center field">
+            <span class="field-label">Type</span>
+            <span class="field-input type">
+                <img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />
+                <select id="selectTitle" class="field-input" ng-model="event.type" selectscroll style="display:none;">
+                    <option value="{{title.id}}" ng-repeat="title in predefTitle">{{title.libelle}}</option>
+                </select>
             </span>
         </div>
         <div class="center field" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
@@ -77,8 +85,8 @@
             <textarea id="descriptionInput" ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
             <div class="center field last">
-                <span class="field-label">Heure</span>
-                <input type="text" timepicker ng-model="event.time" class="field-input" />
+                <span class="field-label">Heure {{event.time}}</span>
+                <input type="text" timepicker ng-model="event.time" class="field-input" style="display:none;" />
             </div>
         </div>
     </form>
@@ -105,12 +113,12 @@
       <ng-include src="'partials/navigationMain.html'"></ng-include>
 </nav>
 
-<div class="topcoat-overlay-bg" ng-show="popTitle"></div>
-<aside id='settingsOverlayTitle' ng-show="popTitle" class="topcoat-overlay-pop">
+<!--<div class="topcoat-overlay-bg" ng-show="popTitle"></div>-->
+<!--<aside id='settingsOverlayTitle' ng-show="popTitle" class="topcoat-overlay-pop">
     <div class="center field titre first last">
         <span class="field-label">Titre</span>
         <div>
-            <select id="selectTitle" class="field-input btn-titre">
+            <select id="selectTitle" class="field-input btn-titre" selectscroll>
                 <option value="">Choisir un titre pr&eacute;d&eacute;fini</option>
                 <option ng-repeat="title in predefTitle">{{title}}</option>
             </select>
@@ -121,4 +129,4 @@
             </button>
         </div>
     </div>
-</aside>
+</aside>-->

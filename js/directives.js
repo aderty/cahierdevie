@@ -19,11 +19,13 @@ angular.module('myApp.directives', [])
                 var first = true;
                 elm.scroller({
                     preset: 'time',
-                    theme: 'default',
+                    theme: 'ios7',
                     mode: 'scroller',
                     lang: 'fr',
-                    display: 'bottom',
-                    animate: 'none'
+                    display: 'inline',
+                    animate: 'none',
+                    rows: 3,
+                    height: 30
                 });
 
 
@@ -134,6 +136,39 @@ angular.module('myApp.directives', [])
 
             scope.$on('destroy', function() {
                 scroller.scroller('destroy');
+            });
+        }
+    };
+} ])
+.directive('selectscroll', ['$compile', function($compile) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        replace: false,
+        link: function(scope, elm, attr, ngModel) {
+            var first = true;
+            setTimeout(function() {
+                elm.scroller({
+                    preset: 'select',
+                    showInput: false,
+                    theme: 'ios7',
+                    mode: 'scroller',
+                    lang: 'fr',
+                    display: 'inline',
+                    animate: 'none',
+                    rows: 3,
+                    height: 30
+                });
+                elm.scroller('setValue', ngModel.$modelValue);
+            }, 50);
+
+
+            /*elm.change(function(e) {
+                ngModel.$setViewValue(elm.scroller('getValue'));
+            });*/
+
+            scope.$on('destroy', function() {
+                elm.scroller('destroy');
             });
         }
     };

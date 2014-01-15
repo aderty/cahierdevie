@@ -36,12 +36,36 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
         $rootScope.$broadcast('loadCahier');
     });
     $rootScope.predefTitle = [
-        'Arrivée',
-        'Départ',
-        'Activité',
-        'Déjeuner',
-        'Sieste',
-        'Gouter'
+        {
+            id: 0,
+            libelle: 'Arrivée',
+            img: 'img/event/start.png'
+        },
+        {
+            id: 1,
+            libelle: 'Départ',
+            img: 'img/event/depart.png'
+        },
+        {
+            id: 2,
+            libelle: 'Activité',
+            img: 'img/event/jeux.png'
+        },
+        {
+            id: 3,
+            libelle: 'Déjeuner',
+            img: 'img/event/repas.png'
+        },
+        {
+            id: 4,
+            libelle: 'Sieste',
+            img: 'img/event/sieste.png'
+        },
+        {
+            id: 5,
+            libelle: 'Gouter',
+            img: 'img/event/repas.png'
+        }
     ];
     $rootScope.smileys = [
         {
@@ -284,9 +308,10 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         EnfantService.setCurrent(null);
         navSvc.slidePage('/viewNewCahier');
     }
-    $timeout(function () {
-        loadEnfants();
-    }, 250);
+    /*$timeout(function () {
+        
+    }, 250);*/
+    loadEnfants();
     
     /*EnfantService.onChange(loadCahier);
     
@@ -712,6 +737,8 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         $scope.event = {
             creation: true,
             time: heure + ":" + minutes,
+            type: 2,
+            title: "Titre",
             pictures: []
         };
         EventService.setCurrent($scope.event);
@@ -725,6 +752,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         //$scope.popTitle = true;
         $scope.inputTitle = true;
         lastTitle = $scope.event.title;
+        if(lastTitle == "Titre") $scope.event.title = "";
         $(document.getElementById("inputTitle")).click().focus();
     }
     $scope.hideTitle = function(){
@@ -737,6 +765,11 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
     }
+    
+    /*$scope.$watch("event.type", function (type) {
+        $scope.event.title = type;
+    });*/
+    
     $scope.indexPhoto = 0;
     var validSwipe = true;
     $scope.prevPhoto = function () {
@@ -999,6 +1032,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
                 desc: event.desc,
                 pictures: event.pictures,
                 etat: 1,
+                type: event.type,
                 tick: new Date()
             });
         }
@@ -1037,14 +1071,6 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
 		Code.PhotoSwipe.Current.show(0);
         //navSvc.slidePage("/viewPhotos");
     }
-    document.getElementById("selectTitle").addEventListener("change", function (e) {
-        if (e.target.value != "") {
-            $scope.event.title = e.target.value;
-            e.target.value = "";
-        }
-        e.preventDefault();
-        $scope.$apply();
-    }, false);
 
     function movePic(file) {
         window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError);
