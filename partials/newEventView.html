@@ -38,32 +38,17 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-        <div class="center field titre first">
-            <span class="field-label" ng-if="!inputTitle">
-                {{event.title}}
-                <button ng-click="showTitle()">
-                    <i class="topcoat-icon pencil-icon"></i>
-                </button>
-            </span>
-            <input id="inputTitle" type="text" ng-if="inputTitle" ng-model="event.title" class="field-input" />
-            <span class="field-label action-title" ng-if="inputTitle">
-                <button ng-click="hideTitle()">
-                        <i class="topcoat-icon checkmark-icon"></i>
-                </button>
-                <button class="btn-cancel" ng-click="resetTitle()">
-                        <i class="topcoat-icon error-icon"></i>
-                </button>
-            </span>
-        </div>
-        <div class="center field">
-            <span class="field-label">Type</span>
-            <span class="field-input type">
-                <img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />
-                <select id="selectTitle" class="field-input" ng-model="event.type" selectscroll style="display:none;">
-                    <option value="{{title.id}}" ng-repeat="title in predefTitle">{{title.libelle}}</option>
-                </select>
-            </span>
-        </div>
+            <div class="center field first">
+                <span class="field-input type">
+                    <img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />
+                    <select id="selectTitle" class="field-input" ng-model="event.type" selectscroll style="display:none;">
+                        <option value="{{title.id}}" ng-repeat="title in predefTitle">{{title.libelle}}</option>
+                    </select>
+                </span>
+            </div>
+            <div class="center field titre">
+                <input id="inputTitle" type="text" ng-model="event.title" class="field-input" placeholder="Titre" />
+            </div>
         <div class="center field" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
                 <!-- ng-click="showPhotos()" -->
                 <span class="field-label">Photos</span>

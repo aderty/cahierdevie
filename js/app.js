@@ -21,6 +21,7 @@ var myApp = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.d
         $routeProvider.when('/viewLogin', { templateUrl: 'partials/loginView.html', controller: 'LoginCtrl' });
         $routeProvider.when('/viewCahierUsers', { templateUrl: 'partials/cahierUsersView.html', controller: 'CahierUsersCtrl' });
         $routeProvider.when('/viewCahier', { templateUrl: 'partials/cahierJourView.html', controller: 'CahierJourCtrl' });
+        $routeProvider.when('/viewEventDetails', { templateUrl: 'partials/detailsEventView.html', controller: 'EventDetailsCtrl' });
         $routeProvider.when('/viewEvent', { templateUrl: 'partials/newEventView.html', controller: 'EventCtrl' });
         $routeProvider.when('/viewPhotos', { templateUrl: 'partials/photoView.html', controller: 'PhotosEventCtrl' });
         $routeProvider.when('/viewNewCahier', { templateUrl: 'partials/newCahier.html', controller: 'CahierCtrl' });

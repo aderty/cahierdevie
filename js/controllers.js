@@ -502,7 +502,7 @@ function CahierJourCtrl($scope, $rootScope, navSvc, EnfantService, CahierService
     }
     $scope.editEvent = function (event) {
         EventService.setCurrent(event);
-        navSvc.slidePage("/viewEvent");
+        navSvc.slidePage("/viewEventDetails");
     }
     $scope.removeEvent = function (event, index) {
         if (!confirm("Etes-vous sûre de vouloir supprimer cet évènement ?")) return false;
@@ -716,6 +716,29 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
     }
 }
 
+function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout) {
+    $scope.event = EventService.getCurrent();
+
+    $scope.showPhotos = function () {
+        if (!$scope.event.pictures) return;
+        Code.PhotoSwipe.Current.setOptions({
+            backButtonHideEnabled: false,
+            getImageSource: function (e) {
+                return e.url;
+            },
+            getImageCaption: function (e) {
+                return "";
+            }
+        });
+        Code.PhotoSwipe.Current.setImages($scope.event.pictures);
+        // Start PhotoSwipe
+        Code.PhotoSwipe.Current.show(0);
+        //navSvc.slidePage("/viewPhotos");
+    }
+}
+
+
+
 function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, db) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
@@ -738,7 +761,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
             creation: true,
             time: heure + ":" + minutes,
             type: 2,
-            title: "Titre",
+            title: "",
             pictures: []
         };
         EventService.setCurrent($scope.event);
@@ -747,7 +770,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         $scope.eventSaved = angular.copy($scope.event);
     }
     $scope.$broadcast("refresh-scroll");
-    var lastTitle;
+    /*var lastTitle;
     $scope.showTitle = function(){
         //$scope.popTitle = true;
         $scope.inputTitle = true;
@@ -761,7 +784,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
     $scope.resetTitle = function(){
         $scope.inputTitle = false;
         $scope.event.title = lastTitle;
-    }
+    }*/
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
     }
@@ -770,7 +793,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         $scope.event.title = type;
     });*/
     
-    $scope.indexPhoto = 0;
+    /*$scope.indexPhoto = 0;
     var validSwipe = true;
     $scope.prevPhoto = function () {
         if (!$scope.event.pictures.length) return;
@@ -798,7 +821,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
     }
     $scope.goTo = function (index) {
         $scope.indexPhoto = index;
-    }
+    }*/
     
     $scope.takePic = function (type) {
         if (type === undefined) {
@@ -1009,9 +1032,9 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
 
     $scope.add = function (event) {
         if(!event) return;
-        if(!event.title || event.title == ""){
+        /*if(!event.title || event.title == ""){
             return alert("Veuillez saisir un titre.");
-        }
+        }*/
         var currentUser = LoginService.load();
         var enfant = EnfantService.getCurrent();
         var cahier = CahierService.getCurrent();
@@ -1056,7 +1079,8 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         navSvc.back();
     }
     $scope.showPhotos = function(){
-        if(!validSwipe || !$scope.event.pictures) return;
+        //if(!validSwipe || !$scope.event.pictures) return;
+        if (!$scope.event.pictures) return;
         Code.PhotoSwipe.Current.setOptions({
             backButtonHideEnabled: false,
 	        getImageSource: function(e){
