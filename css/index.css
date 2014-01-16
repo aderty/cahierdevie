@@ -363,13 +363,22 @@ select.field-input {
 {
 	float:left;
 }
+#eventForm .icoEventConainer
+{
+    height: 100%;
+    width: 8rem;
+    display: block;
+    margin-top: 0.8rem;
+}
 #eventForm .icoEvent
 {
-	width: 7rem;
-	height: 7rem;
-	margin-right: 0;
-	margin-left: 1rem;
+	width: 6rem;
+	height: 6rem;
 	box-shadow: 1px 1px 4px #666;
+}
+#eventForm .icoEventConainer + .field-label{
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
 }
 #eventForm .field-input.type
 {
@@ -1131,10 +1140,16 @@ nav.navigation h4 > i{
 }
 .evts-photos > img
 {
-	max-width: 80px;
     height: 70px;
     box-shadow: inset -2px 0px 15px 5px #CCC;
     padding-left: 2px;
+}
+
+.evts-photos > img.paysage
+{
+	max-width: 80px;
+    height: auto;
+    margin-top: 0.5rem;
 }
 
 .evt-photos > img

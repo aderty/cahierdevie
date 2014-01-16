@@ -38,16 +38,18 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-            <div class="center field first">
-                <span class="field-input type">
-                    <img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />
-                    <select id="selectTitle" class="field-input" ng-model="event.type" selectscroll style="display:none;">
-                        <option value="{{title.id}}" ng-repeat="title in predefTitle">{{title.libelle}}</option>
-                    </select>
-                </span>
-            </div>
-            <div class="center field titre">
+            <div class="center field titre first">
                 <input id="inputTitle" type="text" ng-model="event.title" class="field-input" placeholder="Titre" />
+            </div>
+            <div class="center field">
+                <span class="field-input type">
+                    <span class="icoEventConainer">
+                        <img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />
+                    </span>
+                        <select id="selectTitle" class="field-input" ng-model="event.type" selectscroll style="display:none;">
+                            <option value="{{title.id}}" ng-repeat="title in predefTitle">{{title.libelle}}</option>
+                        </select>
+                    </span>
             </div>
         <div class="center field" ng-if="event.pictures.length > 0" ng-swipe-left="prevPhoto()" ng-swipe-right="nextPhoto()">
                 <!-- ng-click="showPhotos()" -->
