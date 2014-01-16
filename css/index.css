@@ -344,6 +344,7 @@ select.field-input {
 	display: -webkit-box;
 	-webkit-box-orient: horizontal;
 }
+
 #eventForm .titre .field-input
 {
 	min-height: 1.95em;
@@ -363,6 +364,7 @@ select.field-input {
 {
 	float:left;
 }
+
 #eventForm .icoEventConainer
 {
     height: 100%;
@@ -379,10 +381,17 @@ select.field-input {
 #eventForm .icoEventConainer + .field-label{
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
+    -webkit-box-flex: 1;
+    white-space: initial;
 }
 #eventForm .field-input.type
 {
 	padding:0;
+}
+
+#eventForm pre{
+    padding: 1rem;
+    text-align: left;
 }
 
 #zonearea .modal {
@@ -1087,7 +1096,7 @@ nav.navigation h4 > i{
 }
 .events li div.time {
     /*width: 100%;*/
-    background-color: rgb(147, 189, 199);
+    background-color: rgb(157, 226, 182);
     margin-top: -1.26rem;
     padding-left: 2rem;
     color: #000;

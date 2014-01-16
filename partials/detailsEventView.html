@@ -10,7 +10,7 @@
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
         <a class="topcoat-icon-button--quiet" ng-click="slidePage('/viewEvent','modal')">
-            <i class="topcoat-icon pencil-icon"></i> Modifier
+            <i class="topcoat-icon pencil-icon"></i>
         </a>
     </div>
 </div>
@@ -19,17 +19,12 @@
         <div class="panel-inner">
         <div class="center field titre first">
             <span class="icoEventConainer"><img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" /></span>
-            <span class="field-label" ng-if="!inputTitle">
+            <span class="field-label">
                 {{event.time}} : {{event.title &&  event.title != "" ? event.title : predefTitle[event.type].libelle}}
-            </span>
-            <span>
-                 {{event.desc}}
             </span>
         </div>
             <div class="center field titre" ng-if="event.desc">
-                <pre>
-                    {{event.desc}}
-                </pre>
+                <pre>{{event.desc}}</pre>
             </div>
         <div class="center field last" ng-if="event.pictures.length > 0">
                 <!-- ng-click="showPhotos()" -->
