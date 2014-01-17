@@ -252,7 +252,7 @@ li.loading span {
 	font-size: 114%;
 	font-weight: inherit;
 }
-.dw-persp{
+/*.dw-persp{
 	box-shadow: 1px 1px 4px #666;
 	background: #fff;
 	background: rgb(252,255,244);
@@ -263,7 +263,7 @@ li.loading span {
 	background: -ms-linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
 	background: linear-gradient(top, rgba(252,255,244,1) 0%,rgba(219,218,201,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfff4', endColorstr='#dbdac9',GradientType=0 );
-}
+}*/
 select.field-input {
     -webkit-appearance: value;
 }
