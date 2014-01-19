@@ -1080,6 +1080,20 @@ nav.navigation h4 > i{
 .events .topcoat-list__item.action{
     border:0;
     margin-right: 0.5rem;
+    margin-top: 0;
+    padding-top: 0.5rem;
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    display: -moz-box;
+    -moz-box-orient: horizontal;
+    -moz-box-pack: center;
+    -moz-box-align: center;
+    display: box;
+    box-orient: horizontal;
+    box-pack: center;
+    box-align: center;
 }
 
 .events li h3,
