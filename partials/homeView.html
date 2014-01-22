@@ -6,16 +6,18 @@
             <h1 class="title">Todo</h1>
         </header>
         <content has-header="true">
-            <list>
-                <item ng-repeat="enfant in enfants" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]" item="enfant">
-                    <img ng-src="{{enfant.photo}}" class="li-thumb" ng-click="update(enfant);$event.stopPropagation();">
-                    <div class="topcoat-icon pencil-icon edit" ng-click="update(enfant);$event.stopPropagation();">&nbsp;</div>
-                    <h3>{{ enfant.prenom }}</h3>
-                </item>
-                <item>
-                    <span class="topcoat-icon plus-icon"></span> Nouveau cahier
-                </item>
-            </list>
+            <div class="list">
+
+                <a ng-repeat="enfant in enfants" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]"
+                   class="item item-thumbnail-left">
+                    <img ng-src="{{enfant.photo}}">
+                    <h2>{{ enfant.prenom }}</h2>
+                </a>
+                <a class="item">
+                    <span class="topcoat-icon plus-icon"></span>
+                    <h2> Nouveau cahier</h2>
+                </a>
+            </div>
         </content>
     </pane>
 
