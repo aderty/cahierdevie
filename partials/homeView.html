@@ -1,4 +1,34 @@
-<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
+<side-menus>
+
+    <!-- Center content -->
+    <pane side-menu-content>
+        <header class="bar bar-header bar-dark">
+            <h1 class="title">Todo</h1>
+        </header>
+        <content has-header="true">
+            <list>
+                <item ng-repeat="enfant in enfants" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]" item="enfant">
+                    <img ng-src="{{enfant.photo}}" class="li-thumb" ng-click="update(enfant);$event.stopPropagation();">
+                    <div class="topcoat-icon pencil-icon edit" ng-click="update(enfant);$event.stopPropagation();">&nbsp;</div>
+                    <h3>{{ enfant.prenom }}</h3>
+                </item>
+                <item>
+                    <span class="topcoat-icon plus-icon"></span> Nouveau cahier
+                </item>
+            </list>
+        </content>
+    </pane>
+
+    <!-- Left menu -->
+    <side-menu side="left">
+        <header class="bar bar-header bar-dark">
+            <h1 class="title">Projects</h1>
+        </header>
+    </side-menu>
+
+</side-menus>
+
+<!--<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
 <div id="header" class="topcoat-navigation-bar header" >
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu" ng-click="" snap-toggle="left">
@@ -46,5 +76,5 @@
 
   <ng-include src="'partials/navigationMain.html'"></ng-include>
 
-</nav>
+</nav>-->
 
