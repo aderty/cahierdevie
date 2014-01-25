@@ -6,7 +6,7 @@ angular.module('myApp.directives', [])
         return function(scope, elm, attrs) {
             elm.text(version);
         }
-    }])
+    } ])
     .directive('timepicker', ['$compile', function($compile) {
         return {
             restrict: 'A',
@@ -182,7 +182,7 @@ angular.module('myApp.directives', [])
                 var valid = true;
                 var DELTA = 10;
                 var TIMEOUT = 800;
-                return;
+
                 setTimeout(function() {
                     var myScroll = new iScroll(document.getElementById(elm[0].id), {
                         scrollbars: true,

@@ -1,36 +1,4 @@
-<side-menus>
-
-    <!-- Center content -->
-    <pane side-menu-content>
-        <header class="bar bar-header bar-dark">
-            <h1 class="title">Todo</h1>
-        </header>
-        <content has-header="true">
-            <div class="list">
-
-                <a ng-repeat="enfant in enfants" ng-class="{true:'gars', false:'fille'}[enfant.sexe == true]"
-                   class="item item-thumbnail-left">
-                    <img ng-src="{{enfant.photo}}">
-                    <h2>{{ enfant.prenom }}</h2>
-                </a>
-                <a class="item">
-                    <span class="topcoat-icon plus-icon"></span>
-                    <h2> Nouveau cahier</h2>
-                </a>
-            </div>
-        </content>
-    </pane>
-
-    <!-- Left menu -->
-    <side-menu side="left">
-        <header class="bar bar-header bar-dark">
-            <h1 class="title">Projects</h1>
-        </header>
-    </side-menu>
-
-</side-menus>
-
-<!--<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
+<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="backDate()" ng-swipe-right="nextDate()" >
 <div id="header" class="topcoat-navigation-bar header" >
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet off-screen-nav-button" title="menu" ng-click="" snap-toggle="left">
@@ -78,5 +46,5 @@
 
   <ng-include src="'partials/navigationMain.html'"></ng-include>
 
-</nav>-->
+</nav>
 

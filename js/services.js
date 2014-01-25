@@ -7,6 +7,7 @@
 // Simple value service.
 angular.module('myApp.services', []).
   value('version', 'v1');
+
 // phonegap ready service - listens to deviceready
 myApp.factory('phonegapReady', function() {
     return function (fn) {
@@ -27,6 +28,7 @@ myApp.factory('phonegapReady', function() {
         };
     };
 });
+
 myApp.factory('geolocation', function ($rootScope, phonegapReady) {
   return {
     getCurrentPosition: function (onSuccess, onError, options) {
@@ -111,13 +113,13 @@ myApp.factory('notification', function ($rootScope, phonegapReady) {
     };
 });
 
-myApp.factory('navSvc', function(/*$navigate*/) {
+myApp.factory('navSvc', function($navigate) {
     return {
         slidePage: function (path,type) {
-            //$navigate.go(path,type);
+            $navigate.go(path,type);
         },
         back: function () {
-            //$navigate.back();
+            $navigate.back();
         }
     }
 });
