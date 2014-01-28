@@ -109,10 +109,12 @@ html, body {
     font-weight: bold;
     font-size: 18pt;
 
-    display: -webkit-flexbox;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
       -webkit-flex-align: center;
       -ms-flex-align: center;
       -webkit-align-items: center;
@@ -512,6 +514,11 @@ select.field-input {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
     -webkit-box-flex: 1;
+    -webkit-flex: 1 0 auto;
+    -moz-box-flex: 1;
+    -moz-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
     white-space: initial;
     font-size: 1.4rem;
     padding: 1.1em;
@@ -863,6 +870,11 @@ button.delete {
 	height: 100%;*/
 	position: relative;
 	-webkit-box-flex: 1;
+    -webkit-flex: 1 0 auto;
+    -moz-box-flex: 1;
+    -moz-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
 	box-flex: 1;
 	-webkit-box-orient: vertical;
 	box-orient: vertical;
@@ -1066,6 +1078,11 @@ nav.navigation h4 > i{
 }
 #pge-events .status{
     padding: 1rem 0 1rem 1rem;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
     display: flex;
     -webkit-box-align: center;
     -ms-flex-align: center;
@@ -1073,7 +1090,12 @@ nav.navigation h4 > i{
 }
 
 #pge-events .status .date-events{
-    flex: 1 1 auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 auto;
+    -moz-box-flex: 1;
+    -moz-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
 }
 #pge-events .status h3,
 #pge-events .status h4{
