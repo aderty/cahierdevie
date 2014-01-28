@@ -17,10 +17,13 @@
 <div id="content" class="pad" scroll >
     <form id="eventForm" name="eventForm" class="panel">
         <div class="panel-inner">
-        <div class="center field titre first">
+        <div class="field titre first">
             <span class="icoEventConainer"><img ng-src="{{predefTitle[event.type].img}}" class="icoEvent" /></span>
-            <span class="field-label">
-                {{event.time}} : {{event.title &&  event.title != "" ? event.title : predefTitle[event.type].libelle}}
+            <span class="lib light">
+                {{event.time}}
+            </span>
+            <span class="lib">
+                {{event.title &&  event.title != "" ? event.title : predefTitle[event.type].libelle}}
             </span>
         </div>
             <div class="center field titre" ng-if="event.desc">
