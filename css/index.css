@@ -133,6 +133,10 @@ li.loading span {
     margin: 0.5rem 0 0 1rem;
 }
 
+.light{
+    color:rgb(138, 142, 146);
+}
+
 .panel {
     padding: 0.5rem;
     position: absolute;
@@ -562,7 +566,8 @@ select.field-input {
 }
 .humeur button {
     padding: 0;
-    background:transparent;
+    background:rgb(216, 216, 216);
+    border: none;
     border-radius: 1rem;
 }
 .humeur button img {
@@ -879,12 +884,12 @@ h1 .li-thumb
 }
 
 #pge-events #wrapper{
-	top: 11.9rem;
+	top: 10.7rem;
 }
 
 #pge-events .list {
     height: 70%;
-    height: calc(100% - 12rem - 1px);
+    height: calc(100% - 10.8rem - 1px);
 }
 
 #content > form,
@@ -933,16 +938,24 @@ nav.navigation h4 > i{
 	font-size: 1.2em;
 }
 #pge-events .status{
-    padding: 1.5rem 0 1rem 1.25rem;
+    padding: 1rem 0 1rem 1rem;
     display: -webkit-box;
     -webkit-box-align: center;
-    border-bottom: rgb(221, 213, 36) 8px solid;
+    /*border-bottom: rgb(221, 213, 36) 8px solid;*/
 }
-#pge-events .status > h3{
+
+#pge-events .status .date-events{
+    width: 70%;
+}
+#pge-events .status h3{
     font-size: 2rem;
     margin: 0;
-    max-width: 70%;
 }
+#pge-events .status h4{
+    font-size: 1.2rem;
+    margin: 0;
+}
+
 
 .events .now
 {
@@ -1159,8 +1172,8 @@ nav.navigation h4 > i{
     margin-top: -1rem;
     padding-left: 2rem;
     color: #000;
-    border-bottom-right-radius: 1rem;
-	border-top-right-radius: 1rem;
+    /*border-bottom-right-radius: 1rem;
+	border-top-right-radius: 1rem;*/
     font-size: 14pt;
 }
 .events li:nth-child(even) div.time{

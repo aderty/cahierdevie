@@ -28,7 +28,10 @@
         </div>
     </div>-->
     <div class="topcoat-list__item loading status" ng-class="{'now':isCurrentDate()}">
-        <h3>{{currentCahier.date | moment:'dddd D MMMM YYYY'}}</h3>
+        <div class="date-events">
+            <h3 class="center">{{currentCahier.date | moment:'dddd'}}</h3>
+            <h4 class="center light" >{{currentCahier.date | moment:'D MMMM YYYY'}}</h4>
+        </div>
         <div class="humeur">
             <button ng-click="showHumeur()">
                 <img ng-if="loaded" ng-src="{{currentCahier.humeur.img}}" />
