@@ -31,7 +31,8 @@
         <h3>{{currentCahier.date | moment:'dddd D MMMM YYYY'}}</h3>
         <div class="humeur">
             <button ng-click="showHumeur()">
-                <img ng-src="{{currentCahier.humeur.img}}" />
+                <img ng-if="loaded" ng-src="{{currentCahier.humeur.img}}" />
+                <img ng-if="!loaded" src="img/ajax-loader.gif" />
             </button>
             <div class="popover bottom" ng-if="showSmiley">
                 <div class="arrow"></div>
@@ -49,9 +50,9 @@
     <div class="topcoat-list__container list">
         <div id="wrapper" scroll>
             <ul class="topcoat-list events">
-                <li class="topcoat-list__item loading" ng-if="!loaded">
+                <!--<li class="topcoat-list__item loading" ng-if="!loaded">
                     <img src="img/ajax-loader.gif" /><span>Chargement...</span>
-                </li>
+                </li>-->
                 <li ng-repeat="event in currentCahier.events | filter: {etat:1} | orderBy:'time'" ng-click="editEvent(event)" class="topcoat-list__item" ng-class="{'has-photo': event.pictures.length > 0}">
                     <div class="time"><img ng-if="event.type != undefined" ng-src="{{predefTitle[event.type].img}}" class="icoEvent" />{{ event.time }}<span class="creator">{{event.creator.pseudo}}</span></div>
                     <div class="list-inner">

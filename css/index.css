@@ -879,12 +879,12 @@ h1 .li-thumb
 }
 
 #pge-events #wrapper{
-	top: 11.4rem;
+	top: 11.9rem;
 }
 
 #pge-events .list {
     height: 70%;
-    height: calc(100% - 11.5rem - 1px);
+    height: calc(100% - 12rem - 1px);
 }
 
 #content > form,
@@ -936,6 +936,7 @@ nav.navigation h4 > i{
     padding: 1.5rem 0 1rem 1.25rem;
     display: -webkit-box;
     -webkit-box-align: center;
+    border-bottom: rgb(221, 213, 36) 8px solid;
 }
 #pge-events .status > h3{
     font-size: 2rem;
