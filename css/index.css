@@ -884,12 +884,12 @@ h1 .li-thumb
 }
 
 #pge-events #wrapper{
-	top: 10.7rem;
+	top: 10.5rem;
 }
 
 #pge-events .list {
     height: 70%;
-    height: calc(100% - 10.8rem - 1px);
+    height: calc(100% - 10.6rem - 1px);
 }
 
 #content > form,
@@ -948,11 +948,15 @@ nav.navigation h4 > i{
     width: 70%;
 }
 #pge-events .status h3{
-    font-size: 2rem;
+    font-size: 1.8rem;
+    margin: 0;
+}
+#pge-events .status date-events > h3{
+    font-size: 2.4rem;
     margin: 0;
 }
 #pge-events .status h4{
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin: 0;
 }
 
