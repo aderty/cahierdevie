@@ -1,4 +1,4 @@
-<section id="pge-events" class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="nextDate()" ng-swipe-right="backDate()">
+﻿<section id="pge-events" class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="nextDate()" ng-swipe-right="backDate()">
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
             <a class="topcoat-icon-button--quiet" title="menu" ng-click="" snap-toggle="left">
@@ -35,7 +35,11 @@
         <div class="humeur">
             <button ng-click="showHumeur()">
                 <img ng-if="loaded" ng-src="{{currentCahier.humeur.img}}" />
-                <img ng-if="!loaded" src="img/ajax-loader.gif" />
+                <!--<img ng-if="!loaded" src="img/ajax-loader.gif" />-->
+                <div ng-if="!loaded" class="loading-icon">
+                    <div class="icon">✓</div>
+                    <div class="circle rotate-spin"></div>
+                </div>
             </button>
             <div class="popover bottom" ng-if="showSmiley">
                 <div class="arrow"></div>
