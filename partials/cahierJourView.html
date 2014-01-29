@@ -35,11 +35,7 @@
         <div class="humeur">
             <button ng-click="showHumeur()">
                 <img ng-if="loaded" ng-src="{{currentCahier.humeur.img}}" />
-                <!--<img ng-if="!loaded" src="img/ajax-loader.gif" />-->
-                <div ng-if="!loaded" class="loading-icon">
-                    <div class="icon">✓</div>
-                    <div class="circle rotate-spin"></div>
-                </div>
+                <img ng-if="!loaded" src="img/ajax-loader.gif" />
             </button>
             <div class="popover bottom" ng-if="showSmiley">
                 <div class="arrow"></div>
