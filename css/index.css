@@ -850,15 +850,19 @@ button.delete {
 
 .list li:nth-child(4n+1){
     border-left: rgb(201, 110, 110) 8px solid;
+    background-color: rgb(248, 217, 217);
 }
 .list li:nth-child(4n+2){
     border-left: rgb(55, 185, 92) 8px solid;
+    background-color: rgb(206, 240, 206);
 }
 .list li:nth-child(4n+3){
     border-left: rgb(134, 199, 241) 8px solid;
+    background-color: rgb(229, 237, 253);
 }
 .list li:nth-child(4n+4){
     border-left: rgb(221, 213, 36) 8px solid;
+    background-color: rgb(250, 250, 185);
 }
 
 .list .no-item{
