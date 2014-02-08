@@ -700,7 +700,7 @@ select.field-input {
 }
 .humeur button {
     padding: 0;
-    background:rgb(216, 216, 216);
+    background: rgba(199, 218, 226, 0.75);
     border: none;
     border-radius: 1rem;
 }
@@ -1027,12 +1027,16 @@ h1 .li-thumb
 }
 
 #pge-events #wrapper{
-	top: 10.5rem;
+	top: 8.6rem;
+}
+
+#pge-details #content{
+    top: 8.6rem;
 }
 
 #pge-events .list {
     height: 70%;
-    height: calc(100% - 10.6rem - 1px);
+    height: calc(100% - 8.7rem - 1px);
 }
 
 #content > form,
@@ -1080,8 +1084,10 @@ nav.navigation h4 > i{
 	line-height: 2rem;
 	font-size: 1.2em;
 }
-#pge-events .status{
-    padding: 1rem 0 1rem 1rem;
+
+#pge-events .status,
+#pge-details .status{
+    padding: 0;
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -1091,9 +1097,11 @@ nav.navigation h4 > i{
     -webkit-box-align: center;
     -ms-flex-align: center;
     /*border-bottom: rgb(221, 213, 36) 8px solid;*/
+    background-color: rgb(215, 230, 248);
 }
 
-#pge-events .status .date-events{
+#pge-events .status .date-events,
+#pge-details .status .date-events{
     -webkit-box-flex: 1;
     -webkit-flex: 1 0 auto;
     -moz-box-flex: 1;
@@ -1102,11 +1110,14 @@ nav.navigation h4 > i{
     flex: 1 0 auto;
 }
 #pge-events .status h3,
-#pge-events .status h4{
+#pge-events .status h4,
+#pge-details .status h3,
+#pge-details .status h4{
     font-size: 1.5rem;
     margin: 0;
 }
-#pge-events .date-events > h3{
+#pge-events .date-events > h3,
+#pge-details .date-events > h3{
     font-size: 2.3rem;
     margin: 0;
 }
@@ -1137,8 +1148,11 @@ nav.navigation h4 > i{
         height: 3rem;
         /*background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
         background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));*/
-        background-color: rgb(238, 238, 238);
-        background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(145, 145, 145)), color-stop(0.5, rgb(207, 214, 206)),color-stop(0.5, rgb(221, 217, 217)),color-stop(1, rgb(236, 236, 236)));
+        /*background-color: rgb(238, 238, 238);
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(145, 145, 145)), color-stop(0.5, rgb(207, 214, 206)),color-stop(0.5, rgb(221, 217, 217)),color-stop(1, rgb(236, 236, 236)));*/
+        background-color: rgb(193, 227, 250);
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(74, 144, 248)), color-stop(0.5, rgb(201, 230, 246)),color-stop(0.5, rgb(193, 227, 250)),color-stop(1, rgb(215, 230, 248)));
+        box-shadow: none;
 }
 
 .topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active {

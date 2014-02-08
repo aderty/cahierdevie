@@ -22,14 +22,10 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
         return ($rootScope.currentDate - new Date(date.getFullYear(), date.getMonth(), date.getDate())) == 0;
     }
     $rootScope.backDate = function(){
-        var newD = new Date();
-        newD.setDate($rootScope.currentDate.getDate()-1);
-        $rootScope.currentDate = new Date(newD.getTime());
+        $rootScope.currentDate = new Date(moment($rootScope.currentDate).add('days', -1).toDate().getTime());
     }
     $rootScope.nextDate = function(){
-        var newD = new Date();
-        newD.setDate($rootScope.currentDate.getDate()+1);
-        $rootScope.currentDate = new Date(newD.getTime());
+        $rootScope.currentDate = new Date(moment($rootScope.currentDate).add('days', 1).toDate().getTime());
     }
     $rootScope.$watch('currentDate', function(){
         console.log($rootScope.currentDate);
@@ -717,7 +713,28 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService) {
 }
 
 function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout) {
+    $scope.currentEnfant = EnfantService.getCurrent();
+    $scope.currentCahier = CahierService.getCurrent();
     $scope.event = EventService.getCurrent();
+
+    $scope.backEvent = function () {
+        EventService.backEvent().then(function (event) {
+            $scope.event = event;
+            $scope.currentCahier = CahierService.getCurrent();
+            $timeout(function () {
+                $scope.$broadcast("reload-scroll");
+            }, 0);
+        });
+    }
+    $scope.nextEvent = function () {
+        EventService.nextEvent().then(function (event) {
+            $scope.event = event;
+            $scope.currentCahier = CahierService.getCurrent();
+            $timeout(function () {
+                $scope.$broadcast("reload-scroll");
+            }, 0);
+        });
+    }
 
     $scope.showPhotos = function () {
         if (!$scope.event.pictures) return;
