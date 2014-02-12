@@ -79,6 +79,13 @@ textarea.field-input {
     padding-top: 1.1em;
 }
 
+.item-input textarea{
+    height: -moz-fit-content;
+    height: -ms-fit-content;
+    height: -webkit-fit-content;
+    height: fit-content;
+}
+
 input[type="checkbox"] 
 {
 	width: 100%;
@@ -206,7 +213,7 @@ li.loading span {
 }
 
 .field .topcoat-icon-button--quiet{
-    margin-top: 0.8rem;
+    margin: 6px 8px 5px;
 }
 
 .field.first .field-label {
@@ -905,11 +912,17 @@ h1 .li-thumb
 	left:auto;
 }
 
-#cahierForm .btn-photo,
+#cahierForm .btn-photo {
+    margin: 5px;
+    width: 90px;
+	height: 90px;
+    border-radius: 100%;
+}
+
 #cahierForm .btn-photo img
 {
-	width: 100px;
-	height: 100px;
+	width: 90px;
+	height: 90px;
 }
 #cahierForm .btn-photo.has-photo
 {
@@ -1179,9 +1192,13 @@ nav.navigation h4 > i{
 	margin-top: 0.7rem;
 	margin-left: 0.7rem;
 }
+.genre .topcoat-switch__toggle{
+    border-radius: 100%;
+}
 .genre .topcoat-switch__toggle:before {
-    content: 'GARS';
-    padding-left:0;
+    content: 'GARçON';
+    padding-left: 0;
+    padding-right: 12px;
 }
 .genre .topcoat-switch__toggle:after {
     content: 'FILLE';
