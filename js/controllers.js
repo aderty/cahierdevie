@@ -670,7 +670,7 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService, notificati
     }
 }
 
-function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout) {
+function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, notification) {
     $scope.currentEnfant = EnfantService.getCurrent();
     $scope.currentCahier = CahierService.getCurrent();
     $scope.event = EventService.getCurrent();
@@ -713,6 +713,20 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
         Code.PhotoSwipe.Current.setImages($scope.event.pictures);
         // Start PhotoSwipe
         Code.PhotoSwipe.Current.show(0);
+
+        angular.element("i.delete-icon.white").bind("click", function () {
+            console.log(Code.PhotoSwipe.Current.currentIndex);
+            notification.confirm("Etes-vous sûre de vouloir supprimer la photo ?", function (confirm) {
+                if (confirm != 1) return false;
+                Code.PhotoSwipe.Current.hide();
+                $scope.event.pictures.splice(Code.PhotoSwipe.Current.currentIndex, 1);
+                CahierService.save($scope.currentEnfant, $scope.currentCahier);
+            }, "Cahier de vie", ["Oui", "Non"]);
+        });
+        Code.PhotoSwipe.Current.addEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide, function () {
+            angular.element("i.delete-icon.white").unbind("click");
+        });
+        
         //navSvc.slidePage("/viewPhotos");
     }
 }
@@ -1091,6 +1105,20 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         Code.PhotoSwipe.Current.setImages($scope.event.pictures);
         // Start PhotoSwipe
         Code.PhotoSwipe.Current.show(0);
+
+        angular.element("i.delete-icon.white").bind("click", function () {
+            console.log(Code.PhotoSwipe.Current.currentIndex);
+            notification.confirm("Etes-vous sûre de vouloir supprimer la photo ?", function (confirm) {
+                if (confirm != 1) return false;
+                Code.PhotoSwipe.Current.hide();
+                $scope.event.pictures.splice(Code.PhotoSwipe.Current.currentIndex, 1);
+                CahierService.save(EnfantService.getCurrent(), CahierService.getCurrent());
+            }, "Cahier de vie", ["Oui", "Non"]);
+        });
+        Code.PhotoSwipe.Current.addEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide, function () {
+            angular.element("i.delete-icon.white").unbind("click");
+        });
+
         //navSvc.slidePage("/viewPhotos");
     }
 
