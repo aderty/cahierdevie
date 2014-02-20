@@ -120,4 +120,5 @@
   
   <!-- splashscreen -->
   <gap:splash src="res/splash/splash.png" />
+  <gap:plugin name="com.adobe.plugins.pushplugin" />
 </widget>

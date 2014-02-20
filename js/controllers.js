@@ -699,6 +699,17 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
         navSvc.slidePage("/viewEvent");
     }
 
+    document.removeEventListener("backbutton", onBackKeyDown, false);
+    document.addEventListener("backbutton", onBackKeyDown, false);
+    //navigator.app.overrideBackbutton(true);
+    function onBackKeyDown(e) {
+        document.removeEventListener("backbutton", onBackKeyDown, false);
+        if ($scope.inShowPhotosMode) {
+            Code.PhotoSwipe.Current.hide();
+        }
+    }
+
+    $scope.inShowPhotosMode = false;
     $scope.showPhotos = function () {
         if (!$scope.event.pictures) return;
         Code.PhotoSwipe.Current.setOptions({
@@ -713,10 +724,16 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
         Code.PhotoSwipe.Current.setImages($scope.event.pictures);
         // Start PhotoSwipe
         Code.PhotoSwipe.Current.show(0);
+        $scope.inShowPhotosMode = true;
         // Suppression du bouton de suppresion
         angular.element("i.delete-icon.white").hide();
         
         //navSvc.slidePage("/viewPhotos");
+        // A la fermeture on se désabonnedu click
+        Code.PhotoSwipe.Current.addEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide, function () {
+            $scope.inShowPhotosMode = false;
+            Code.PhotoSwipe.Current.removeEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide);
+        });
     }
 }
 
@@ -1013,7 +1030,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         console.log("On fail " + e);
     };
 
-    $scope.add = function (event) {
+    $scope.add = function (event, skipBack) {
         if (!event) return;
         /*if(!event.title || event.title == ""){
             return alert("Veuillez saisir un titre.");
@@ -1056,19 +1073,25 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         CahierService.save(enfant, cahier).then(function () {
             //$scope.$apply();
         });
-        navSvc.back();
+        if (!skipBack) {
+            navSvc.back();
+        }
     }
     document.removeEventListener("backbutton", onBackKeyDown, false);
     document.addEventListener("backbutton", onBackKeyDown, false);
-
+    //navigator.app.overrideBackbutton(true);
     function onBackKeyDown(e) {
         document.removeEventListener("backbutton", onBackKeyDown, false);
-        notification.confirm("Etes-vous sûre de vouloir quitter l'édition de l'évènement sans sauvegarder ?", function (confirm) {
-            if (confirm != 1) return false;
-            $scope.cancel();
-        }, "Cahier de vie", ["Oui", "Non"]);
-        e.preventDefault();
-        return false;
+        notification.confirm("Voullez-vous sauvegarder l'évènement avant de quitter ?", function (confirm) {
+            if (confirm != 1) return;
+            $scope.add($scope.event, true);
+        }, "Cahier de vie", ["Sauvergarder", "Ignorer"]);
+        if ($scope.inShowPhotosMode) {
+            Code.PhotoSwipe.Current.hide();
+        }
+        //e.preventDefault();
+        // navigator.app.exitApp();
+        //return false;
     }
 
     $scope.cancel = function () {
@@ -1078,7 +1101,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         }
         navSvc.back();
     }
-
+    $scope.inShowPhotosMode = false;
     $scope.showPhotos = function () {
         //if(!validSwipe || !$scope.event.pictures) return;
         if (!$scope.event.pictures) return;
@@ -1094,6 +1117,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         Code.PhotoSwipe.Current.setImages($scope.event.pictures);
         // Start PhotoSwipe
         Code.PhotoSwipe.Current.show(0);
+        $scope.inShowPhotosMode = true;
         // Affichage si le bouton avez été masqué.
         angular.element("i.delete-icon.white").show();
         // Au click sur le bouton de suppression -> Confirmation et suppression si nécessaire
@@ -1110,6 +1134,8 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         // A la fermeture on se désabonnedu click
         Code.PhotoSwipe.Current.addEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide, function () {
             angular.element("i.delete-icon.white").unbind("click");
+            $scope.inShowPhotosMode = false;
+            Code.PhotoSwipe.Current.removeEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide);
         });
 
         //navSvc.slidePage("/viewPhotos");
