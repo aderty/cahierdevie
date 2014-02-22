@@ -34,24 +34,37 @@ myApp.factory('phonegapReady', function () {
     };
 });
 
-myApp.factory('backbutton', function () {
-    var queue = [];
+myApp.factory('Device', function ($location, phonegapReady) {
+    var queue = {
+        backbutton: {},
+        resume: {}
+    }, path;
     document.addEventListener("backbutton", onBackKeyDown, false);
+    document.addEventListener("resume", onResume, false);
+
     //navigator.app.overrideBackbutton(true);
     function onBackKeyDown(e) {
-        queue.forEach(function (args) {
-            fn.apply(this, args);
-        });
+        path = $location.path();
+        if (queue.backbutton[path]) {
+            queue.backbutton[path].apply(this, arguments);
+        }
+    }
+    function onResume(e) {
+        path = $location.path();
+        if (queue.resume[path]) {
+            queue.resume[path].apply(this, arguments);
+        }
     }
 
     return {
-        onBackButton: phonegapReady(function (callback) {
-            queue.push(callback);
+        onBackbutton: phonegapReady(function (callback) {
+            queue.backbutton[$location.path()] = callback;
+        }),
+        onResume: phonegapReady(function (callback) {
+            queue.resume[$location.path()] = callback;
         })
     };
 });
-
-
 
 myApp.factory('geolocation', function ($rootScope, phonegapReady) {
   return {
@@ -661,7 +674,7 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
     return me;
 });
 
-myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config, DropBoxService) {
+myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $rootScope, config, DropBoxService, LoginService) {
     var orderBy = $filter('orderBy');
     var cahierChangeCb = [];
     var ip = config.getUrlUpload();
@@ -868,10 +881,10 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
             var defered = $q.defer();
             db.getInstance().objectStore("cahier").get(id).done(function (data) {
                 $timeout(function () {
-                    defered.resolve(data);
+                    defered.resolve(data, id);
                 });
             }).fail(function () {
-                defered.reject(null);
+                defered.reject(id);
             });
             return defered.promise;
         },
@@ -964,6 +977,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                         delete toSync[cahier.id];
                         localStorage["cahiersToSync"] = JSON.stringify(toSync);
                         me.save(enfant, cahier);
+
+                        LoginService.pushEvent(enfant, cahier);
                     });
                 }
             }
@@ -1048,8 +1063,14 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
     if (localStorage["cahiersToSync"]) {
         toSync = JSON.parse(localStorage["cahiersToSync"]);
         for (var id in toSync) {
-            me.getById(id).then(function (cahier) {
-                me.sync(toSync[id], cahier);
+            me.getById(id).then(function (cahier, cahierid) {
+                if (cahier) {
+                    me.sync(toSync[cahier.id], cahier);
+                }
+                else {
+                    delete toSync[cahierid];
+                    localStorage["cahiersToSync"] = JSON.stringify(toSync);
+                }
             })
         }
     }
@@ -1933,6 +1954,71 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                     user: currentLogin,
                     cahier: cahier._id,
                     target: user.id
+                }
+            }).
+            success(function (data, status, headers, config) {
+                // this callback will be called asynchronously
+                // when the response is available
+                defered.resolve(data);
+            }).
+            error(function (data, status, headers, config) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+                defered.reject(arguments);
+            });
+            return defered.promise;
+        },
+        addPushId: function(id, type){
+            var defered = $q.defer();
+            if (currentLogin.pushIds && currentLogin.pushIds[type].indexOf(id) > -1) {
+                defered.resolve({result: true});
+            }
+            else {
+                var url = "http://" + config.getUrl() + '/addPushId/' + config.getVersion();
+                $http({
+                    method: 'POST',
+                    url: url,
+                    data: {
+                        user: currentLogin,
+                        push: {
+                            id: id,
+                            type: type
+                        }
+                    }
+                }).
+                success(function (data, status, headers, config) {
+                    // this callback will be called asynchronously
+                    // when the response is available
+                    defered.resolve(data);
+                    if (!currentLogin.pushIds) {
+                        currentLogin.pushIds = {
+                            gcm: [],
+                            apn: []
+                        }
+                    }
+                    if (currentLogin.pushIds[type].indexOf(id) == -1) {
+                        currentLogin.pushIds[type].push(id);
+                        me.store(currentLogin);
+                    }
+                }).
+                error(function (data, status, headers, config) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                    defered.reject(arguments);
+                });
+            }
+            return defered.promise;
+        },
+        pushEvent: function (cahier, event) {
+            var defered = $q.defer();
+            var url = "http://" + config.getUrl() + '/pushEvent/' + config.getVersion();
+            $http({
+                method: 'POST',
+                url: url,
+                data: {
+                    user: currentLogin,
+                    cahier: cahier._id,
+                    event: event
                 }
             }).
             success(function (data, status, headers, config) {

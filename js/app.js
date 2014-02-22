@@ -38,6 +38,9 @@ function isPhonegap() {
 function isIOS() {
     return navigator.userAgent.match(/(iPad|iPhone|iPod)/g);
 }
+function isAndroid() {
+    return navigator.userAgent.match(/Android/i);
+}
 
 document.addEventListener('deviceready', function () {
     // window.device is available only if you include the phonegap package
@@ -90,16 +93,8 @@ if (myApp.isPhone) {
       }
 }
 
-function createModal() {
-    var modal = document.createElement("div");
-    modal.innerHTML = "<span>Chargement...<span><input />";
-    modal.classList.add("loading-modal");
-    return modal;
-}
-
 myApp.initialize = function () {
-    myApp.modal = createModal();
-    document.body.appendChild(myApp.modal);
+    myApp.modal = document.getElementById('escapingBallG');
     window.setTimeout(function () {
         myApp.initDB();
     }, 150);
@@ -142,10 +137,7 @@ myApp.initDB = function() {
     }).then(function() {
         // Once the DB is opened with the object stores set up, show data from all tables
         window.setTimeout(function() {
-            //loadFromDB("cart");
-            //loadFromDB("wishlist");
-            //downloadCatalog();
-            $("html").addClass("ready");
+            $('body').addClass('ready');
             document.body.removeChild(myApp.modal);
             angular.bootstrap(document, ['myApp']);
         }, 200);
