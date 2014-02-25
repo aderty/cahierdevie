@@ -34,19 +34,20 @@ myApp.factory('phonegapReady', function () {
     };
 });
 
-myApp.factory('Device', function ($location, phonegapReady) {
+myApp.factory('Device', function ($rootScope, $location) {
     var queue = {
         backbutton: {},
         resume: {}
-    }, path;
+    }, path, current, previous;
+
     document.addEventListener("backbutton", onBackKeyDown, false);
     document.addEventListener("resume", onResume, false);
 
     //navigator.app.overrideBackbutton(true);
     function onBackKeyDown(e) {
         path = $location.path();
-        if (queue.backbutton[path]) {
-            queue.backbutton[path].apply(this, arguments);
+        if (previous && queue.backbutton[previous]) {
+            queue.backbutton[previous].apply(this, arguments);
         }
     }
     function onResume(e) {
@@ -56,13 +57,21 @@ myApp.factory('Device', function ($location, phonegapReady) {
         }
     }
 
+    $rootScope.$on("$routeChangeSuccess", function (event, cur, prev, rejection) {
+        current = cur.originalPath;
+        previous = prev.originalPath;
+        /*setTimeout(function () {
+            previous = null;
+        }, 1000);*/
+    });
+
     return {
-        onBackbutton: phonegapReady(function (callback) {
+        onBackbutton: function (callback) {
             queue.backbutton[$location.path()] = callback;
-        }),
-        onResume: phonegapReady(function (callback) {
+        },
+        onResume: function (callback) {
             queue.resume[$location.path()] = callback;
-        })
+        }
     };
 });
 
