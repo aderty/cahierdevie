@@ -1106,10 +1106,11 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
     }
 
     Device.onBackbutton(function (e) {
-        notification.confirm("Voullez-vous sauvegarder l'évènement avant de quitter ?", function (confirm) {
+        /*notification.confirm("Voullez-vous sauvegarder l'évènement avant de quitter ?", function (confirm) {
             if (confirm != 1) return;
             $scope.add($scope.event, true);
-        }, "Cahier de vie", ["Sauvergarder", "Ignorer"]);
+        }, "Cahier de vie", ["Sauvergarder", "Ignorer"]);*/
+        $scope.add($scope.event, true);
         if ($scope.inShowPhotosMode) {
             Code.PhotoSwipe.Current.hide();
         }
