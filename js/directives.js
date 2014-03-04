@@ -243,6 +243,7 @@ angular.module('myApp.directives', [])
     } ])
     .directive('focusscroll', [function () {
         var resizeIt = function (value) {
+            if (!value || !value.length) return;
             var str = value;
             var cols = this.cols;
 

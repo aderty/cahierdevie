@@ -1,4 +1,4 @@
-<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<section class="wrapper" id="pge-cahier" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
@@ -30,7 +30,7 @@
     </div>
 <div id="content" scroll >
     <form id="cahierForm" name="cahierForm" class="panel">
-        <div class="panel-inner">
+        <div class="panel-inner" ng-if="enfant.creation || enfant.share">
             <div class="center field first">
                 <label class="item item-input">
                     <input type="text" ng-model="enfant.prenom" placeholder="Pr&eacute;nom de l'enfant">
@@ -87,28 +87,38 @@
             </div>
         </div>
         <br />
-        <div class="panel-inner">
-            <div class="center field first" ng-if="enfant.owner || enfant.creation">
+        <div class="panel-inner" ng-if="!enfant.creation">
+            <div class="center field first" ng-if="enfant.owner && enfant.sharing">
                 <span class="field-label full">Administration</span>
             </div>
-            <div class="center field" ng-if="enfant.owner || enfant.creation">
+            <div class="center field first" ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)">
+                <span class="field-label full sharing">
+                    Pensez à partager le cahier de vie avec des personnes de confiance.
+                </span>
+            </div>
+            <div class="center field" ng-if="enfant.owner">
                 <span class="field-label">Mes amis</span>
                 <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
             </div>
-            <div class="center field" ng-if="enfant.owner  || enfant.creation">
+            <div class="center field" ng-if="enfant.owner && !enfant.sharing">
+                <span class="field-label full sharing">
+                    Configurez aussi le compte Dropbox lié au cahier de vie afin d'activer son partage.
+                </span>
+            </div>
+            <div class="center field" ng-if="enfant.owner">
                 <span class="field-label">Stockage</span>
                 <button class="topcoat-icon-button btn-dropbox" ng-if="!isAuthenticated" ng-click="authenticate()">&nbsp;</button>
                 <button class="topcoat-icon-button btn-dropbox" ng-if="isAuthenticated" ng-click="authenticate()">&nbsp;</button>
             </div>
-            <div class="center field last" ng-if="!enfant.creation">
+            <div class="center field last">
                 <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
                     <i class="topcoat-icon delete-icon"></i> Supprimer le cahier
                 </button>
-                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner && !enfant.creation">
+                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner">
                     <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner
                 </button>
             </div>
-            </div>
+        </div>
     </form>
 </div>
 </section>

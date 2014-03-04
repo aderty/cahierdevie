@@ -978,6 +978,16 @@ h1 .li-thumb
 	left:auto;
 }
 
+#pge-cahier span.sharing{
+    white-space: normal;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 0 auto;
+    -moz-box-flex: 1;
+    -moz-flex: 1 0 auto;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+}
+
 #cahierForm .btn-photo {
     margin: 5px;
     width: 90px;

@@ -536,7 +536,6 @@ function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService,
 }
 
 function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, DropBoxService, notification) {
-
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Nouveau cahier";
 
@@ -547,6 +546,9 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         }
     }
     else {
+        if (typeof $scope.enfant.share == "undefined") {
+            $scope.enfant.share = true;
+        }
         $scope.title = "Modification de cahier";
         $scope.enfantSaved = angular.copy($scope.enfant);
     }
@@ -557,15 +559,29 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
             notification.alert("Veuillez saisir un prénom.", function () {}, "Cahier de vie", "Ok");
             return;
         }
+        var creation = enfant.creation;
         if (!enfant.id) {
             enfant.id = new Date().getTime();
         }
         if (enfant.creation) {
             delete enfant.creation;
+            enfant.share = false;
+            enfant.sharing = false;
+        }
+        else {
+            enfant.share = true;
+        }
+        if (enfant.users && enfant.users.length > 1 && enfant.credentials) {
+            enfant.sharing = true;
         }
         enfant.tick = new Date();
         EnfantService.save(enfant).then(function () {
-            navSvc.back();
+            if (creation) {
+                EnfantService.setCurrent(enfant);
+            }
+            else {
+                navSvc.back();
+            }
             $scope.$apply();
         });
     }
