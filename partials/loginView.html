@@ -1,4 +1,4 @@
-<section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
+<section class="wrapper" id="pge-login" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
         <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
@@ -107,22 +107,31 @@
     </form>
     <div class="panel" ng-if="mode == 3">
         <div class="panel-inner">
-            <div class="center field first last sync">
-                <img src="img/ajax-loader.gif" /> <span class="field-input">Synchronisation du compte...</span>
+            <div class="center field first last">
+                <div ng-if="!loaded" class="loading-anim">
+                    <div class="border mid"></div>
+                </div>
+                <span class="field-input sync">Synchronisation du compte...</span>
             </div>
         </div>
     </div>
     <div class="panel" ng-if="mode == 4">
         <div class="panel-inner">
-            <div class="center field first last sync">
-                <img src="img/ajax-loader.gif" /> <span class="field-input">Cr&eacute;ation du compte...</span>
+            <div class="center field first last">
+                <div ng-if="!loaded" class="loading-anim">
+                    <div class="border mid"></div>
+                </div>
+                <span class="field-input sync">Cr&eacute;ation du compte...</span>
             </div>
         </div>
     </div>
     <div class="panel" ng-if="mode == 7">
         <div class="panel-inner">
-            <div class="center field first last sync">
-                <img src="img/ajax-loader.gif" /> <span class="field-input">Modification du compte...</span>
+            <div class="center field first last">
+                <div ng-if="!loaded" class="loading-anim">
+                    <div class="border mid"></div>
+                </div>
+                <span class="field-input sync">Modification du compte...</span>
             </div>
         </div>
     </div>

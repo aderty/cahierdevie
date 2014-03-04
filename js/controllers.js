@@ -268,6 +268,9 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
         EnfantService.setCurrent(enfant);
         navSvc.slidePage('/viewNewCahier');
     }
+    $scope.set = function(enfant){
+        EnfantService.setCurrent(enfant);
+    }
     $scope.remove = function (enfant) {
         notification.confirm('Etes-vous sur ?', function (button) {
             // yes = 1, no = 2, later = 3

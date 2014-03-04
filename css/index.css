@@ -39,6 +39,10 @@
     src: url('../font/IndieFlower.ttf');
 }
 
+body
+{
+	background-image: url('../img/graphy_@2X.png');
+}
 body > *{
     display: none;
 }
@@ -443,6 +447,14 @@ select.field-input {
     -webkit-appearance: value;
 }
 
+#pge-home .btn-amis
+{
+	position: absolute;
+	right: 3rem;
+	margin-top: -3.4rem;
+	border:0;
+}
+
 #eventForm .panel-inner {
         border: 1px solid #dddddd;
         background: rgb(236, 236, 236);
@@ -589,12 +601,21 @@ select.field-input {
 	padding:0;
 }
 
+#eventForm #descriptionInput
+{
+	margin: 0;
+	width: -webkit-calc(100% - 2em);
+	width: calc(100% - 2em);
+}
+
 #eventForm pre{
     margin: 0;
     padding: 1rem;
     text-align: left;
-    width: 95%;
+    /*width: 95%;*/
     word-break: break-word;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1 0 auto;
 }
 
 #zonearea .modal {
@@ -763,7 +784,6 @@ select.field-input {
 
 .login  .sync{
     padding-top: 1.5rem;
-    padding-left: 1rem;
 }
 .humeur {
     padding-right: 0.5rem;
@@ -1188,6 +1208,7 @@ nav.navigation h4 > i{
     /*border-bottom: rgb(221, 213, 36) 8px solid;*/
     /*background-color: rgb(215, 230, 248);*/
     background-color: rgb(236, 235, 235);
+    background-image: url('../img/graphy_@2X.png');
     /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(156, 165, 165)),color-stop(1, rgb(117, 122, 122)));*/
 }
 
@@ -1250,6 +1271,7 @@ nav.navigation h4 > i{
             background-color: rgb(193, 227, 250);
             background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(74, 144, 248)), color-stop(0.5, rgb(201, 230, 246)),color-stop(0.5, rgb(193, 227, 250)),color-stop(1, rgb(215, 230, 248)));*/
         background-color: rgb(236, 235, 235);
+        background-image: url('../img/graphy_@2X.png');
         /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(156, 165, 165)),color-stop(1, rgb(117, 122, 122)));*/
         /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(218, 218, 218)),color-stop(1, rgb(117, 122, 122)));*/
         box-shadow: none;
@@ -2144,11 +2166,83 @@ position:absolute;
 top: 50%;
 text-align: center;
 font-size: 3rem;
-width: 100%
+width: 100%;
+  display: inline-block;
+  text-transform: uppercase;
+  color: #34495e;
+}
+
+.loading.back-flip > * 
+{
+	display: inline-block;
+  -webkit-animation-name: letter-hop;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+.loading.back-flip > *:nth-child(1) {
+  -webkit-animation-delay: .1s;
+}
+.loading.back-flip > *:nth-child(2) {
+  -webkit-animation-delay: .2s;
+}
+.loading.back-flip > *:nth-child(3) {
+  -webkit-animation-delay: .3s;
+}
+.loading.back-flip > *:nth-child(4) {
+  -webkit-animation-delay: .4s;
+}
+.loading.back-flip > *:nth-child(5) {
+  -webkit-animation-delay: .5s;
+}
+.loading.back-flip > *:nth-child(6) {
+  -webkit-animation-delay: .6s;
+}
+.loading.back-flip > *:nth-child(7) {
+  -webkit-animation-delay: .7s;
+}
+.loading.back-flip > *:nth-child(8) {
+  -webkit-animation-delay: .8s;
+}
+.loading.back-flip > *:nth-child(9) {
+  -webkit-animation-delay: .9s;
+}
+.loading.back-flip > *:nth-child(10) {
+  -webkit-animation-delay: 1.0s;
+}
+
+/*
+* Letter hopping loading animation
+*/
+@-webkit-keyframes letter-hop {
+  0% {
+    -webkit-transform: scale(1);
+  }
+  25% {
+    -webkit-transform: scale(.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+
+/*
+* Letter Flapping loading animation
+*/
+@-webkit-keyframes letter-back-flip {
+  0% {
+    -webkit-transform: rotateX(0deg);
+  }
+  50% {
+    -webkit-transform: rotateX(360deg);
+  }
+  100% {
+    -webkit-transform: rotateX(0deg);
+  }
 }
 
 .escapingBallG{
-background-color:#A3B84F;
+background-color:#e34981;
 background-image: url('../img/icon.png');
 background-position: 0px 0px;
 position:absolute;
@@ -2156,8 +2250,8 @@ top: 50%;
 margin-top: -150px;
 left:50%;
 margin-left: -76px;
-width:152px;
-height:152px;
+width:150px;
+height:150px;
 -moz-border-radius:38px;
 -moz-animation-name:bounce_escapingBallG;
 -moz-animation-duration:2s;
@@ -2166,12 +2260,12 @@ height:152px;
 -moz-animation-delay:0s;
 -moz-transform:scale(0.5, 1);
 -webkit-border-radius:38px;
--webkit-animation-name:bounce_escapingBallG;
+-webkit-animation-name:bounce_escapingBallG2;
 -webkit-animation-duration:2s;
 -webkit-animation-iteration-count:infinite;
 -webkit-animation-timing-function:linear;
 -webkit-animation-delay:0s;
--webkit-transform:scale(0.5, 1);
+/*-webkit-transform:scale(0.5, 1);*/
 -ms-border-radius:38px;
 -ms-animation-name:bounce_escapingBallG;
 -ms-animation-duration:2s;
@@ -2186,7 +2280,7 @@ height:152px;
 -o-animation-timing-function:linear;
 -o-animation-delay:0s;
 -o-transform:scale(0.5, 1);
-border-radius:100%;
+/*border-radius:100%;*/
 animation-name:bounce_escapingBallG;
 animation-duration:2s;
 animation-iteration-count:infinite;
@@ -2242,6 +2336,24 @@ transform:scale(0.5, 1);
 100%{
 /*left:5%;*/
 -webkit-transform:scale(0.5, 1);
+}
+
+}
+
+@-webkit-keyframes bounce_escapingBallG2{
+0%{
+/*left:5%;*/
+-webkit-transform:scale(1);
+}
+
+50%{
+/*left:calc(95% - 75px);*/
+-webkit-transform:scale(0.85);
+}
+
+100%{
+/*left:5%;*/
+-webkit-transform:scale(1);
 }
 
 }
@@ -2313,4 +2425,55 @@ transform:scale(1, 0.5);
 transform:scale(0.5, 1);
 }
 
+}
+
+#escapingBallG .loading-anim
+{
+	position: absolute;
+	top: 50%;
+	left:50%;
+	margin-top: -1.6rem;
+	margin-left: -4rem;
+	height: 8rem;
+	width: 8rem;
+}
+
+.loading-anim {
+  position: relative;
+  width: 4.8rem;
+  height: 4.8rem;
+  margin: auto;
+  perspective: 800px;
+  -webkit-transform-style: preserve-3d;
+  /*-webkit-transform: translateZ(-100px) rotateY(-90deg) rotateX(90deg) rotateZ(90deg) scale(0.5);
+  opacity: 0;*/
+  -webkit-transition: all .2s ease-out;
+}
+
+#pge-login .loading-anim
+{
+	margin: 0;
+}
+
+.loading-anim .mid {
+  top: 25%;
+  left: 25%;
+  width: 42%;
+  height: 42%;
+  -webkit-animation: spin 1s linear infinite;
+  position: absolute;
+border-radius: 50%;
+border: 3px solid #e34981;
+border-left-color: transparent;
+border-right-color: transparent;
+}
+
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+ 
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
