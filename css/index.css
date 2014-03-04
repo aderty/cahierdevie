@@ -921,6 +921,18 @@ button.delete {
 	right: -0.5em;
 }
 
+.topcoat-list {
+    background-color: transparent;
+}
+
+nav * {
+    font-family: cursive;
+}
+
+nav .topcoat-list__header {
+    background-color: rgba(0, 0, 0, 0.36);
+}
+
 .list ul {
     position: relative;
     background-color: Transparent;
@@ -929,10 +941,16 @@ button.delete {
     /*box-shadow: 10px 10px 5px #888888;*/
 }
 .topcoat-list__item:first-child{
-    border:none;
+    /*border:none;*/
 }
 .topcoat-list__item{
-    border:none;
+    /*border:none;
+    border-bottom: 1px solid rgba(0,0,0,0.05);*/
+}
+
+nav .topcoat-list {
+    background-color: rgba(0, 0, 0, 0.25);
+    color: rgb(241, 241, 241);
 }
 .list li {
     background-color: #fff;
@@ -1846,6 +1864,13 @@ nav.navigation h4 > i{
 
 .group-icon {
     background: url("../img/group.svg") no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+}
+
+.calendar-icon {
+    background: url("../img/calendar.svg") no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
