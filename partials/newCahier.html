@@ -1,33 +1,19 @@
 <section class="wrapper" id="pge-cahier" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" title="menu" snap-toggle="left" >
-            <span class="topcoat-icon listview-icon"></span>
+        <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
+            <span class="topcoat-icon back-icon"></span>
         </a>
     </div>
     <div class="topcoat-navigation-bar__item center half">
         <h1 class="topcoat-navigation-bar__title">{{title}}</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-            <span class="topcoat-icon home-icon"></span>
+        <a class="topcoat-icon-button--quiet btn-valid" ng-click="add(enfant)">
+            <span class="topcoat-icon checkmark-icon"></span>
         </a>
     </div>
 </div>
-<div class="topcoat-button-bar full sub-header">
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full first" ng-click="add(enfant)">
-                <i class="topcoat-icon checkmark-icon"></i>
-                Terminer
-            </button>
-        </div>
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full btn-cancel" ng-click="cancel()">
-                <i class="topcoat-icon error-icon"></i>
-                Annuler
-            </button>
-        </div>
-    </div>
 <div id="content" scroll >
     <form id="cahierForm" name="cahierForm" class="panel">
         <div class="panel-inner" ng-if="enfant.creation || enfant.share">

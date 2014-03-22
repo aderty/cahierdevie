@@ -447,6 +447,73 @@ select.field-input {
     -webkit-appearance: value;
 }
 
+.topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
+{
+	 border-right: 1px solid #a5a8a8;
+}
+.topcoat-navigation-bar {
+        height: 3rem;
+        /*background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
+        background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));*/
+        /*background-color: rgb(238, 238, 238);
+        background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(145, 145, 145)), color-stop(0.5, rgb(207, 214, 206)),color-stop(0.5, rgb(221, 217, 217)),color-stop(1, rgb(236, 236, 236)));*/
+        
+        /* 25/02/2014 : 
+            background-color: rgb(193, 227, 250);
+            background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(74, 144, 248)), color-stop(0.5, rgb(201, 230, 246)),color-stop(0.5, rgb(193, 227, 250)),color-stop(1, rgb(215, 230, 248)));*/
+        background-color: rgb(236, 235, 235);
+        background-image: url('../img/graphy_@2X.png');
+        /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(156, 165, 165)),color-stop(1, rgb(117, 122, 122)));*/
+        /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(218, 218, 218)),color-stop(1, rgb(117, 122, 122)));*/
+        box-shadow: none;
+}
+
+.topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active {
+    /*background-color: #ADDBA7;*/
+    background-color: #BBBBBB;
+    border: 1px solid #a5a8a8;
+    box-shadow: inset 0 1px #fff;
+}
+
+.topcoat-navigation-bar__item {
+	line-height: 3rem;
+}
+.topcoat-navigation-bar__title
+{
+	font-weight: bold;
+}
+.topcoat-navigation-bar .topcoat-icon-button, .topcoat-icon-button--quiet, .topcoat-icon-button--large, .topcoat-icon-button--large--quiet {
+	line-height: 2.9rem;
+}
+
+.topcoat-switch.genre
+{
+	z-index: 2;
+	margin-top: 0.7rem;
+	margin-left: 0.7rem;
+}
+.genre .topcoat-switch__toggle{
+    border-radius: 100%;
+}
+.genre .topcoat-switch__toggle:before {
+    content: 'GARçON';
+    padding-left: 0;
+    padding-right: 12px;
+}
+.genre .topcoat-switch__toggle:after {
+    content: 'FILLE';
+    background-color: rgb(232, 209, 235);
+    padding-left:0;
+}
+
+.topcoat-button--quiet.ng-click-active,
+.topcoat-icon-button--quiet.ng-click-active {
+    /*background-color: #BBA693;*/
+    background-color: #E4E4E4;
+    border: 1px solid #a5a8a8;
+    box-shadow: inset 0 1px #fff;
+}
+
 #pge-home .btn-amis
 {
 	position: absolute;
@@ -667,14 +734,6 @@ select.field-input {
         padding: 0;
 }
 
-.topcoat-button--quiet.ng-click-active,
-.topcoat-icon-button--quiet.ng-click-active {
-    /*background-color: #BBA693;*/
-    background-color: #E4E4E4;
-    border: 1px solid #a5a8a8;
-    box-shadow: inset 0 1px #fff;
-}
-
 .overlay .action-menu{
     width: 100%;
     left:10%;
@@ -745,6 +804,15 @@ select.field-input {
 
 .topcoat-navigation-bar {
     padding-left: 0.1rem;
+}
+
+.btn-valid{
+    background-color: #9FDD9F;
+    border: 1px solid #a5a8a8;
+}
+.btn-valid:hover,.btn-valid.ng-click-active
+{
+	background-color: #6BC96B;
 }
 
 .btn-cancel
@@ -1272,65 +1340,6 @@ nav.navigation h4 > i{
 	background-image: linear-gradient(to left, #FFFFFF 0%, #FFDFE3 100%);
     border-top-right-radius: 1rem;
     border-top-left-radius: 1rem;
-}
-
-.topcoat-button-bar__item:first-child > .topcoat-button-bar__button.first
-{
-	 border-right: 1px solid #a5a8a8;
-}
-.topcoat-navigation-bar {
-        height: 3rem;
-        /*background: -moz-linear-gradient(top, rgb(74, 146, 68) 0%, rgb(225, 243, 222));
-        background: -webkit-gradient( linear, left top, left bottom, from(rgb(74, 146, 68)), to(rgb(225, 243, 222)));*/
-        /*background-color: rgb(238, 238, 238);
-        background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(145, 145, 145)), color-stop(0.5, rgb(207, 214, 206)),color-stop(0.5, rgb(221, 217, 217)),color-stop(1, rgb(236, 236, 236)));*/
-        
-        /* 25/02/2014 : 
-            background-color: rgb(193, 227, 250);
-            background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(74, 144, 248)), color-stop(0.5, rgb(201, 230, 246)),color-stop(0.5, rgb(193, 227, 250)),color-stop(1, rgb(215, 230, 248)));*/
-        background-color: rgb(236, 235, 235);
-        background-image: url('../img/graphy_@2X.png');
-        /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(156, 165, 165)),color-stop(1, rgb(117, 122, 122)));*/
-        /*background: -webkit-gradient( linear, left top, left bottom, color-stop(0, rgb(127, 131, 136)), color-stop(0, rgb(236, 235, 235)),color-stop(0.93, rgb(218, 218, 218)),color-stop(1, rgb(117, 122, 122)));*/
-        box-shadow: none;
-}
-
-.topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active {
-    /*background-color: #ADDBA7;*/
-    background-color: #BBBBBB;
-    border: 1px solid #a5a8a8;
-    box-shadow: inset 0 1px #fff;
-}
-
-.topcoat-navigation-bar__item {
-	line-height: 3rem;
-}
-.topcoat-navigation-bar__title
-{
-	font-weight: bold;
-}
-.topcoat-navigation-bar .topcoat-icon-button, .topcoat-icon-button--quiet, .topcoat-icon-button--large, .topcoat-icon-button--large--quiet {
-	line-height: 2.5rem;
-}
-
-.topcoat-switch.genre
-{
-	z-index: 2;
-	margin-top: 0.7rem;
-	margin-left: 0.7rem;
-}
-.genre .topcoat-switch__toggle{
-    border-radius: 100%;
-}
-.genre .topcoat-switch__toggle:before {
-    content: 'GARçON';
-    padding-left: 0;
-    padding-right: 12px;
-}
-.genre .topcoat-switch__toggle:after {
-    content: 'FILLE';
-    background-color: rgb(232, 209, 235);
-    padding-left:0;
 }
 
 /*.footer {

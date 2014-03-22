@@ -545,14 +545,15 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
-            creation: true
+            creation: true,
+            owner: true
         }
     }
     else {
         if (typeof $scope.enfant.share == "undefined") {
             $scope.enfant.share = true;
         }
-        $scope.title = "Modification de cahier";
+        $scope.title = "Cahier de " + $scope.enfant.prenom;
         $scope.enfantSaved = angular.copy($scope.enfant);
     }
 
