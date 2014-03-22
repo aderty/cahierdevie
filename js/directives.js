@@ -222,22 +222,29 @@ angular.module('myApp.directives', [])
                     myScroll.hasVerticalScroll = true;
                 }
 
-                setTimeout(function () {
-                    var wrapper = document.getElementById(elm[0].id)
-                    if (!wrapper || !wrapper.children || !wrapper.children.length) return;
-                    load(wrapper);
+                    var wrapper;
                     function refresh() {
-                        myScroll.refresh();
+                        if (myScroll) {
+                            myScroll.refresh();
+                        }
+                        else {
+                            reload();
+                        }
                     }
                     function reload() {
-                        load(wrapper);
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            wrapper = document.getElementById(elm[0].id);
+                            if (wrapper && wrapper.children && wrapper.children.length) {
+                                load(wrapper);
+                            }
+                        } ,350);
                     }
                     scope.$on('refresh-scroll', refresh);
-                    scope.$on('reload-scroll', reload);
                     scope.$on('destroy', function() {
                         myScroll.destroy();
                     });
-                }, 350);
+                    refresh();
             }
         };
     } ])

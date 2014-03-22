@@ -730,7 +730,7 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
             $scope.event = event;
             $scope.currentCahier = CahierService.getCurrent();
             $timeout(function () {
-                $scope.$broadcast("reload-scroll");
+                $scope.$broadcast("refresh-scroll");
             }, 0);
         });
     }
@@ -739,7 +739,7 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
             $scope.event = event;
             $scope.currentCahier = CahierService.getCurrent();
             $timeout(function () {
-                $scope.$broadcast("reload-scroll");
+                $scope.$broadcast("refresh-scroll");
             }, 0);
         });
     }
