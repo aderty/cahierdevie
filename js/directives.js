@@ -19,10 +19,11 @@ angular.module('myApp.directives', [])
                 var first = true;
                 elm.scroller({
                     preset: 'time',
-                    theme: 'ios7',
+                    theme: 'default',
                     mode: 'scroller',
                     lang: 'fr',
-                    display: 'inline',
+                    display: 'bottom',
+                    /*theme: 'ios7', display: 'inline',*/
                     animate: 'none',
                     rows: 3,
                     height: 30

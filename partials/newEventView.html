@@ -1,7 +1,7 @@
 <section class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
+        <a class="topcoat-icon-button--quiet" title="back" ng-click="cancel()">
             <span class="topcoat-icon back-icon"></span>
         </a>
     </div>
@@ -9,8 +9,8 @@
         <h1 class="topcoat-navigation-bar__title">Un instant...</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-            <i class="topcoat-icon home-icon"></i>
+        <a class="topcoat-icon-button--quiet btn-valid" ng-click="add(event)">
+            <i class="topcoat-icon checkmark-icon"></i>
         </a>
     </div>
 </div>
@@ -20,18 +20,6 @@
                 <div>
                     <i class="neo160"></i>&nbsp;
                 </div>
-            </button>
-        </div>
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full" ng-click="add(event)">
-                <i class="topcoat-icon checkmark-icon"></i>
-                Terminer
-            </button>
-        </div>
-        <div class="topcoat-button-bar__item">
-            <button class="topcoat-button-bar__button full btn-cancel" ng-click="cancel()">
-                <i class="topcoat-icon error-icon"></i>
-                Annuler
             </button>
         </div>
     </div>
@@ -72,8 +60,10 @@
             <textarea id="descriptionInput" ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
             <div class="center field last">
-                <span class="field-label">Heure {{event.time}}</span>
-                <input type="text" timepicker ng-model="event.time" class="field-input" style="display:none;" />
+                <label class="item item-input">
+                    Heure
+                    <input type="text" timepicker ng-model="event.time" class="field-input" />
+                </label>   
             </div>
         </div>
     </form>

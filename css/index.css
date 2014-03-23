@@ -470,7 +470,7 @@ select.field-input {
 
 .topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active {
     /*background-color: #ADDBA7;*/
-    background-color: #BBBBBB;
+    background-color: #E6E6E6;
     border: 1px solid #a5a8a8;
     box-shadow: inset 0 1px #fff;
 }
@@ -807,12 +807,12 @@ select.field-input {
 }
 
 .btn-valid{
-    background-color: #9FDD9F;
+    background-color: #6BC96B;
     border: 1px solid #a5a8a8;
 }
 .btn-valid:hover,.btn-valid.ng-click-active
 {
-	background-color: #6BC96B;
+	background-color: #9FDD9F;
 }
 
 .btn-cancel
