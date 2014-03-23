@@ -822,12 +822,13 @@ select.field-input {
 }
 
 .btn-valid{
-    background-color: rgba(21, 129, 0, 0.7);
-    border: 1px solid #a5a8a8;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
 }
 .btn-valid:hover,.btn-valid.ng-click-active
 {
-	background-color: rgba(100, 207, 100, 0.78);
+    background-color:#47a447;
+    border-color:#398439;
 }
 
 .btn-cancel
