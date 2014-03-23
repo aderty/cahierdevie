@@ -835,6 +835,9 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
     }
+    $scope.showHour = function () {
+        $(document.getElementById("hourInput")).focus();
+    }
 
     /*$scope.$watch("event.type", function (type) {
         $scope.event.title = type;

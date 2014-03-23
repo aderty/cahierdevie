@@ -60,9 +60,12 @@
             <textarea id="descriptionInput" ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
         </div>
             <div class="center field last">
-                <label class="item item-input">
+                <label class="item item-input heure">
                     Heure
-                    <input type="text" timepicker ng-model="event.time" class="field-input" />
+                    <input id="hourInput" type="text" timepicker ng-model="event.time" class="field-input" />
+                    <button ng-click="showHour()">
+                        <i class="topcoat-icon pencil-icon"></i>
+                    </button>
                 </label>   
             </div>
         </div>

@@ -269,6 +269,17 @@ li.loading span {
     margin-top: -0.65rem;
 }
 
+    .field .item-input button {
+        float: right;
+        -webkit-border-radius: 1.0rem;
+        border-radius: 1.0rem;
+        border: none;
+        padding: 0.75rem;
+        position: absolute;
+        right: 0.5rem;
+        margin-top: 1rem;
+    }
+
 .field .topcoat-icon-button--quiet{
     margin: 6px 8px 5px;
 }
@@ -543,6 +554,10 @@ select.field-input {
         width: calc(100% - 10rem);
 }
 
+.item-input.heure{
+    width: auto;
+}
+
 #settingsOverlayTitle .field,
 #eventForm .field {
         /*border-bottom: 1px solid #dddddd;*/
@@ -807,12 +822,12 @@ select.field-input {
 }
 
 .btn-valid{
-    background-color: #6BC96B;
+    background-color: rgba(21, 129, 0, 0.7);
     border: 1px solid #a5a8a8;
 }
 .btn-valid:hover,.btn-valid.ng-click-active
 {
-	background-color: #9FDD9F;
+	background-color: rgba(100, 207, 100, 0.78);
 }
 
 .btn-cancel
