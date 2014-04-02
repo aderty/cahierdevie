@@ -880,10 +880,10 @@ select.field-input {
     background: rgba(129, 200, 255, 0.75);
     border: none;
     border-radius: 1rem;
-    padding-top: 0.5rem;
 }
 .humeur img {
     height: 4rem;
+    padding-top: 0.5rem;
 }
 
 ul.amis {
