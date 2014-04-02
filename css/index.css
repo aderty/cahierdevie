@@ -877,12 +877,13 @@ select.field-input {
 }
 .humeur button {
     padding: 0;
-    background: rgba(199, 218, 226, 0.75);
+    background: rgba(129, 200, 255, 0.75);
     border: none;
     border-radius: 1rem;
+    padding-top: 0.5rem;
 }
 .humeur img {
-    height: 4.8rem;
+    height: 4rem;
 }
 
 ul.amis {
@@ -944,7 +945,7 @@ ul.humeurs img {
 .popover.bottom .arrow {
     top: -11px;
     /*left: 50%;*/
-    right: 0.6rem;
+    right: 1rem;
     margin-left: -11px;
     border-bottom-color: #999999;
     border-bottom-color: rgba(0, 0, 0, 0.25);
@@ -1218,7 +1219,7 @@ h1 .li-thumb
 }
 .sub-header + #content
 {
-	top: 6.5rem;
+	top: 6rem;
 }
 .sub-header + div>#wrapper
 {
@@ -1238,11 +1239,11 @@ h1 .li-thumb
 }
 
 #pge-events #wrapper{
-	top: 8.6rem;
+	top: 8.72rem;
 }
 
 #pge-details #content{
-    top: 8.0rem;
+    top: 8.7rem;
 }
 
 #pge-events .list {
@@ -1398,6 +1399,9 @@ nav.navigation h4 > i{
 	border-radius: 1rem;
 	/*box-shadow: inset -2px 0px 15px 5px rgb(180, 217, 252);*/
 	box-shadow: 0px 0px 10px 2px rgb(180, 217, 252);
+    border-bottom-left-radius: 100%;
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
 }
 
 .enfants .li-thumb:active {

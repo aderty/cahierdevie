@@ -1,7 +1,7 @@
 <section class="wrapper" id="pge-login" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" >
 <div class="topcoat-navigation-bar header">
     <div class="topcoat-navigation-bar__item left quarter">
-        <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
+        <a ng-if="isConnected || mode != 0" class="topcoat-icon-button--quiet" title="back" ng-click="backLogin()">
             <span class="topcoat-icon back-icon"></span>
         </a>
     </div>
@@ -9,7 +9,7 @@
         <h1 class="topcoat-navigation-bar__title">{{title}}</h1>
     </div>
     <div class="topcoat-navigation-bar__item right quarter">
-        <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
+        <a ng-if="isConnected" class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
             <span class="topcoat-icon home-icon"></span>
         </a>
     </div>

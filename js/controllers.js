@@ -202,7 +202,7 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
             });
         });
     }
-    else {
+    /*else {
         if (!demandeCompte) {
             //$rootScope.$emit('message', "Voulez-vous créer un compte ? <button ng-click=\"slidePage('/viewLogin')\">Cliquez ici</button>");
             $timeout(function () {
@@ -210,12 +210,12 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
             }, 500);
             demandeCompte = true;
         }
-    }
+    }*/
 
 }]);
 
 /* Controllers */
-function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
+function HomeCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
     $rootScope.showSettings = false;
     $scope.slidePage = function (path, type) {
         navSvc.slidePage(path, type);
@@ -230,6 +230,11 @@ function HomeCtrl($scope, navSvc, $rootScope, EnfantService, CahierService) {
     $scope.closeOverlay = function () {
         $rootScope.showSettings = false;
     };
+    if (!$rootScope.isConnected) {
+        $timeout(function () {
+            navSvc.slidePage('/viewLogin');
+        }, 250);
+    }
 
     $scope.optsNavigation = {
         disable: 'right',
@@ -356,6 +361,10 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
     else {
         $scope.user.pwd = "";
     }
+    $scope.backLogin = function () {
+        if ($scope.mode == 6) return navSvc.back();
+        $scope.mode = 0;
+    }
     $scope.setMode = function (mode) {
         $scope.mode = mode;
     }
@@ -401,6 +410,7 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
                     $rootScope.$emit('message', "Les informations des cahiers de vie de " + prenoms.join(", ") + " ont étés mis à jour.");
                 }
                 navSvc.back();
+                $scope.$apply();
             })
         }, function (current) {
             $scope.mode = 2;
@@ -430,16 +440,17 @@ function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService,
             }
             $scope.loaded = true;
             CahierService.setCurrent(cahier);
-            $timeout(function () {
+            /*$timeout(function () {
                 $scope.$broadcast("refresh-scroll");
-            }, 150);
+            }, 150);*/
         });
     }
 
     function changeCahier(cahier) {
+        $timeout(function () {
         $scope.currentCahier = cahier;
         $scope.currentEnfant = EnfantService.getCurrent();
-        $timeout(function () {
+        
             $scope.$broadcast("refresh-scroll");
         }, 150);
     }
