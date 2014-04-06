@@ -14,99 +14,99 @@
         </a>
     </div>
 </div>
-<div id="content" scroll >
-    <form id="cahierForm" name="cahierForm" class="panel">
-        <div class="panel-inner" ng-if="enfant.creation || enfant.share">
-            <div class="center field first">
-                <label class="item item-input">
-                    <input type="text" ng-model="enfant.prenom" placeholder="Pr&eacute;nom de l'enfant">
-                </label>
+    <div id="pge-cahier-content" class="content" scroll>
+        <form id="cahierForm" name="cahierForm" class="panel">
+            <div class="panel-inner" ng-if="enfant.creation || enfant.share">
+                <div class="center field first">
+                    <label class="item item-input">
+                        <input type="text" ng-model="enfant.prenom" placeholder="Pr&eacute;nom de l'enfant">
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <input type="text" ng-model="enfant.email" placeholder="Email des parents">
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <input type="tel" ng-model="enfant.tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" placeholder="Tel">
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="topcoat-switch genre">
+                        <input type="checkbox" name="sex" ng-model="enfant.sexe" class="topcoat-switch__input">
+                        <div class="topcoat-switch__toggle"></div>
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <input type="text" datepicker ng-model="enfant.birth" placeholder="Date de naissance">
+                    </label>
+                </div>
+                <div class="center field">
+                    <button class="topcoat-button-bar__button btn-photo" ng-class="{'has-photo' : enfant.photo != null}" ng-click="takePic()">
+                        <div ng-if="enfant.photo == null">
+                            <i class="neo160"></i>&nbsp;
+                        </div>
+                        <img ng-if="enfant.photo != null" ng-src="{{enfant.photo}}" class="evt-photo-item" />
+                    </button>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <textarea ng-model="enfant.allergies" focusscroll placeholder="Allergies"></textarea>
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <textarea ng-model="enfant.love" focusscroll placeholder="Il / elle aime..."></textarea>
+                    </label>
+                </div>
+                <div class="center field">
+                    <label class="item item-input">
+                        <textarea ng-model="enfant.hate" focusscroll placeholder="Il / elle n'aime pas..."></textarea>
+                    </label>
+                </div>
+                <div class="center field last">
+                    <label class="item item-input">
+                        <textarea ng-model="enfant.infos" focusscroll placeholder="Infos compl&eacute;mentaires"></textarea>
+                    </label>
+                </div>
             </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <input type="text" ng-model="enfant.email" placeholder="Email des parents">
-                </label>
+            <br />
+            <div class="panel-inner" ng-if="!enfant.creation">
+                <div class="center field first" ng-if="enfant.owner && enfant.sharing">
+                    <span class="field-label full">Administration</span>
+                </div>
+                <div class="center field first" ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)">
+                    <span class="field-label full sharing">
+                        Pensez à partager le cahier de vie avec des personnes de confiance.
+                    </span>
+                </div>
+                <div class="center field" ng-if="enfant.owner">
+                    <span class="field-label">Mes amis</span>
+                    <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
+                </div>
+                <div class="center field" ng-if="enfant.owner && !enfant.sharing">
+                    <span class="field-label full sharing">
+                        Configurez aussi le compte Dropbox lié au cahier de vie afin d'activer son partage.
+                    </span>
+                </div>
+                <div class="center field" ng-if="enfant.owner">
+                    <span class="field-label">Stockage</span>
+                    <button class="topcoat-icon-button btn-dropbox" ng-if="!isAuthenticated" ng-click="authenticate()">&nbsp;</button>
+                    <button class="topcoat-icon-button btn-dropbox" ng-if="isAuthenticated" ng-click="authenticate()">&nbsp;</button>
+                </div>
+                <div class="center field last">
+                    <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
+                        <i class="topcoat-icon delete-icon"></i> Supprimer le cahier
+                    </button>
+                    <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner">
+                        <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner
+                    </button>
+                </div>
             </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <input type="tel" ng-model="enfant.tel" pattern="^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$" placeholder="Tel">
-                </label>
-            </div>
-            <div class="center field">
-                <label class="topcoat-switch genre">
-                    <input type="checkbox" name="sex" ng-model="enfant.sexe" class="topcoat-switch__input">
-                    <div class="topcoat-switch__toggle"></div>
-                </label>
-            </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <input type="text" datepicker ng-model="enfant.birth" placeholder="Date de naissance">
-                </label>
-            </div>
-            <div class="center field">
-                <button class="topcoat-button-bar__button btn-photo" ng-class="{'has-photo' : enfant.photo != null}" ng-click="takePic()">
-                    <div ng-if="enfant.photo == null">
-                        <i class="neo160"></i>&nbsp;
-                    </div>
-                    <img ng-if="enfant.photo != null" ng-src="{{enfant.photo}}" class="evt-photo-item" />
-                </button>
-            </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <textarea ng-model="enfant.allergies" focusscroll placeholder="Allergies"></textarea>
-                </label>
-            </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <textarea ng-model="enfant.love" focusscroll placeholder="Il / elle aime..."></textarea>
-                </label>
-            </div>
-            <div class="center field">
-                <label class="item item-input">
-                    <textarea ng-model="enfant.hate" focusscroll placeholder="Il / elle n'aime pas..."></textarea>
-                </label>
-            </div>
-            <div class="center field last">
-                <label class="item item-input">
-                    <textarea ng-model="enfant.infos" focusscroll placeholder="Infos compl&eacute;mentaires"></textarea>
-                </label>
-            </div>
-        </div>
-        <br />
-        <div class="panel-inner" ng-if="!enfant.creation">
-            <div class="center field first" ng-if="enfant.owner && enfant.sharing">
-                <span class="field-label full">Administration</span>
-            </div>
-            <div class="center field first" ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)">
-                <span class="field-label full sharing">
-                    Pensez à partager le cahier de vie avec des personnes de confiance.
-                </span>
-            </div>
-            <div class="center field" ng-if="enfant.owner">
-                <span class="field-label">Mes amis</span>
-                <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
-            </div>
-            <div class="center field" ng-if="enfant.owner && !enfant.sharing">
-                <span class="field-label full sharing">
-                    Configurez aussi le compte Dropbox lié au cahier de vie afin d'activer son partage.
-                </span>
-            </div>
-            <div class="center field" ng-if="enfant.owner">
-                <span class="field-label">Stockage</span>
-                <button class="topcoat-icon-button btn-dropbox" ng-if="!isAuthenticated" ng-click="authenticate()">&nbsp;</button>
-                <button class="topcoat-icon-button btn-dropbox" ng-if="isAuthenticated" ng-click="authenticate()">&nbsp;</button>
-            </div>
-            <div class="center field last">
-                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Supprimer" ng-if="enfant.owner">
-                    <i class="topcoat-icon delete-icon"></i> Supprimer le cahier
-                </button>
-                <button class="topcoat-icon-button--quiet btn-cancel" ng-click="remove(enfant)" title="Désabonner" ng-if="!enfant.owner">
-                    <i class="topcoat-icon delete-icon"></i> Me d&eacute;sabonner
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </section>
 <nav class="topcoat-list__container snapjs-left navigation" snap-drawer >
 

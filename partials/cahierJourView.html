@@ -33,11 +33,12 @@
             <h4 class="center light" >{{currentCahier.date | moment:'D MMMM YYYY'}}</h4>
         </div>
         <div class="humeur">
-            <button ng-click="showHumeur()">
-                <img ng-if="loaded" ng-src="{{currentCahier.humeur.img}}" />
-                <div ng-if="!loaded" class="loading-anim">
+            <button ng-show="!loaded">
+                <div class="loading-anim">
                     <div class="border mid"></div>
                 </div>
+            </button>
+            <button ng-show="loaded" ng-click="showHumeur()" style="background-image: url('{{currentCahier.humeur.img}}')">
             </button>
             <div class="popover bottom" ng-if="showSmiley">
                 <div class="arrow"></div>
@@ -53,7 +54,7 @@
         </div>
     </div>
     <div class="topcoat-list__container list">
-        <div id="wrapper" scroll ng-if="!currentEvent">
+        <div id="pge-events-content" class="content" scroll ng-if="!currentEvent">
             <ul class="topcoat-list events">
                 <!--<li class="topcoat-list__item loading" ng-if="!loaded">
                 <img src="img/ajax-loader.gif" /><span>Chargement...</span>

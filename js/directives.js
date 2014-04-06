@@ -188,7 +188,9 @@ angular.module('myApp.directives', [])
                 function load(wrapper) {
                     myScroll = new iScroll(wrapper, {
                         scrollbars: true,
+                        //fadeScrollbar: true,
                         mouseWheel: true,
+                        //preventGhostClick: true,
                         interactiveScrollbars: true,
                         onBeforeScrollStart: function (e) {
                             valid = true;
@@ -222,9 +224,12 @@ angular.module('myApp.directives', [])
                     elm.data('scroll', myScroll);
                     myScroll.hasVerticalScroll = true;
                 }
-
+                function getInstance() {
+                    return elm.data('scroll');
+                }
                     var wrapper;
                     function refresh() {
+                        myScroll = getInstance();
                         if (myScroll) {
                             myScroll.refresh();
                         }

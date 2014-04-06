@@ -866,11 +866,17 @@ select.field-input {
     background-color: rgb(198, 135, 248);
 }
 
+.user{
+    color: white;
+    text-transform: capitalize;
+}
+
 .login  .sync{
     padding-top: 1.5rem;
 }
 .humeur {
     padding-right: 0.5rem;
+    padding-top: 1rem;
 }
 #pge-details .humeur {
     padding-top: 0.3rem;
@@ -880,9 +886,19 @@ select.field-input {
     background: rgba(129, 200, 255, 0.75);
     border: none;
     border-radius: 1rem;
+    background-size: contain;
+    width: 4rem;
+    height: 4rem;
 }
+
+.humeur button .loading-anim {
+  width: 100%;
+  height: 100%;
+}
+
 .humeur img {
     height: 4rem;
+    width: 4rem;
     padding-top: 0.5rem;
 }
 
@@ -922,7 +938,7 @@ ul.humeurs img {
 }
 
 .popover.bottom {
-    margin-top: 10px;
+    margin-top: 2px;
 }
 .popover {
     position: absolute;
@@ -930,7 +946,7 @@ ul.humeurs img {
     /*max-width: 60%;*/
     width: 8rem;
     /*left: 50%;*/
-    margin-left: -4.3rem;
+    margin-left: -4.5rem;
     padding: 1px;
     text-align: left;
     white-space: normal;
@@ -1204,29 +1220,20 @@ h1 .li-thumb
 { 
         font-weight: bold;
 } 
-.sub-header+#content 
-{ 
-       /*margin-top: 2.4rem;*/
-} 
-#content {
-	/*position: absolute;
-	z-index: 1;
-	top: 3.5rem;
-	bottom: 0;
-	left: 0;
-	width: 100%;*/
+
+.content {
 	overflow: hidden;
 }
-.sub-header + #content
+.sub-header + .content
 {
 	top: 6rem;
 }
-.sub-header + div>#wrapper
+.sub-header + div>.content
 {
 	top: 6.3rem;
 }
-#content,
-#wrapper
+
+.content
 {
 	position: absolute;
 	z-index: 1;
@@ -1238,11 +1245,11 @@ h1 .li-thumb
 	overflow: hidden;
 }
 
-#pge-events #wrapper{
+#pge-events .content{
 	top: 8.72rem;
 }
 
-#pge-details #content{
+#pge-details .content{
     top: 8.7rem;
 }
 
@@ -1251,8 +1258,8 @@ h1 .li-thumb
     height: calc(100% - 8.7rem - 1px);
 }
 
-#content > form,
-#wrapper > div {
+.content > form,
+.content > div {
 	position: absolute;
 	z-index: 1;
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -1274,11 +1281,16 @@ h1 .li-thumb
 	text-size-adjust: none;
 }
 
-#content > ul
+.content > ul
 {
 	min-width: 100%;
 	/*min-height: 100%;*/
 	position: relative;
+}
+
+#pge-events .content > ul
+{
+	min-width: initial;
 }
 
 nav.navigation .topcoat-icon{
@@ -1471,6 +1483,7 @@ nav.navigation h4 > i{
 }
 .events li:first-child{
     min-height: 2.2rem;
+    border-top: 0;
 }
 /*.events li.topcoat-list__item:first-child {
     border: 2px solid rgb(102, 102, 102);

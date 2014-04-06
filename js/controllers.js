@@ -410,7 +410,7 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
                     $rootScope.$emit('message', "Les informations des cahiers de vie de " + prenoms.join(", ") + " ont étés mis à jour.");
                 }
                 navSvc.back();
-                $scope.$apply();
+                //$scope.$apply();
             })
         }, function (current) {
             $scope.mode = 2;
