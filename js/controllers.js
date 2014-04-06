@@ -394,6 +394,7 @@ function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantSer
         $scope.mode = 3;
         LoginService.connect(user).then(function (current) {
             $rootScope.isConnected = true;
+            $rootScope.user = current;
             LoginService.sync({
                 user: current,
                 enfants: {}

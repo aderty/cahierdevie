@@ -64,13 +64,13 @@ body.phonegap-ios-7{
   margin-top: 20px;
 }
 
-body.phonegap-ios-7 section{
+/*body.phonegap-ios-7 section{
   margin-top: 20px;
 }
 
 body.phonegap-ios-7 .snap-drawers{
   margin-top: 20px;
-}
+}*/
 
 input, textarea {
     -webkit-user-select: auto !important;
