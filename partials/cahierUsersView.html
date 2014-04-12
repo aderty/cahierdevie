@@ -1,4 +1,4 @@
-<section id="pge-amis" class="wrapper" ng-controller="HomeCtrl" snap-content>
+<section id="pge-amis" class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation">
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
             <a class="topcoat-icon-button--quiet" title="back" ng-click="back()">
@@ -17,11 +17,10 @@
     <div id="pge-amis-content" class="content" scroll>
         <form id="userForm" name="userForm" class="panel">
             <div class="panel-inner">
-                <div class="center field">
+                <div class="center field first" ng-if="enfant.users.length > 1">
                     <span class="field-label">Mes amis</span>
                     <div class="field-input">
                         <ul class="amis">
-                            <li ng-if="enfant.users.length == 1">Aucun...</li>
                             <li ng-repeat="ami in enfant.users  | not_me">
                                 {{ami.pseudo}}
                                 <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="remove(ami, $index);$event.stopPropagation();" style="float: right;">
@@ -31,8 +30,11 @@
                         </ul>
                     </div>
                 </div>
+                <div class="center field first empty" ng-if="enfant.users.length == 1">
+                    Aucune personne ne partage ce cahier...Ajouter l'email d'un ami !
+                </div>
                 <div class="center field">
-                    <label class="item item-input">
+                    <label class="item item-input add">
                         <input ng-model="email" type="email" value="" placeholder="Email &agrave; ajouter" required id="email" name="email">
                     </label>
                 </div>

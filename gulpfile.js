@@ -14,6 +14,7 @@ var paths = {
   views: ['partials/*.html'],
   index: ['index.html'],
   img: ['img/*'],
+  res: ['res/**/*'],
   font: ['fonts/*']
 };
 
@@ -22,6 +23,7 @@ DEST_CSS = DEST + '/css',
 DEST_JS = DEST + '/js',
 DEST_LIB = DEST + '/lib',
 DEST_IMG = DEST + '/img',
+DEST_RES = DEST + '/res',
 DEST_VIEWS = DEST + '/partials',
 DEST_FONT = DEST + '/fonts';
 
@@ -68,6 +70,12 @@ gulp.task('img', function() {
     .pipe(gulp.dest(DEST_IMG))
 });
 
+gulp.task('res', function () {
+    return gulp.src(paths.res)
+    .pipe(changed(DEST_RES))
+    .pipe(gulp.dest(DEST_RES))
+});
+
 gulp.task('font', function() {
     return gulp.src(paths.font)
     .pipe(changed(DEST_FONT))
@@ -87,6 +95,7 @@ gulp.task('watch', function() {
   gulp.watch(paths.css, ['css']);
   gulp.watch(paths.views, ['views']);
   gulp.watch(paths.img, ['img']);
+  gulp.watch(paths.res, ['res']);
   gulp.watch(paths.font['font']);
   gulp.watch(paths.cssPrint, ['index']);
 });
@@ -97,6 +106,8 @@ gulp.task('default', ['scripts',
                       'css',
                       'views',
                       'font',
+                      'img',
+                      'res',
                       'index',
                       'watch']);
                       

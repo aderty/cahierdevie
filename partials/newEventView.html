@@ -27,7 +27,7 @@
         <form id="eventForm" name="eventForm" class="panel">
             <div class="panel-inner">
                 <div class="center field titre first">
-                    <input id="inputTitle" type="text" ng-model="event.title" class="field-input" placeholder="Titre" />
+                    <input id="inputTitle" type="text" ng-model="event.title" class="field-input desc" placeholder="Titre" />
                 </div>
                 <div class="center field">
                     <span class="field-input type">
@@ -58,12 +58,12 @@
                             <i class="topcoat-icon pencil-icon"></i>
                         </button>
                     </span>
-                    <textarea id="descriptionInput" ng-model="event.desc" class="field-input" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
+                    <textarea id="descriptionInput" ng-model="event.desc" class="field-input desc" rows="6" cols="36" focusscroll placeholder="Description de l'&eacute;v&egrave;nement"></textarea>
                 </div>
                 <div class="center field last">
                     <label class="item item-input heure">
                         Heure
-                        <input id="hourInput" type="text" timepicker ng-model="event.time" class="field-input" />
+                        <input id="hourInput" type="text" timepicker ng-model="event.time" class="field-input desc" />
                         <button ng-click="showHour()">
                             <i class="topcoat-icon pencil-icon"></i>
                         </button>

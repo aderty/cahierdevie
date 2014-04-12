@@ -9,7 +9,7 @@
             <h1 class="topcoat-navigation-bar__title"><img ng-src="{{currentEnfant.photo}}" class="li-thumb" />{{currentEnfant.prenom}}</h1>
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
-            <a ng-if="event && event.creator.id == user._id" class="topcoat-icon-button--quiet" ng-click="slidePage('/viewEvent','modal')">
+            <a ng-if="currentCahier.owner || event && event.creator.id == user._id" class="topcoat-icon-button--quiet" ng-click="slidePage('/viewEvent','modal')">
                 <i class="topcoat-icon pencil-icon"></i>
             </a>
         </div>
@@ -27,15 +27,15 @@
         <form id="eventForm" name="eventForm" class="panel" ng-if="event">
             <div class="panel-inner">
                 <div class="field titre first">
-                    <span class="lib time light">
+                    <span class="lib time light desc">
                         {{event.time}}
                     </span>
-                    <span class="lib">
+                    <span class="lib desc">
                         {{event.title &&  event.title != "" ? event.title : predefTitle[event.type].libelle}}
                     </span>
                 </div>
                 <div class="center field titre" ng-if="event.desc">
-                    <pre>{{event.desc}}</pre>
+                    <pre class="desc">{{event.desc}}</pre>
                 </div>
                 <div class="center field last" ng-if="event.pictures.length > 0">
                     <!-- ng-click="showPhotos()" -->

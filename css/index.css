@@ -38,6 +38,10 @@
     font-family: "IndieFlower";
     src: url('../font/IndieFlower.ttf');
 }
+@font-face {
+    font-family: "Roboto-Light-webfont";
+    src: url('../font/Roboto-Light-webfont.ttf');
+}
 
 body
 {
@@ -256,6 +260,15 @@ li.loading span {
 .field.last {
     border-bottom-left-radius: 1.0rem;
     border-bottom-right-radius: 1.0rem;
+}
+
+.field.first label {
+    border-top-left-radius: 0.9rem;
+    border-top-right-radius: 0.9rem;
+}
+.field.last label {
+    border-bottom-left-radius: 0.9rem;
+    border-bottom-right-radius: 0.9rem;
 }
 
 .field .field-label button {
@@ -676,6 +689,7 @@ select.field-input {
     white-space: initial;
     font-size: 1.4rem;
     padding: 1.1em;
+    padding-left: 2.5rem;
     display: block;
 }
 #eventForm .field-input.type
@@ -1027,7 +1041,11 @@ button.delete {
 }
 
 nav * {
-    font-family: cursive;
+    font-family: "Roboto-Light-webfont";
+}
+
+.desc {
+    font-family: "Roboto-Light-webfont";
 }
 
 nav .topcoat-list__header {
@@ -1049,7 +1067,7 @@ nav .topcoat-list__header {
     border-bottom: 1px solid rgba(0,0,0,0.05);*/
 }
 
-nav .topcoat-list {
+nav.topcoat-list__container {
     background-color: rgba(0, 0, 0, 0.25);
     color: rgb(241, 241, 241);
 }
@@ -1253,9 +1271,23 @@ h1 .li-thumb
     top: 8.7rem;
 }
 
+#pge-about .panel-inner{
+    padding: 1rem;
+    min-width: initial;
+}
+
 #pge-events .list {
     height: 70%;
     height: calc(100% - 8.7rem - 1px);
+}
+
+#pge-amis-content .empty {
+    padding: 1rem;
+    padding-bottom: 0;
+}
+
+#pge-amis-content .add {
+    height: 4rem;
 }
 
 .content > form,
@@ -1349,8 +1381,9 @@ nav.navigation h4 > i{
     margin: 0;
 }
 
-#pge-details .time{
+#pge-details .titre .time{
     max-width: 1rem;
+    padding-left: 0.5rem;
 }
 
 .events .now

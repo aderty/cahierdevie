@@ -16,7 +16,7 @@
 </div>
     <div id="pge-cahier-content" class="content" scroll>
         <form id="cahierForm" name="cahierForm" class="panel">
-            <div class="panel-inner" ng-if="enfant.creation || enfant.share">
+            <div class="panel-inner" ng-if="enfant.creation || enfant.share || !enfant.owner">
                 <div class="center field first">
                     <label class="item item-input">
                         <input type="text" ng-model="enfant.prenom" placeholder="Pr&eacute;nom de l'enfant">
@@ -78,7 +78,7 @@
                     <span class="field-label full">Administration</span>
                 </div>
                 <div class="center field first" ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)">
-                    <span class="field-label full sharing">
+                    <span class="field-label full desc sharing">
                         Pensez à partager le cahier de vie avec des personnes de confiance.
                     </span>
                 </div>
@@ -87,7 +87,7 @@
                     <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
                 </div>
                 <div class="center field" ng-if="enfant.owner && !enfant.sharing">
-                    <span class="field-label full sharing">
+                    <span class="field-label full desc sharing">
                         Configurez aussi le compte Dropbox lié au cahier de vie afin d'activer son partage.
                     </span>
                 </div>
