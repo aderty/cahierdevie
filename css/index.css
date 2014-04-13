@@ -930,10 +930,12 @@ ul.amis li {
 	padding-top: 0.5rem;
 	padding-bottom: 0.5rem;
 	border-bottom: solid 1px;
+    padding-left: 1rem;
 }
 ul.amis li a.delete
 {
 	margin-top: -0.5rem;
+    margin-right: 1.5rem;
 }
 
 ul.humeurs {

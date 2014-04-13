@@ -18,8 +18,6 @@
         <form id="userForm" name="userForm" class="panel">
             <div class="panel-inner">
                 <div class="center field first" ng-if="enfant.users.length > 1">
-                    <span class="field-label">Mes amis</span>
-                    <div class="field-input">
                         <ul class="amis">
                             <li ng-repeat="ami in enfant.users  | not_me | ami_actif">
                                 {{ami.pseudo}}
@@ -29,7 +27,6 @@
                                 </a>
                             </li>
                         </ul>
-                    </div>
                 </div>
                 <div class="center field first empty" ng-if="enfant.users.length == 1">
                     Aucune personne ne partage ce cahier...Ajouter l'email d'un ami !
