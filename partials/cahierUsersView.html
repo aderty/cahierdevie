@@ -21,8 +21,9 @@
                     <span class="field-label">Mes amis</span>
                     <div class="field-input">
                         <ul class="amis">
-                            <li ng-repeat="ami in enfant.users  | not_me">
+                            <li ng-repeat="ami in enfant.users  | not_me | ami_actif">
                                 {{ami.pseudo}}
+                                <span ng-if="ami.email && ami.email != ami.pseudo">({{ami.email}})</span>
                                 <a class="topcoat-icon-button--quiet delete" title="Supprimer" ng-click="remove(ami, $index);$event.stopPropagation();" style="float: right;">
                                     <i class="topcoat-icon delete-icon"></i>
                                 </a>

@@ -86,7 +86,7 @@
                     <span class="field-label">Mes amis</span>
                     <button class="topcoat-icon-button btn-amis" ng-click="slidePage('/viewCahierUsers')"><span><i class="topcoat-icon group-icon"></i></span></button>
                 </div>
-                <div class="center field" ng-if="enfant.owner && !enfant.sharing">
+                <div class="center field" ng-if="enfant.owner && !enfant.isShared()">
                     <span class="field-label full desc sharing">
                         Configurez aussi le compte Dropbox lié au cahier de vie afin d'activer son partage.
                     </span>

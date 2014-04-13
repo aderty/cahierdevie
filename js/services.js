@@ -427,6 +427,18 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                             me.save(this);
                         }
                     };
+                    data.value.isShared = function () {
+                        return this.credentials && this.credentials.token;
+                    };
+                    data.value.isEnable = function () {
+                        var currentUser = LoginService.load(), enable;
+                        angular.forEach(this.users, function (user) {
+                            if (user.id == currentUser._id) {
+                                enable = user.state != 0;
+                            }
+                        });
+                        return enable;
+                    }
                     enfants.push(data.value);
                 }).done(function (data) {
                     init = true;
@@ -497,6 +509,18 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                             this.credentials = credentials;
                             me.save(this);
                         };
+                        data.isShared = function () {
+                            return this.credentials && this.credentials.token;
+                        };
+                        data.isEnable = function () {
+                            var currentUser = LoginService.load(), enable;
+                            angular.forEach(this.users, function (user) {
+                                if (user.id == currentUser._id) {
+                                    enable = user.state != 0;
+                                }
+                            });
+                            return enable;
+                        }
                     }
                     $timeout(function () {
                         defered.resolve(data);
@@ -513,6 +537,18 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
                 enfant.setCredentials = function(credentials){
                      this.credentials = credentials;
                      me.save(this);
+                }
+                enfant.isShared = function () {
+                    return this.credentials && this.credentials.token;
+                };
+                enfant.isEnable = function () {
+                    var currentUser = LoginService.load(), enable;
+                    angular.forEach(this.users, function (user) {
+                        if (user.id == currentUser._id) {
+                            enable = user.state != 0;
+                        }
+                    });
+                    return enable;
                 }
             }
             if(!enfant.users){
@@ -553,6 +589,8 @@ myApp.factory('EnfantService', function ($q, db, $timeout, CahierService, LoginS
             }
             var toStore = angular.copy(enfant);
             delete toStore.setCredentials;
+            delete toStore.isShared;
+            delete toStore.isEnable;
             return db.getInstance().objectStore("enfants").put(toStore).done(function () {
                 $timeout(function () {
                     defered.resolve(true);
@@ -771,6 +809,8 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                          });
                     });
                 }
+
+                if (!enfant.isEnable()) return;
                 
                 DropBoxService.getCahier(enfant, date).then(function(cahier){
                     if (!cahier && !data) return;
@@ -926,7 +966,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
                 $timeout(function () {
                     defered.resolve(true);
                 });
-                if(!fromServer){
+                if (!fromServer && enfant.isEnable()) {
                     me.sync(enfant, cahier);
                 }
                 
@@ -937,6 +977,7 @@ myApp.factory('CahierService', function ($q, db, $timeout, $http, $filter, $root
         },
         sync: function (enfant, cahier) {
             if (!enfant || !cahier) return;
+            if (!enfant.isEnable()) return;
             var i = 0, l = cahier.events.length, imgs = [], path, run = 0;
             for (; i < l; i++) {
                 var j = 0, k = cahier.events[i].pictures.length;
@@ -1967,7 +2008,7 @@ myApp.factory('LoginService', function ($q, $http, $timeout, $rootScope, config)
                 data: {
                     user: currentLogin,
                     cahier: cahier._id,
-                    target: user.id
+                    target: user.state == 2 ? user.id : user.email
                 }
             }).
             success(function (data, status, headers, config) {

@@ -270,6 +270,7 @@ function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierSer
     };
 
     $scope.update = function (enfant) {
+        if (!enfant.isEnable()) return;
         EnfantService.setCurrent(enfant);
         navSvc.slidePage('/viewNewCahier');
     }
@@ -722,7 +723,8 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService, notificati
             if (button == '1') {    // Rate Now
                 LoginService.removeUser($scope.enfant, user).then(function (data) {
                     var index = $scope.enfant.users.indexOf(user);
-                    $scope.enfant.users.splice(index, 1);
+                    //$scope.enfant.users.splice(index, 1);
+                    $scope.enfant.users[index].state = 0;
                     $scope.enfant.tick = data.tick;
                     $scope.enfant.fromServer = true;
                     EnfantService.save($scope.enfant);

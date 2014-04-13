@@ -51,5 +51,16 @@ filter('not_me', function(LoginService) {
         });
         return amis;
     };
+}).
+filter('ami_actif', function (LoginService) {
+    return function (users) {
+        var amis = [];
+        angular.forEach(users, function (ami) {
+            if (ami.state != 0) amis.push(ami);
+        });
+        return amis;
+    };
 });
+
+
 
