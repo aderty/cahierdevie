@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "LoginService", "EnfantService", "DropBoxService", function ($rootScope, phonegapReady, $timeout, config, navSvc, LoginService, EnfantService, DropBoxService) {
     phonegapReady(function () {
@@ -118,7 +118,7 @@ if (!myApp.isPhone) {
     }]);
 }
 
-myApp.run(["$rootScope", "$timeout", function ($rootScope, $timeout) {
+myApp.run(["$rootScope", "$timeout", "Device", function ($rootScope, $timeout, Device) {
 
     $rootScope.showMessage = false;
 
@@ -139,14 +139,20 @@ myApp.run(["$rootScope", "$timeout", function ($rootScope, $timeout) {
         }, 2000);
     });
 
+    // Synchro du compte lors des retours sur l'appli
+    Device.onResume(function () {
+        $rootScope.$emit('initialized');
+    }, true);
+
 }]);
 
 myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "LoginService", "EnfantService", "CahierService", "DropBoxService", function ($rootScope, phonegapReady, $timeout, config, navSvc, LoginService, EnfantService, CahierService, DropBoxService) {
     $rootScope.isConnected = false;
+
     $rootScope.user = LoginService.load();
     if ($rootScope.user) {
-        
-        $rootScope.addPushId = function(id, type){
+
+        $rootScope.addPushId = function (id, type) {
             LoginService.addPushId(id, type);
         }
         $rootScope.viewCahier = function (enfant, date) {
@@ -160,13 +166,14 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
                 });
             });
         }
-        
+
         $rootScope.isConnected = true;
         $rootScope.$on('synced', function (e) {
             app.receivedEvent('deviceready');
         });
-        
+
         $rootScope.$on('initialized', function (e) {
+            if (!$rootScope.user) return;
             EnfantService.list().then(function (dbEnfants) {
                 var i = 0, l = dbEnfants.length, enfants = {};
                 for (; i < l; i++) {
@@ -202,231 +209,11 @@ myApp.run(["$rootScope", "phonegapReady", "$timeout", "config", "navSvc", "Login
             });
         });
     }
-    /*else {
-        if (!demandeCompte) {
-            //$rootScope.$emit('message', "Voulez-vous créer un compte ? <button ng-click=\"slidePage('/viewLogin')\">Cliquez ici</button>");
-            $timeout(function () {
-                navSvc.slidePage('/viewLogin');
-            }, 500);
-            demandeCompte = true;
-        }
-    }*/
-
 }]);
 
 /* Controllers */
-function HomeCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
-    $rootScope.showSettings = false;
-    $scope.slidePage = function (path, type) {
-        navSvc.slidePage(path, type);
-    };
-    $rootScope.date = new Date();
-    $scope.back = function () {
-        navSvc.back();
-    };
-    $scope.changeSettings = function () {
-        $rootScope.showSettings = true;
-    };
-    $scope.closeOverlay = function () {
-        $rootScope.showSettings = false;
-    };
-    if (!$rootScope.isConnected) {
-        $timeout(function () {
-            navSvc.slidePage('/viewLogin');
-        }, 250);
-    }
 
-    $scope.optsNavigation = {
-        disable: 'right',
-        touchToDrag: false
-    };
-}
-var demandeCompte = false;
-function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService) {
-    /*$scope.backDate = function(){
-        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
-        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
-    }
-    $scope.nextDate = function(){
-        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
-        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
-    }*/
-    $scope.connect = function (path, type) {
-        navSvc.slidePage('/viewLogin');
-    };
-    /*$scope.disconnect = function (path, type) {
-        LoginService.disconnect();
-        navSvc.slidePage('/viewLogin'); 
-    };*/
-}
-
-function MessageCtrl($scope, $rootScope, $timeout) {
-}
-
-function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService, notification) {
-    $scope.loaded = false;
-    $scope.slidePage = function (path, type) {
-        navSvc.slidePage(path, type);
-    };
-
-    $scope.update = function (enfant) {
-        if (!enfant.isEnable()) return;
-        EnfantService.setCurrent(enfant);
-        navSvc.slidePage('/viewNewCahier');
-    }
-    $scope.set = function(enfant){
-        EnfantService.setCurrent(enfant);
-    }
-    $scope.remove = function (enfant) {
-        notification.confirm('Etes-vous sur ?', function (button) {
-            // yes = 1, no = 2, later = 3
-            if (button != '1') return;
-
-            EnfantService.remove(enfant).then(function () {
-                $scope.$emit("reload");
-            });
-        }, 'Cahier de vie', ['Supprimer', 'Annuler']);
-    }
-
-    $rootScope.showEnfantOverlay = false;
-
-    $scope.showMenuEnfant = function (enfant) {
-        EnfantService.setCurrent(enfant);
-        $rootScope.showEnfantOverlay = true;
-    };
-
-
-
-    $scope.showCahier = function (enfant) {
-        if (enfant != EnfantService.getCurrent()) {
-            CahierService.setCurrent(null);
-            EnfantService.setCurrent(enfant);
-        }
-        navSvc.slidePage('/viewCahier');
-    };
-
-    $scope.newCahier = function () {
-        EnfantService.setCurrent(null);
-        navSvc.slidePage('/viewNewCahier');
-    }
-    /*$timeout(function () {
-        
-    }, 250);*/
-    loadEnfants();
-
-    /*EnfantService.onChange(loadCahier);
-    
-    $scope.$on('$destroy', function() {
-          EnfantService.removeOnChange(loadCahier);
-    });*/
-
-    //$rootScope.$watch('currentDate', loadCahier);
-
-    $scope.$on("reload", function () {
-        $timeout(function () {
-            loadEnfants();
-        });
-        //$scope.$apply();
-    });
-
-    function loadEnfants() {
-        EnfantService.list().then(function (enfants) {
-            $scope.enfants = enfants;
-            $scope.loaded = true;
-            $timeout(function () {
-                $scope.$broadcast("refresh-scroll");
-            }, 150);
-        });
-    }
-
-    function loadCahier() {
-        if (!EnfantService.getCurrent()) return;
-        CahierService.get(EnfantService.getCurrent(), $rootScope.currentDate).then(function (cahier) {
-            if (!cahier) {
-                cahier = CahierService.new(EnfantService.getCurrent(), $rootScope.currentDate);
-            }
-            CahierService.setCurrent(cahier);
-        });
-    }
-}
-
-function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantService) {
-    $scope.title = "Mon compte";
-    $scope.mode = 6;
-    $scope.user = LoginService.load();
-    if (!$scope.user) {
-        $scope.title = "Login";
-        $scope.mode = 0;
-        $scope.user = {};
-    }
-    else {
-        $scope.user.pwd = "";
-    }
-    $scope.backLogin = function () {
-        if ($scope.mode == 6) return navSvc.back();
-        $scope.mode = 0;
-    }
-    $scope.setMode = function (mode) {
-        $scope.mode = mode;
-    }
-    $scope.create = function (user) {
-        delete user.confirm_pwd;
-        $scope.mode = 4;
-        LoginService.create(user).then(function (current) {
-            navSvc.back();
-            $rootScope.isConnected = true;
-        }, function (current) {
-            $scope.mode = 1;
-            $scope.user = {};
-        });
-    }
-    $scope.update = function (user) {
-        delete user.confirm_pwd;
-        $scope.mode = 7;
-        LoginService.update(user).then(function (current) {
-            navSvc.back();
-        }, function (current) {
-            $scope.mode = 6;
-            $scope.user = LoginService.load();
-            $scope.user.pwd = "";
-        });
-    }
-    $scope.connect = function (user) {
-        $scope.mode = 3;
-        LoginService.connect(user).then(function (current) {
-            $rootScope.isConnected = true;
-            $rootScope.user = current;
-            LoginService.sync({
-                user: current,
-                enfants: {}
-            }).then(function (data) {
-                var i = 0, l = data.length;
-                var prenoms = [];
-                for (; i < l; i++) {
-                    data[i].fromServer = true;
-                    data[i].tick = new Date(data[i].tick);
-                    EnfantService.save(data[i]);
-                    prenoms.push(data[i].prenom);
-                }
-                if (data.length) {
-                    $rootScope.$emit('message', "Les informations des cahiers de vie de " + prenoms.join(", ") + " ont étés mis à jour.");
-                }
-                navSvc.back();
-                //$scope.$apply();
-            })
-        }, function (current) {
-            $scope.mode = 2;
-            $scope.user = {};
-        });
-    }
-    $scope.disconnect = function (path, type) {
-        LoginService.disconnect();
-        $rootScope.isConnected = false;
-        $scope.mode = 0;
-    };
-}
-
-function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, $filter, notification, Device) {
+﻿function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, $filter, notification, Device) {
     $scope.loaded = true;
     $scope.sending = false;
     $scope.showSmiley = false;
@@ -450,9 +237,9 @@ function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService,
 
     function changeCahier(cahier) {
         $timeout(function () {
-        $scope.currentCahier = cahier;
-        $scope.currentEnfant = EnfantService.getCurrent();
-        
+            $scope.currentCahier = cahier;
+            $scope.currentEnfant = EnfantService.getCurrent();
+
             $scope.$broadcast("refresh-scroll");
         }, 150);
     }
@@ -549,16 +336,20 @@ function CahierJourCtrl($scope, $rootScope, navSvc, LoginService, EnfantService,
         setlabelTransmi();
     });
     setlabelTransmi();
-}
 
-function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, DropBoxService, notification) {
+    $scope.cancel = function () {
+        navSvc.back();
+    }
+}
+﻿function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, DropBoxService, notification) {
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Nouveau cahier";
-
+    $scope.inCreation = false;
     if (!$scope.enfant) {
         $scope.enfant = {
             id: new Date().getTime(),
             creation: true,
+            sexe: false,
             owner: true
         }
     }
@@ -570,10 +361,14 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         $scope.enfantSaved = angular.copy($scope.enfant);
     }
 
+    $scope.isDirty = function () {
+        return !$scope.inCreation && !angular.equals($scope.enfantSaved, $scope.enfant);
+    }
+
     $scope.add = function (enfant) {
         if (!enfant) return;
         if (!enfant.prenom || enfant.prenom == "") {
-            notification.alert("Veuillez saisir un prénom.", function () {}, "Cahier de vie", "Ok");
+            notification.alert("Veuillez saisir un prénom.", function () { }, "Cahier de vie", "Ok");
             return;
         }
         var creation = enfant.creation;
@@ -594,6 +389,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         enfant.tick = new Date();
         EnfantService.save(enfant).then(function () {
             if (creation) {
+                $scope.inCreation = true;
                 EnfantService.setCurrent(enfant);
             }
             else {
@@ -695,8 +491,7 @@ function CahierCtrl($scope, navSvc, EnfantService, CahierService, EventService, 
         });
     }
 }
-
-function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService, notification) {
+﻿function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService, notification) {
 
     $scope.enfant = EnfantService.getCurrent();
     $scope.title = "Mes amis";
@@ -734,8 +529,7 @@ function CahierUsersCtrl($scope, navSvc, EnfantService, LoginService, notificati
         }, 'Cahier de vie', ['Supprimer', 'Annuler']);
     }
 }
-
-function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, notification, Device) {
+﻿function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, notification, Device) {
     $scope.currentEnfant = EnfantService.getCurrent();
     $scope.currentCahier = CahierService.getCurrent();
     $scope.event = EventService.getCurrent();
@@ -788,7 +582,7 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
         $scope.inShowPhotosMode = true;
         // Suppression du bouton de suppresion
         angular.element("i.delete-icon.white").hide();
-        
+
         //navSvc.slidePage("/viewPhotos");
         // A la fermeture on se désabonnedu click
         Code.PhotoSwipe.Current.addEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide, function () {
@@ -796,11 +590,17 @@ function EventDetailsCtrl($scope, $rootScope, navSvc, LoginService, EnfantServic
             Code.PhotoSwipe.Current.removeEventListener(Code.PhotoSwipe.EventTypes.onBeforeHide);
         });
     }
+
+    $scope.canEdit = function () {
+        return $scope.currentCahier.owner || $scope.event && $scope.event.creator.id == $rootScope.user._id;
+    }
+
+    $scope.editEvent = function () {
+        if (!$scope.canEdit()) return;
+        $rootScope.slidePage('/viewEvent', 'modal');
+    }
 }
-
-
-
-function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, db, notification, Device) {
+﻿function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, CahierService, EventService, $timeout, db, notification, Device) {
     $rootScope.showEnfantOverlay = false;
     $scope.event = EventService.getCurrent();
     $scope.showPhotoMenu = false;
@@ -828,6 +628,7 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         EventService.setCurrent($scope.event);
     }
     else {
+        $scope.event.type = $scope.event.type.toString();
         $scope.eventSaved = angular.copy($scope.event);
     }
     $scope.$broadcast("refresh-scroll");
@@ -846,6 +647,11 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         $scope.inputTitle = false;
         $scope.event.title = lastTitle;
     }*/
+    $scope.isDirty = function () {
+        if ($scope.event && $scope.event.$$hashKey && $scope.eventSaved) $scope.eventSaved.$$hashKey = $scope.event.$$hashKey;
+        return !angular.equals($scope.eventSaved, $scope.event);
+    }
+
     $scope.showDesc = function () {
         $(document.getElementById("descriptionInput")).focus();
     }
@@ -894,12 +700,12 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         }
         $scope.showPhotoMenu = false;
         var options = {
-            quality: 60,
+            quality: 85,
             destinationType: Camera.DestinationType.FILE_URI, //Camera.DestinationType.DATA_URL,
             sourceType: type,      // 0:Photo Library, 1=Camera, 2=Saved Photo Album
             encodingType: 0,     // 0=JPG 1=PNG
-            targetWidth: 1000,
-            targetHeight: 1000,
+            targetWidth: 1600,
+            targetHeight: 1600,
             correctOrientation: true
         }
         if (myApp.isPhone) {
@@ -1236,8 +1042,224 @@ function EventCtrl($scope, $rootScope, navSvc, LoginService, EnfantService, Cahi
         alert(error.code);
     }
 }
+﻿function HomeCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService) {
+    $rootScope.showSettings = false;
+    $scope.slidePage = function (path, type) {
+        navSvc.slidePage(path, type);
+    };
+    $rootScope.date = new Date();
+    $scope.back = function () {
+        navSvc.back();
+    };
+    $scope.changeSettings = function () {
+        $rootScope.showSettings = true;
+    };
+    $scope.closeOverlay = function () {
+        $rootScope.showSettings = false;
+    };
+    if (!$rootScope.isConnected) {
+        $timeout(function () {
+            navSvc.slidePage('/viewLogin');
+        }, 250);
+    }
 
-function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, notification) {
+    $scope.optsNavigation = {
+        disable: 'right',
+        touchToDrag: false
+    };
+}
+﻿function LoginCtrl($scope, navSvc, $rootScope, $timeout, LoginService, EnfantService, notification) {
+    $scope.title = "Mon compte";
+    $scope.mode = 6;
+    $scope.user = LoginService.load();
+    if (!$scope.user) {
+        $scope.title = "Login";
+        $scope.mode = 0;
+        $scope.user = {};
+    }
+    else {
+        $scope.user.pwd = "";
+    }
+    $scope.backLogin = function () {
+        if ($scope.mode == 6) return navSvc.back();
+        $scope.mode = 0;
+    }
+    $scope.setMode = function (mode) {
+        $scope.mode = mode;
+    }
+    $scope.create = function (user) {
+        delete user.confirm_pwd;
+        $scope.mode = 4;
+        LoginService.create(user).then(function (current) {
+            navSvc.back();
+            $rootScope.isConnected = true;
+        }, function (current) {
+            $scope.mode = 1;
+            $scope.user = {};
+        });
+    }
+    $scope.update = function (user) {
+        delete user.confirm_pwd;
+        $scope.mode = 7;
+        LoginService.update(user).then(function (current) {
+            navSvc.back();
+        }, function (current) {
+            $scope.mode = 6;
+            $scope.user = LoginService.load();
+            $scope.user.pwd = "";
+        });
+    }
+    $scope.connect = function (user) {
+        $scope.mode = 3;
+        LoginService.connect(user).then(function (current) {
+            $rootScope.isConnected = true;
+            $rootScope.user = current;
+            LoginService.sync({
+                user: current,
+                enfants: {}
+            }).then(function (data) {
+                var i = 0, l = data.length;
+                var prenoms = [];
+                for (; i < l; i++) {
+                    data[i].fromServer = true;
+                    data[i].tick = new Date(data[i].tick);
+                    EnfantService.save(data[i]);
+                    prenoms.push(data[i].prenom);
+                }
+                if (data.length) {
+                    $rootScope.$emit('message', "Les informations des cahiers de vie de " + prenoms.join(", ") + " ont étés mis à jour.");
+                }
+                navSvc.back();
+                //$scope.$apply();
+            })
+        }, function (current) {
+            $scope.mode = 2;
+            $scope.user = {};
+        });
+    }
+    $scope.disconnect = function (path, type) {
+        LoginService.disconnect();
+        $rootScope.isConnected = false;
+        $scope.mode = 0;
+    };
+    $scope.raz = function (path, type) {
+        notification.confirm('Etes-vous sur de vouloir supprimer toutes les données des cahiers de vie ?', function (button) {
+            // yes = 1, no = 2, later = 3
+            if (button != '1') return;
+            myApp.deleteDB();
+            $scope.mode = 0;
+            location.reload();
+        }, 'Cahier de vie', ['Supprimer', 'Annuler']);
+    };
+
+}
+﻿function MainCtrl($scope, navSvc, $rootScope, $timeout, EnfantService, CahierService, notification) {
+    $scope.loaded = false;
+    $scope.slidePage = function (path, type) {
+        navSvc.slidePage(path, type);
+    };
+
+
+    $scope.update = function (enfant) {
+        if (!enfant.isEnable()) return;
+        EnfantService.setCurrent(enfant);
+        navSvc.slidePage('/viewNewCahier');
+    }
+    $scope.set = function (enfant) {
+        EnfantService.setCurrent(enfant);
+    }
+    $scope.remove = function (enfant) {
+        notification.confirm('Etes-vous sur ?', function (button) {
+            // yes = 1, no = 2, later = 3
+            if (button != '1') return;
+
+            EnfantService.remove(enfant).then(function () {
+                $scope.$emit("reload");
+            });
+        }, 'Cahier de vie', ['Supprimer', 'Annuler']);
+    }
+
+    $rootScope.showEnfantOverlay = false;
+
+    $scope.showMenuEnfant = function (enfant) {
+        EnfantService.setCurrent(enfant);
+        $rootScope.showEnfantOverlay = true;
+    };
+
+
+
+    $scope.showCahier = function (enfant) {
+        if (enfant != EnfantService.getCurrent()) {
+            CahierService.setCurrent(null);
+            EnfantService.setCurrent(enfant);
+        }
+        navSvc.slidePage('/viewCahier');
+    };
+
+    $scope.newCahier = function () {
+        EnfantService.setCurrent(null);
+        navSvc.slidePage('/viewNewCahier');
+    }
+    /*$timeout(function () {
+        
+    }, 250);*/
+    loadEnfants();
+
+    /*EnfantService.onChange(loadCahier);
+    
+    $scope.$on('$destroy', function() {
+          EnfantService.removeOnChange(loadCahier);
+    });*/
+
+    //$rootScope.$watch('currentDate', loadCahier);
+
+    $scope.$on("reload", function () {
+        $timeout(function () {
+            loadEnfants();
+        });
+        //$scope.$apply();
+    });
+
+    function loadEnfants() {
+        EnfantService.list().then(function (enfants) {
+            $scope.enfants = enfants;
+            $scope.loaded = true;
+            $timeout(function () {
+                $scope.$broadcast("refresh-scroll");
+            }, 150);
+        });
+    }
+
+    function loadCahier() {
+        if (!EnfantService.getCurrent()) return;
+        CahierService.get(EnfantService.getCurrent(), $rootScope.currentDate).then(function (cahier) {
+            if (!cahier) {
+                cahier = CahierService.new(EnfantService.getCurrent(), $rootScope.currentDate);
+            }
+            CahierService.setCurrent(cahier);
+        });
+    }
+}
+﻿function MessageCtrl($scope, $rootScope, $timeout) {
+}
+﻿function NavigationCtrl($scope, navSvc, $rootScope, $timeout, LoginService, Device) {
+    /*$scope.backDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()-1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }
+    $scope.nextDate = function(){
+        $rootScope.currentDate.setDate($rootScope.currentDate.getDate()+1);
+        $rootScope.currentDate = new Date($rootScope.currentDate.getTime());
+    }*/
+    $scope.connect = function (path, type) {
+        navSvc.slidePage('/viewLogin');
+    };
+    /*$scope.disconnect = function (path, type) {
+        LoginService.disconnect();
+        navSvc.slidePage('/viewLogin'); 
+    };*/
+}
+﻿function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierService, EventService, notification) {
     $scope.indexPhoto = 0;
     $scope.currentPhoto = "";
     $scope.event = EventService.getCurrent();
@@ -1297,4 +1319,3 @@ function PhotosEventCtrl($scope, $rootScope, navSvc, EnfantService, CahierServic
         alert(error.code);
     }
 }
-

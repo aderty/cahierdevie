@@ -27,7 +27,7 @@
                         <div class="topcoat-icon pencil-icon edit" ng-click="update(enfant);$event.stopPropagation();">&nbsp;</div>
                         <h3>{{ enfant.prenom }}</h3>
                     </div>
-                    <span ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)" class="topcoat-icon-button btn-amis" ng-click="set(enfant);slidePage('/viewCahierUsers');$event.stopPropagation();"><i class="topcoat-icon group-icon"></i></span>
+                    <a ng-if="enfant.owner && (!enfant.users || enfant.users.length < 2)" class="topcoat-icon-button btn-amis" ng-click="set(enfant);slidePage('/viewCahierUsers');$event.stopPropagation();"><i class="topcoat-icon group-icon"></i></a>
                     <i class="topcoat-icon next-icon"></i>
                 </li>
                 <li class="topcoat-list__item loading" ng-if="!loaded">
@@ -35,8 +35,10 @@
                         <div class="border mid"></div>
                     </div>
                 </li>
-                <li class="topcoat-list__item" ng-click="newCahier()">
-                    <span class="topcoat-icon plus-icon"></span> Nouveau cahier
+                <li class="topcoat-list__item add">
+                    <a ng-click="newCahier()">
+                        <span class="topcoat-icon plus-icon"></span> Nouveau cahier
+                    </a>
                 </li>
             </ul>
         </div>

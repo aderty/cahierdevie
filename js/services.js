@@ -37,7 +37,8 @@ myApp.factory('phonegapReady', function () {
 myApp.factory('Device', function ($rootScope, $location) {
     var queue = {
         backbutton: {},
-        resume: {}
+        resume: {},
+        globalResume: []
     }, path, current, previous;
 
     document.addEventListener("backbutton", onBackKeyDown, false);
@@ -55,22 +56,27 @@ myApp.factory('Device', function ($rootScope, $location) {
         if (queue.resume[path]) {
             queue.resume[path].apply(this, arguments);
         }
+        angular.forEach(queue.globalResume, function (cb) {
+            cb.apply(this, arguments);
+        });
     }
 
     $rootScope.$on("$routeChangeSuccess", function (event, cur, prev, rejection) {
         current = cur.originalPath;
-        previous = prev.originalPath;
-        /*setTimeout(function () {
-            previous = null;
-        }, 1000);*/
+        if (prev) previous = prev.originalPath;
     });
 
     return {
         onBackbutton: function (callback) {
             queue.backbutton[$location.path()] = callback;
         },
-        onResume: function (callback) {
-            queue.resume[$location.path()] = callback;
+        onResume: function (callback, global) {
+            if (global) {
+                queue.globalResume.push(callback);
+            }
+            else {
+                queue.resume[$location.path()] = callback;
+            }
         }
     };
 });
@@ -1650,7 +1656,7 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
             dropbox.authStep = 2;
                 dropbox.setCredentials({
 	            key: DROPBOX_APP_KEY,
-	            secret: DROPBOX_APP_SECRET,
+	            //secret: DROPBOX_APP_SECRET,
 	            sandbox: false
 	        });
         },
@@ -1659,7 +1665,15 @@ myApp.factory('DropBoxService', function ($q, $http, $timeout, $rootScope, confi
                 dropbox.signOut();
             }
             else {*/
-                dropbox.reset();
+            /*if (dropbox._driver && dropbox._driver.storageKey) {
+                dropbox._driver.forgetCredentials(function () { });
+            }*/
+            try {
+                //dropbox.reset();
+                dropbox.signOut();
+            }
+            catch (e) { }
+            
             //}
             if (localStorage.getItem(key)) {
                  localStorage.removeItem(key);

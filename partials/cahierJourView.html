@@ -1,17 +1,17 @@
 ﻿<section id="pge-events" class="wrapper" ng-controller="HomeCtrl" snap-content snap-options="optsNavigation" ng-swipe-left="nextDate()" ng-swipe-right="backDate()">
     <div class="topcoat-navigation-bar header">
         <div class="topcoat-navigation-bar__item left quarter">
-            <a class="topcoat-icon-button--quiet" title="menu" ng-click="" snap-toggle="left">
-                <i class="topcoat-icon listview-icon"></i>
+            <a class="topcoat-icon-button--quiet" title="back" ng-click="cancel()">
+                <span class="topcoat-icon back-icon"></span>
             </a>
         </div>
         <div class="topcoat-navigation-bar__item center half">
             <h1 class="topcoat-navigation-bar__title"><img ng-src="{{currentEnfant.photo}}" class="li-thumb" />{{currentEnfant.prenom}}</h1>
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
-            <a class="topcoat-icon-button--quiet" ng-click="slidePage('/','modal')">
-                <i class="topcoat-icon home-icon"></i>
-            </a>
+                <datemodelpicker ng-model="currentDate" class="topcoat-icon-button--quiet">
+                    <i class="topcoat-icon calendar-icon"></i>
+                </datemodelpicker>
         </div>
     </div>
     <!--<div class="topcoat-button-bar full sub-header">
@@ -71,8 +71,10 @@
                         <i class="topcoat-icon delete-icon"></i>
                     </a>
                 </li>
-                <li class="topcoat-list__item add" ng-click="newEvent()">
-                    <i class="topcoat-icon plus-icon"></i> Ajouter un &eacute;v&egrave;nement
+                <li class="topcoat-list__item add">
+                    <a ng-click="newEvent()">
+                        <i class="topcoat-icon plus-icon"></i> Ajouter un &eacute;v&egrave;nement
+                    </a>
                 </li>
             </ul>
         </div>

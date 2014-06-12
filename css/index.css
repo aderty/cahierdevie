@@ -492,7 +492,8 @@ select.field-input {
         box-shadow: none;
 }
 
-.topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active {
+.topcoat-navigation-bar .topcoat-icon-button.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--quiet.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large.ng-click-active, .topcoat-navigation-bar .topcoat-icon-button--large--quiet.ng-click-active,
+.action.ng-click-active {
     /*background-color: #ADDBA7;*/
     background-color: #E6E6E6;
     border: 1px solid #a5a8a8;
@@ -543,7 +544,12 @@ select.field-input {
 	position: absolute;
 	right: 3rem;
 	margin-top: -3.4rem;
-	border:0;
+	border: 2px solid rgb(224, 135, 135);
+}
+
+#pge-home .btn-amis.ng-click-active
+{
+	border-width: 4px;
 }
 
 #eventForm .panel-inner {
@@ -565,6 +571,10 @@ select.field-input {
 
 #eventForm .titre .field-input {
         width: calc(100% - 10rem);
+}
+
+#eventForm .field button.ng-click-active {
+        border: 2px solid #CCC;
 }
 
 .item-input.heure{
@@ -843,6 +853,25 @@ select.field-input {
 {
     background-color:#47a447;
     border-color:#398439;
+}
+
+.animate-valid.ng-hide-add, 
+.animate-valid.ng-hide-remove {
+  -webkit-transition:all linear 0.5s;
+  -moz-transition:all linear 0.5s;
+  -o-transition:all linear 0.5s;
+  transition:all linear 0.5s;
+  display:inline-block!important;
+}
+
+.animate-valid.ng-hide-add.ng-hide-add-active,
+.animate-valid.ng-hide-remove {
+  opacity:0;
+}
+
+.animate-valid.ng-hide-add,
+.animate-valid.ng-hide-remove.ng-hide-remove-active {
+  opacity:1;
 }
 
 .btn-cancel
@@ -1157,6 +1186,10 @@ h1 .li-thumb
     border-radius: 100%;
 }
 
+#cahierForm .btn-photo.ng-click-active {
+    border: 2px solid #CCC;
+}
+
 #cahierForm .btn-photo img
 {
 	width: 90px;
@@ -1171,6 +1204,10 @@ h1 .li-thumb
     height: 6rem;
     width: 6rem;
 }
+#cahierForm .btn-amis.ng-click-active{
+    border-width: 3px;
+}
+
 #cahierForm .btn-amis i{
     height: 3rem;
     width: 3rem;
@@ -1285,14 +1322,27 @@ h1 .li-thumb
     height: 70%;
     height: calc(100% - 8.7rem - 1px);
 }
+.flex{
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
 
 #pge-amis-content .empty {
     padding: 1rem;
     padding-bottom: 0;
+    text-align: left;
 }
 
 #pge-amis-content .add {
     height: 4rem;
+}
+#cahierForm .btn-cancel,
+#newLoginForm .btn-cancel{
+    width: 100%;
 }
 
 .content > form,
@@ -1523,6 +1573,50 @@ nav.navigation h4 > i{
     min-height: 2.2rem;
     border-top: 0;
 }
+
+.list li.add{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding: 0;
+    display: flex;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    justify-content: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    border: none;
+    background-color: transparent;
+}
+.list li.add > a{
+    padding: 1.25rem;
+    border-radius: 15px;
+    border: rgb(134, 199, 241) 3px solid;
+}
+
+.list li.add:nth-child(4n+1) > a{
+    border: rgb(201, 110, 110) 3px solid;
+    background-color: rgb(248, 217, 217);
+}
+.list li.add:nth-child(4n+2) > a{
+    border: rgb(55, 185, 92) 3px solid;
+    background-color: rgb(206, 240, 206);
+}
+.list li.add:nth-child(4n+3) > a{
+    border: rgb(134, 199, 241) 3px solid;
+    background-color: rgb(229, 237, 253);
+}
+.list li.add:nth-child(4n+4) > a{
+    border: rgb(221, 213, 36) 3px solid;
+    background-color: rgb(250, 250, 185);
+}
+
+.list li.add > a.ng-click-active{
+    border-width: 5px;
+}
+
 /*.events li.topcoat-list__item:first-child {
     border: 2px solid rgb(102, 102, 102);
 }*/

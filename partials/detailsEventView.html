@@ -9,7 +9,7 @@
             <h1 class="topcoat-navigation-bar__title"><img ng-src="{{currentEnfant.photo}}" class="li-thumb" />{{currentEnfant.prenom}}</h1>
         </div>
         <div class="topcoat-navigation-bar__item right quarter">
-            <a ng-if="currentCahier.owner || event && event.creator.id == user._id" class="topcoat-icon-button--quiet" ng-click="slidePage('/viewEvent','modal')">
+            <a ng-if="canEdit()" class="topcoat-icon-button--quiet" ng-click="editEvent()">
                 <i class="topcoat-icon pencil-icon"></i>
             </a>
         </div>
@@ -25,8 +25,8 @@
     </div>
     <div id="pge-details-content" class="content pad" scroll>
         <form id="eventForm" name="eventForm" class="panel" ng-if="event">
-            <div class="panel-inner">
-                <div class="field titre first">
+            <div class="panel-inner" ng-click="editEvent()">
+                <div class="field titre first" ng-class="{last: !event.desc && !event.pictures.length}">
                     <span class="lib time light desc">
                         {{event.time}}
                     </span>
@@ -34,14 +34,14 @@
                         {{event.title &&  event.title != "" ? event.title : predefTitle[event.type].libelle}}
                     </span>
                 </div>
-                <div class="center field titre" ng-if="event.desc">
+                <div class="center field titre" ng-if="event.desc" ng-class="{last: !event.pictures.length}">
                     <pre class="desc">{{event.desc}}</pre>
                 </div>
                 <div class="center field last" ng-if="event.pictures.length > 0">
                     <!-- ng-click="showPhotos()" -->
                     <div id="slides" class="pic{{event.pictures.length}}">
                         <div id="overflow">
-                            <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos()">
+                            <article ng-repeat="picData in event.pictures" class="evt-photos" ng-click="showPhotos();$event.stopPropagation();">
                                 <img class="evt-photo-item {{picData.dir}}" ng-src="{{picData.url}}" />
                             </article>
                         </div> <!-- #overflow -->

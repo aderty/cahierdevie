@@ -7,6 +7,7 @@ var minifyCSS = require('gulp-minify-css');
 var clean = require('gulp-clean');
 
 var paths = {
+    controllers: ['js/controllers/index.js', 'js/controllers/*.js'],
     scripts: ['js/*.js'],
     scriptsLibs: ['lib/**/*.js'],
   css: ['css/**/*.css'],
@@ -32,7 +33,14 @@ gulp.task('clean', function() {
   .pipe(clean());
 });
 
-gulp.task('scripts', function() {
+gulp.task('controllers', function () {
+    // Minify and copy all JavaScript (except vendor scripts)
+    return gulp.src(paths.controllers)
+    .pipe(concat('controllers.js'))
+    .pipe(gulp.dest('js/'));
+});
+
+gulp.task('scripts', ['controllers'], function() {
   // Minify and copy all JavaScript (except vendor scripts)
     return gulp.src(paths.scripts)
     .pipe(changed(DEST_JS))
@@ -89,7 +97,8 @@ gulp.task('index', function () {
 });
 
 // Rerun the task when a file changes
-gulp.task('watch', function() {
+gulp.task('watch', function () {
+  gulp.watch(paths.controllers, ['controllers']);
   gulp.watch(paths.scripts, ['scripts']);
   gulp.watch(paths.scriptsLibs, ['scriptsLibs']);
   gulp.watch(paths.css, ['css']);
@@ -101,7 +110,8 @@ gulp.task('watch', function() {
 });
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', ['scripts',
+gulp.task('default', ['controllers',
+                      'scripts',
                       'scriptsLibs',
                       'css',
                       'views',

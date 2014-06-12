@@ -98,7 +98,7 @@ angular.module('myApp.directives', [])
         },
         replace: true,
         transclude: true,
-        template: '<div ng-click="show();"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></div>',
+        template: '<a ng-click="show();" class="action"><input type="text" style="width: 0;height: 0;margin-left: -9999px;position: absolute;" /><span ng-transclude></span></a>',
         require: 'ngModel',
         link: function(scope, elm, attr, ngModel) {
             var first = true;
