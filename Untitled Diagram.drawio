@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-04-19T11:46:09.460Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" etag="3iK-kC_WfdMn8G0H3Tex" version="14.6.1" type="github">
+<mxfile host="app.diagrams.net" modified="2021-04-19T15:58:58.269Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" etag="zTvclwn6f-wZW8sNR9zN" version="14.6.1" type="github">
   <diagram id="6a731a19-8d31-9384-78a2-239565b7b9f0" name="Page-1">
-    <mxGraphModel dx="1422" dy="872" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+    <mxGraphModel dx="1422" dy="774" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -394,7 +394,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="lMd9HIMTsf6DAG7rfUUA-1640" value="&lt;div style=&quot;font-family: &amp;#34;arial&amp;#34; , &amp;#34;helvetica&amp;#34; , sans-serif ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Les fichiers des répertoires SRV_020 et SRV_030 proviennent de différentes fonctions techniques de l&#39;evoman1 :&amp;nbsp;&lt;/font&gt;Service applicatif, Site Web, FTP, BDD, ... .&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-family: &amp;#34;arial&amp;#34; , &amp;#34;helvetica&amp;#34; , sans-serif ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Avec la mise en place des VM, les fonctions techniques sont réparties sur des machines différentes.&lt;/font&gt;&lt;/div&gt;&lt;div style=&quot;font-family: &amp;#34;arial&amp;#34; , &amp;#34;helvetica&amp;#34; , sans-serif ; background-color: rgb(255 , 255 , 255)&quot;&gt;&lt;font style=&quot;font-size: 12px&quot;&gt;Dans la nouvelle architecture, nous avons fait le choix d&#39;implanter ces répertoires sur le VM1 et de créer des liens symboliques (&quot;raccourci de répertoire&quot;) sur les autres VM.&lt;br&gt;Cela garantit l&#39;échange d&#39;information entre les fonctions logicielles avec un minimum&amp;nbsp;d&#39;impact sur les développements&lt;br&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;strokeWidth=3;shadow=0;html=1;dashed=1;strokeColor=#FFFFFF;fillColor=#FFFFFF;align=left;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="770" y="50" width="370" height="130" as="geometry" />
+          <mxGeometry x="770" y="40" width="370" height="150" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
