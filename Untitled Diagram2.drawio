@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-04-22T08:35:56.525Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" etag="J47Z4cxDRzQ_vuRmAy4T" version="14.6.3" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2021-04-22T08:38:45.238Z" agent="5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36" etag="K_mlEEg35ZjmdIZVu3Nm" version="14.6.3" type="github" pages="5">
   <diagram name="Gobal" id="42789a77-a242-8287-6e28-9cd8cfd52e62">
     <mxGraphModel dx="1564" dy="2330" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="0">
       <root>
@@ -78,7 +78,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="cjUqeVApk2GWS8ht3CH_-25" value="SCAN ACHAT" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
-          <mxGeometry x="1620" y="-500" width="130" height="130" as="geometry" />
+          <mxGeometry x="1600" y="-450" width="130" height="130" as="geometry" />
         </mxCell>
         <mxCell id="cjUqeVApk2GWS8ht3CH_-26" value="" style="endArrow=classic;startArrow=classic;html=1;fillColor=#1ba1e2;strokeColor=#006EAF;strokeWidth=3;" parent="1" source="cjUqeVApk2GWS8ht3CH_-25" target="cjUqeVApk2GWS8ht3CH_-27" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
